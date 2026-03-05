@@ -420,6 +420,12 @@
         resize: vertical;
       }
 
+      .polish-link {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+
       @media (min-width: 980px) {
         .topbar {
           padding: 0.8rem 1.4rem;
@@ -485,27 +491,18 @@
           </ul>
           <section class="polish-card">
             <p class="subtle">If you have a draft, I can polish one post for free.</p>
-            <form class="polish-form" id="freePolishForm">
-              <input
-                id="polishEmail"
-                name="email"
-                type="email"
-                placeholder="Email"
-                autocomplete="email"
-                required
-              />
-              <textarea
-                id="polishNote"
-                name="note"
-                maxlength="500"
-                placeholder="What is the draft, and what do you want sharpened?"
-                required
-              ></textarea>
+            <div class="polish-form">
+              <p class="muted">Email me a rough draft, voice note, or note with what you want sharpened.</p>
               <div>
-                <button class="btn-primary" id="freePolishBtn" type="submit">Request Free Polish</button>
+                <a
+                  class="btn-primary polish-link"
+                  href="mailto:dylan.galloway@proton.me?subject=Free%20Polish%20Request&body=Hi%20Dylan%2C%0A%0AHere%20is%20my%20draft%20or%20note%3A%0A%0AWhat%20I%20want%20sharpened%3A%0A"
+                >
+                  Email A Draft
+                </a>
               </div>
-              <p class="status" id="freePolishStatus"></p>
-            </form>
+              <p class="status">This opens a draft to dylan.galloway@proton.me.</p>
+            </div>
           </section>
         </article>
 
@@ -624,8 +621,6 @@
       const nav = document.getElementById('nav');
       const payNowBtn = document.getElementById('payNowBtn');
       const payStatus = document.getElementById('payStatus');
-      const freePolishForm = document.getElementById('freePolishForm');
-      const freePolishStatus = document.getElementById('freePolishStatus');
       const startDistillation = document.getElementById('startDistillation');
       const rawIntro = document.querySelector('.raw-intro');
       const rawTitleNode = document.querySelector('.raw-intro h1.editable');
@@ -729,32 +724,6 @@
 
       payNowBtn.addEventListener('click', () => {
         startCheckout();
-      });
-
-      freePolishForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        freePolishStatus.textContent = 'Saving your note...';
-
-        try {
-          const response = await fetch('/api/free-polish', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: freePolishForm.email.value,
-              note: freePolishForm.note.value.trim()
-            })
-          });
-
-          const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.error || 'Unable to save your request.');
-          }
-
-          freePolishForm.reset();
-          freePolishStatus.textContent = 'Request received. I will follow up by email.';
-        } catch (error) {
-          freePolishStatus.textContent = error.message;
-        }
       });
 
       const url = new URL(window.location.href);

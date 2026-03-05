@@ -22,9 +22,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const dataDir = storageRoot;
 const bookingsPath = path.join(dataDir, 'bookings.json');
 const freePolishPath = path.join(dataDir, 'free-polish.json');
-const resendApiKey = process.env.RESEND_API_KEY || '';
-const notifyToEmail = process.env.NOTIFY_TO_EMAIL || '';
-const notifyFromEmail = process.env.NOTIFY_FROM_EMAIL || '';
 const defaultPreparationChecklist = [
   'Send a rough note, voice memo, or messy draft before the session if you have one.',
   'Bring one specific articulation problem, not three adjacent ones.',
@@ -79,46 +76,6 @@ function saveFreePolishRequest(entry) {
   const requests = getFreePolishRequests();
   requests.push(entry);
   writeJsonFile(freePolishPath, requests);
-}
-
-function emailNotificationsEnabled() {
-  return Boolean(resendApiKey && notifyToEmail && notifyFromEmail);
-}
-
-async function sendFreePolishNotification(entry) {
-  if (!emailNotificationsEnabled()) {
-    return { sent: false, reason: 'Email notifications not configured.' };
-  }
-
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${resendApiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from: notifyFromEmail,
-      to: [notifyToEmail],
-      reply_to: entry.email,
-      subject: `Free polish request from ${entry.email}`,
-      text: [
-        'New free polish request',
-        '',
-        `Email: ${entry.email}`,
-        `Submitted: ${entry.createdAt}`,
-        '',
-        'Note:',
-        entry.note
-      ].join('\n')
-    })
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Resend error ${response.status}: ${body}`);
-  }
-
-  return { sent: true };
 }
 
 app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res) => {
@@ -209,7 +166,7 @@ app.post('/api/book-session', async (req, res) => {
   }
 });
 
-app.post('/api/free-polish', async (req, res) => {
+app.post('/api/free-polish', (req, res) => {
   const { email, note } = req.body || {};
   if (!email || !note) {
     return res.status(400).json({ error: 'Email and note are required.' });
@@ -222,16 +179,6 @@ app.post('/api/free-polish', async (req, res) => {
   };
   saveFreePolishRequest(entry);
   console.log('Free polish request:', entry);
-
-  try {
-    const result = await sendFreePolishNotification(entry);
-    if (!result.sent) {
-      console.warn(result.reason);
-    }
-  } catch (error) {
-    console.error('Free polish email error:', error.message);
-  }
-
   return res.json({ ok: true });
 });
 
