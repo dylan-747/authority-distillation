@@ -57,6 +57,34 @@ function getBookings() {
   return readJsonFile(bookingsPath, {});
 }
 
+function extractBookingDate(bookingTime) {
+  return String(bookingTime || '').slice(0, 10);
+}
+
+function isWeekdayBooking(bookingTime) {
+  const bookingDate = extractBookingDate(bookingTime);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(bookingDate)) {
+    return false;
+  }
+
+  const date = new Date(`${bookingDate}T12:00:00Z`);
+  const day = date.getUTCDay();
+  return day >= 1 && day <= 5;
+}
+
+function hasExistingBookingOnDate(bookingTime, ignoredSessionId) {
+  const bookingDate = extractBookingDate(bookingTime);
+  const bookings = getBookings();
+
+  return Object.entries(bookings).some(([sessionId, booking]) => {
+    if (sessionId === ignoredSessionId) {
+      return false;
+    }
+
+    return extractBookingDate(booking.bookingTime) === bookingDate;
+  });
+}
+
 function saveBooking(sessionId, booking) {
   const bookings = getBookings();
   bookings[sessionId] = booking;
@@ -146,6 +174,14 @@ app.post('/api/book-session', async (req, res) => {
     const { sessionId, bookingTime, focus } = req.body || {};
     if (!sessionId || !bookingTime) {
       return res.status(400).json({ error: 'Missing sessionId or bookingTime.' });
+    }
+
+    if (!isWeekdayBooking(bookingTime)) {
+      return res.status(400).json({ error: 'Please choose a Monday to Friday session time.' });
+    }
+
+    if (hasExistingBookingOnDate(bookingTime, sessionId)) {
+      return res.status(409).json({ error: 'That day is already booked. Please choose another weekday.' });
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);

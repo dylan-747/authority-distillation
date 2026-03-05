@@ -136,6 +136,7 @@
         <p class="muted">Before the call:</p>
         <ul>
           <li>Bring one articulation problem, not a bundle of adjacent issues.</li>
+          <li>Sessions are Monday to Friday only, with one booking accepted per day.</li>
           <li>If you have a rough draft, memo, or voice note, mention it in the focus field.</li>
           <li>You will see next-step preparation instructions again after booking.</li>
         </ul>
@@ -144,18 +145,65 @@
 
     <script>
       const bookingForm = document.getElementById('bookingForm');
+      const bookingInput = document.getElementById('bookingTime');
       const statusNode = document.getElementById('status');
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
+
+      function isWeekdayBooking(value) {
+        const bookingDate = String(value || '').slice(0, 10);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(bookingDate)) return false;
+        const date = new Date(`${bookingDate}T12:00:00`);
+        const day = date.getDay();
+        return day >= 1 && day <= 5;
+      }
+
+      function nextWeekdayDateTimeValue() {
+        const now = new Date();
+        now.setMinutes(0, 0, 0);
+        now.setHours(Math.max(now.getHours() + 2, 9));
+
+        while (now.getDay() === 0 || now.getDay() === 6) {
+          now.setDate(now.getDate() + 1);
+          now.setHours(9, 0, 0, 0);
+        }
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+      }
+
+      bookingInput.min = nextWeekdayDateTimeValue();
+      bookingInput.placeholder = 'Choose a Monday-Friday time';
 
       if (!sessionId) {
         statusNode.textContent = 'Missing payment session. Please complete payment first.';
         bookingForm.querySelector('button').disabled = true;
       }
 
+      bookingInput.addEventListener('change', () => {
+        if (!bookingInput.value) return;
+
+        if (!isWeekdayBooking(bookingInput.value)) {
+          statusNode.textContent = 'Please choose a Monday to Friday time.';
+          bookingInput.value = '';
+          return;
+        }
+
+        statusNode.textContent = '';
+      });
+
       bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!sessionId) return;
+
+        if (!isWeekdayBooking(bookingInput.value)) {
+          statusNode.textContent = 'Please choose a Monday to Friday time.';
+          return;
+        }
 
         statusNode.textContent = 'Saving booking...';
 
