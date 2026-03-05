@@ -23,10 +23,12 @@ const dataDir = storageRoot;
 const bookingsPath = path.join(dataDir, 'bookings.json');
 const freePolishPath = path.join(dataDir, 'free-polish.json');
 const weeklySlotSchedule = [
-  { weekday: 2, hour: 10, minute: 0, label: 'Tuesday — 10:00 GMT' },
-  { weekday: 3, hour: 14, minute: 0, label: 'Wednesday — 14:00 GMT' },
-  { weekday: 5, hour: 11, minute: 0, label: 'Friday — 11:00 GMT' }
+  { weekday: 2, weekdayName: 'Tuesday', hour: 10, minute: 0 },
+  { weekday: 3, weekdayName: 'Wednesday', hour: 14, minute: 0 },
+  { weekday: 5, weekdayName: 'Friday', hour: 11, minute: 0 }
 ];
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+  'August', 'September', 'October', 'November', 'December'];
 const defaultPreparationChecklist = [
   'Send a rough note, voice memo, or messy draft before the session if you have one.',
   'Bring one specific articulation problem, not three adjacent ones.',
@@ -120,7 +122,7 @@ function buildScheduledSlot(weekStart, slot) {
 
   return {
     bookingTime: formatIsoDateTime(date),
-    label: slot.label,
+    label: `${slot.weekdayName} ${date.getUTCDate()} ${monthNames[date.getUTCMonth()]} — ${String(slot.hour).padStart(2, '0')}:${String(slot.minute).padStart(2, '0')} GMT`,
     date
   };
 }
@@ -130,32 +132,27 @@ function availableSlotsResponse(now = new Date()) {
   const bookedByDate = new Set(
     Object.values(bookings).map((booking) => extractBookingDate(booking.bookingTime)).filter(Boolean)
   );
+  const slots = [];
 
-  for (let weekOffset = 0; weekOffset < 3; weekOffset += 1) {
+  for (let weekOffset = 0; weekOffset < 6 && slots.length < 3; weekOffset += 1) {
     const weekStart = startOfWeekUtc(now);
     weekStart.setUTCDate(weekStart.getUTCDate() + (weekOffset * 7));
 
-    const slots = weeklySlotSchedule
+    const weekSlots = weeklySlotSchedule
       .map((slot) => buildScheduledSlot(weekStart, slot))
       .filter((slot) => slot.date.getTime() > now.getTime())
       .filter((slot) => !bookedByDate.has(extractBookingDate(slot.bookingTime)))
       .map((slot) => ({
         bookingTime: slot.bookingTime,
-        label: slot.label,
-        dayLabel: slot.label.split(' — ')[0]
+        label: slot.label
       }));
 
-    if (slots.length > 0) {
-      return {
-        heading: weekOffset === 0 ? 'Available times this week' : 'Available times next week',
-        slots
-      };
-    }
+    slots.push(...weekSlots);
   }
 
   return {
-    heading: 'Available times',
-    slots: []
+    heading: 'Available appointment slots',
+    slots: slots.slice(0, 3)
   };
 }
 
