@@ -18,6 +18,9 @@ Set these environment variables:
 - `BASE_URL`
 - `PRICE_GBP_PENCE=45000`
 - `DATA_DIR=/var/data`
+- `RESEND_API_KEY`
+- `NOTIFY_TO_EMAIL=dylan.galloway@proton.me`
+- `NOTIFY_FROM_EMAIL=hello@dylangalloway.com`
 
 For the first deploy, set:
 
@@ -47,6 +50,7 @@ Verify this full flow on the Render URL:
 7. Booking saves successfully.
 8. Confirmation page shows paid status, session time, and prep guidance.
 9. Restart or redeploy the service and confirm booking data still exists.
+10. Submit the free polish form and confirm the notification email arrives.
 
 ## Domain cutover
 

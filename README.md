@@ -30,6 +30,10 @@ Minimal horizontal-canvas website for a founder thought partner.
    BASE_URL=http://localhost:3000
    PORT=3000
    PRICE_GBP_PENCE=45000
+   DATA_DIR=./data
+   RESEND_API_KEY=re_your_resend_api_key
+   NOTIFY_TO_EMAIL=dylan.galloway@proton.me
+   NOTIFY_FROM_EMAIL=hello@dylangalloway.com
    ```
 4. Run:
    ```bash
@@ -45,3 +49,4 @@ Set the resulting signing secret as `STRIPE_WEBHOOK_SECRET` in `.env`.
 ## Note
 Booking selections and free polish requests are persisted to local JSON files in `data/`.
 The confirmation flow returns preparation guidance to the client after payment and booking.
+If `RESEND_API_KEY`, `NOTIFY_TO_EMAIL`, and `NOTIFY_FROM_EMAIL` are configured, free polish requests are also emailed to your inbox.
