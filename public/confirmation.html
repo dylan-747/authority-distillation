@@ -92,12 +92,12 @@
   </head>
   <body>
     <main class="card">
-      <h1>Confirmed.</h1>
+      <h1>Authority Distillation confirmed.</h1>
       <p id="sessionLine">Loading your confirmation...</p>
       <p class="muted" id="metaLine"></p>
       <p class="small" id="emailLine"></p>
       <section class="next-steps" aria-label="Next steps">
-        <h2>What happens next</h2>
+        <h2>Before the session</h2>
         <ul id="prepList">
           <li>Loading preparation notes...</li>
         </ul>
@@ -132,15 +132,20 @@
             const firstName = (s.customer_name || '').trim().split(/\s+/)[0];
 
             sessionLine.textContent = paid
-              ? `${firstName ? `${firstName}, ` : ''}your Authority Distillation is secured.`
+              ? `${firstName ? `${firstName}, ` : ''}your session is booked.`
               : 'Payment is not complete yet.';
-            metaLine.textContent = `Paid: ${amount} | Session time: ${bookedTime}`;
+            metaLine.textContent = `Session time: ${bookedTime}`;
             emailLine.textContent = s.customer_email
               ? `Confirmation is tied to ${s.customer_email}.`
               : 'Confirmation recorded. We will follow up by email.';
 
             prepList.innerHTML = '';
-            (s.preparation_checklist || []).forEach((item) => {
+            [
+              'Session length: 90 minutes',
+              'Location: Google Meet / Zoom',
+              'Bring the one idea you want to articulate clearly.',
+              'Optional: send 2-3 sentences of context beforehand.'
+            ].forEach((item) => {
               const li = document.createElement('li');
               li.textContent = item;
               prepList.appendChild(li);
