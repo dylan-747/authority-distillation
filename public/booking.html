@@ -67,7 +67,6 @@
         gap: 0.65rem;
       }
 
-      input,
       textarea {
         width: 100%;
         border: 1px solid #c6c1b6;
@@ -81,6 +80,41 @@
       textarea {
         min-height: 90px;
         resize: vertical;
+      }
+
+      .slot-list {
+        display: grid;
+        gap: 0.6rem;
+        margin-top: 0.2rem;
+      }
+
+      .slot-option {
+        border: 1px solid #c6c1b6;
+        border-radius: 12px;
+        background: #fffdf8;
+        padding: 0.8rem 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        cursor: pointer;
+      }
+
+      .slot-option input {
+        margin: 0;
+      }
+
+      .slot-copy {
+        display: grid;
+        gap: 0.1rem;
+      }
+
+      .slot-label {
+        font-weight: 500;
+      }
+
+      .slot-note {
+        color: var(--muted);
+        font-size: 0.84rem;
       }
 
       button {
@@ -121,7 +155,12 @@
       <p class="muted">One 90-minute working session, then one written articulation you can actually use.</p>
 
       <form id="bookingForm">
-        <input id="bookingTime" name="bookingTime" type="datetime-local" required />
+        <div>
+          <p class="muted" id="slotHeading">Available times</p>
+          <div class="slot-list" id="slotList">
+            <p class="muted">Loading available slots...</p>
+          </div>
+        </div>
         <textarea
           id="focus"
           name="focus"
@@ -145,63 +184,76 @@
 
     <script>
       const bookingForm = document.getElementById('bookingForm');
-      const bookingInput = document.getElementById('bookingTime');
+      const slotHeading = document.getElementById('slotHeading');
+      const slotList = document.getElementById('slotList');
       const statusNode = document.getElementById('status');
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
-
-      function isWeekdayBooking(value) {
-        const bookingDate = String(value || '').slice(0, 10);
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(bookingDate)) return false;
-        const date = new Date(`${bookingDate}T12:00:00`);
-        const day = date.getDay();
-        return day >= 1 && day <= 5;
-      }
-
-      function nextWeekdayDateTimeValue() {
-        const now = new Date();
-        now.setMinutes(0, 0, 0);
-        now.setHours(Math.max(now.getHours() + 2, 9));
-
-        while (now.getDay() === 0 || now.getDay() === 6) {
-          now.setDate(now.getDate() + 1);
-          now.setHours(9, 0, 0, 0);
-        }
-
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
-      }
-
-      bookingInput.min = nextWeekdayDateTimeValue();
-      bookingInput.placeholder = 'Choose a Monday-Friday time';
 
       if (!sessionId) {
         statusNode.textContent = 'Missing payment session. Please complete payment first.';
         bookingForm.querySelector('button').disabled = true;
       }
 
-      bookingInput.addEventListener('change', () => {
-        if (!bookingInput.value) return;
+      async function loadSlots() {
+        try {
+          const response = await fetch('/api/available-slots');
+          const data = await response.json();
 
-        if (!isWeekdayBooking(bookingInput.value)) {
-          statusNode.textContent = 'Please choose a Monday to Friday time.';
-          bookingInput.value = '';
-          return;
+          if (!response.ok) {
+            throw new Error(data.error || 'Unable to load available slots.');
+          }
+
+          slotHeading.textContent = data.heading || 'Available times';
+          slotList.innerHTML = '';
+
+          if (!data.slots || data.slots.length === 0) {
+            bookingForm.querySelector('button').disabled = true;
+            slotList.innerHTML = '<p class="muted">No slots are available right now. Email me and I will arrange one manually.</p>';
+            return;
+          }
+
+          data.slots.forEach((slot, index) => {
+            const label = document.createElement('label');
+            label.className = 'slot-option';
+
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'bookingTime';
+            input.value = slot.bookingTime;
+            input.required = true;
+            if (index === 0) input.checked = true;
+
+            const copy = document.createElement('div');
+            copy.className = 'slot-copy';
+
+            const title = document.createElement('span');
+            title.className = 'slot-label';
+            title.textContent = slot.label;
+
+            const note = document.createElement('span');
+            note.className = 'slot-note';
+            note.textContent = 'One 90-minute session.';
+
+            copy.appendChild(title);
+            copy.appendChild(note);
+            label.appendChild(input);
+            label.appendChild(copy);
+            slotList.appendChild(label);
+          });
+        } catch (error) {
+          bookingForm.querySelector('button').disabled = true;
+          statusNode.textContent = error.message;
         }
-
-        statusNode.textContent = '';
-      });
+      }
 
       bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!sessionId) return;
 
-        if (!isWeekdayBooking(bookingInput.value)) {
-          statusNode.textContent = 'Please choose a Monday to Friday time.';
+        const selectedSlot = bookingForm.querySelector('input[name="bookingTime"]:checked');
+        if (!selectedSlot) {
+          statusNode.textContent = 'Please choose one of the available times.';
           return;
         }
 
@@ -209,7 +261,7 @@
 
         const payload = {
           sessionId,
-          bookingTime: bookingForm.bookingTime.value,
+          bookingTime: selectedSlot.value,
           focus: bookingForm.focus.value.trim()
         };
 
@@ -230,6 +282,8 @@
           statusNode.textContent = error.message;
         }
       });
+
+      loadSlots();
     </script>
   </body>
 </html>

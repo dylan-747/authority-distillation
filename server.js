@@ -22,6 +22,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const dataDir = storageRoot;
 const bookingsPath = path.join(dataDir, 'bookings.json');
 const freePolishPath = path.join(dataDir, 'free-polish.json');
+const weeklySlotSchedule = [
+  { weekday: 2, hour: 10, minute: 0, label: 'Tuesday — 10:00' },
+  { weekday: 3, hour: 14, minute: 0, label: 'Wednesday — 14:00' },
+  { weekday: 5, hour: 11, minute: 0, label: 'Friday — 11:00' }
+];
 const defaultPreparationChecklist = [
   'Send a rough note, voice memo, or messy draft before the session if you have one.',
   'Bring one specific articulation problem, not three adjacent ones.',
@@ -61,13 +66,17 @@ function extractBookingDate(bookingTime) {
   return String(bookingTime || '').slice(0, 10);
 }
 
+function parseBookingDateTime(bookingTime) {
+  const date = new Date(bookingTime);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 function isWeekdayBooking(bookingTime) {
-  const bookingDate = extractBookingDate(bookingTime);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(bookingDate)) {
+  const date = parseBookingDateTime(bookingTime);
+  if (!date) {
     return false;
   }
 
-  const date = new Date(`${bookingDate}T12:00:00Z`);
   const day = date.getUTCDay();
   return day >= 1 && day <= 5;
 }
@@ -83,6 +92,76 @@ function hasExistingBookingOnDate(bookingTime, ignoredSessionId) {
 
     return extractBookingDate(booking.bookingTime) === bookingDate;
   });
+}
+
+function formatDateKey(date) {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function formatIsoDateTime(date) {
+  return `${formatDateKey(date)}T${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
+}
+
+function startOfWeekUtc(date) {
+  const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const day = utcDate.getUTCDay();
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+  utcDate.setUTCDate(utcDate.getUTCDate() + diffToMonday);
+  return utcDate;
+}
+
+function buildScheduledSlot(weekStart, slot) {
+  const date = new Date(weekStart);
+  date.setUTCDate(weekStart.getUTCDate() + (slot.weekday - 1));
+  date.setUTCHours(slot.hour, slot.minute, 0, 0);
+
+  return {
+    bookingTime: formatIsoDateTime(date),
+    label: slot.label,
+    date
+  };
+}
+
+function availableSlotsResponse(now = new Date()) {
+  const bookings = getBookings();
+  const bookedByDate = new Set(
+    Object.values(bookings).map((booking) => extractBookingDate(booking.bookingTime)).filter(Boolean)
+  );
+
+  for (let weekOffset = 0; weekOffset < 3; weekOffset += 1) {
+    const weekStart = startOfWeekUtc(now);
+    weekStart.setUTCDate(weekStart.getUTCDate() + (weekOffset * 7));
+
+    const slots = weeklySlotSchedule
+      .map((slot) => buildScheduledSlot(weekStart, slot))
+      .filter((slot) => slot.date.getTime() > now.getTime())
+      .filter((slot) => !bookedByDate.has(extractBookingDate(slot.bookingTime)))
+      .map((slot) => ({
+        bookingTime: slot.bookingTime,
+        label: slot.label,
+        dayLabel: slot.label.split(' — ')[0]
+      }));
+
+    if (slots.length > 0) {
+      return {
+        heading: weekOffset === 0 ? 'Available times this week' : 'Available times next week',
+        slots
+      };
+    }
+  }
+
+  return {
+    heading: 'Available times',
+    slots: []
+  };
+}
+
+function findAvailableSlot(bookingTime) {
+  const available = availableSlotsResponse();
+  return available.slots.find((slot) => slot.bookingTime === bookingTime) || null;
 }
 
 function saveBooking(sessionId, booking) {
@@ -180,6 +259,11 @@ app.post('/api/book-session', async (req, res) => {
       return res.status(400).json({ error: 'Please choose a Monday to Friday session time.' });
     }
 
+    const selectedSlot = findAvailableSlot(bookingTime);
+    if (!selectedSlot) {
+      return res.status(409).json({ error: 'That slot is no longer available. Please choose another available time.' });
+    }
+
     if (hasExistingBookingOnDate(bookingTime, sessionId)) {
       return res.status(409).json({ error: 'That day is already booked. Please choose another weekday.' });
     }
@@ -191,6 +275,7 @@ app.post('/api/book-session', async (req, res) => {
 
     saveBooking(sessionId, {
       bookingTime,
+      bookingLabel: selectedSlot.label,
       focus: (focus || '').toString().slice(0, 500),
       updatedAt: new Date().toISOString()
     });
@@ -216,6 +301,10 @@ app.post('/api/free-polish', (req, res) => {
   saveFreePolishRequest(entry);
   console.log('Free polish request:', entry);
   return res.json({ ok: true });
+});
+
+app.get('/api/available-slots', (_req, res) => {
+  return res.json(availableSlotsResponse());
 });
 
 app.get('/api/checkout-session/:id', async (req, res) => {
