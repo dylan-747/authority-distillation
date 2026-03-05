@@ -189,61 +189,129 @@
       const statusNode = document.getElementById('status');
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
+      const weeklySlotSchedule = [
+        { weekday: 2, hour: 10, minute: 0, label: 'Tuesday — 10:00' },
+        { weekday: 3, hour: 14, minute: 0, label: 'Wednesday — 14:00' },
+        { weekday: 5, hour: 11, minute: 0, label: 'Friday — 11:00' }
+      ];
 
       if (!sessionId) {
         statusNode.textContent = 'Missing payment session. Please complete payment first.';
         bookingForm.querySelector('button').disabled = true;
       }
 
+      function formatDateKey(date) {
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatIsoDateTime(date) {
+        return `${formatDateKey(date)}T${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
+      }
+
+      function startOfWeekUtc(date) {
+        const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+        const day = utcDate.getUTCDay();
+        const diffToMonday = day === 0 ? -6 : 1 - day;
+        utcDate.setUTCDate(utcDate.getUTCDate() + diffToMonday);
+        return utcDate;
+      }
+
+      function buildScheduledSlot(weekStart, slot) {
+        const date = new Date(weekStart);
+        date.setUTCDate(weekStart.getUTCDate() + (slot.weekday - 1));
+        date.setUTCHours(slot.hour, slot.minute, 0, 0);
+
+        return {
+          bookingTime: formatIsoDateTime(date),
+          label: slot.label,
+          date
+        };
+      }
+
+      function fallbackSlots(now = new Date()) {
+        for (let weekOffset = 0; weekOffset < 3; weekOffset += 1) {
+          const weekStart = startOfWeekUtc(now);
+          weekStart.setUTCDate(weekStart.getUTCDate() + (weekOffset * 7));
+
+          const slots = weeklySlotSchedule
+            .map((slot) => buildScheduledSlot(weekStart, slot))
+            .filter((slot) => slot.date.getTime() > now.getTime())
+            .map((slot) => ({
+              bookingTime: slot.bookingTime,
+              label: slot.label
+            }));
+
+          if (slots.length > 0) {
+            return {
+              heading: weekOffset === 0 ? 'Available times this week' : 'Available times next week',
+              slots
+            };
+          }
+        }
+
+        return {
+          heading: 'Available times',
+          slots: []
+        };
+      }
+
+      function renderSlots(data) {
+        slotHeading.textContent = data.heading || 'Available times';
+        slotList.innerHTML = '';
+
+        if (!data.slots || data.slots.length === 0) {
+          bookingForm.querySelector('button').disabled = true;
+          slotList.innerHTML = '<p class="muted">No slots are available right now. Email me and I will arrange one manually.</p>';
+          return;
+        }
+
+        data.slots.forEach((slot, index) => {
+          const label = document.createElement('label');
+          label.className = 'slot-option';
+
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = 'bookingTime';
+          input.value = slot.bookingTime;
+          input.required = true;
+          if (index === 0) input.checked = true;
+
+          const copy = document.createElement('div');
+          copy.className = 'slot-copy';
+
+          const title = document.createElement('span');
+          title.className = 'slot-label';
+          title.textContent = slot.label;
+
+          const note = document.createElement('span');
+          note.className = 'slot-note';
+          note.textContent = 'One 90-minute session.';
+
+          copy.appendChild(title);
+          copy.appendChild(note);
+          label.appendChild(input);
+          label.appendChild(copy);
+          slotList.appendChild(label);
+        });
+      }
+
       async function loadSlots() {
         try {
           const response = await fetch('/api/available-slots');
-          const data = await response.json();
+          const text = await response.text();
+          const data = text ? JSON.parse(text) : {};
 
           if (!response.ok) {
             throw new Error(data.error || 'Unable to load available slots.');
           }
 
-          slotHeading.textContent = data.heading || 'Available times';
-          slotList.innerHTML = '';
-
-          if (!data.slots || data.slots.length === 0) {
-            bookingForm.querySelector('button').disabled = true;
-            slotList.innerHTML = '<p class="muted">No slots are available right now. Email me and I will arrange one manually.</p>';
-            return;
-          }
-
-          data.slots.forEach((slot, index) => {
-            const label = document.createElement('label');
-            label.className = 'slot-option';
-
-            const input = document.createElement('input');
-            input.type = 'radio';
-            input.name = 'bookingTime';
-            input.value = slot.bookingTime;
-            input.required = true;
-            if (index === 0) input.checked = true;
-
-            const copy = document.createElement('div');
-            copy.className = 'slot-copy';
-
-            const title = document.createElement('span');
-            title.className = 'slot-label';
-            title.textContent = slot.label;
-
-            const note = document.createElement('span');
-            note.className = 'slot-note';
-            note.textContent = 'One 90-minute session.';
-
-            copy.appendChild(title);
-            copy.appendChild(note);
-            label.appendChild(input);
-            label.appendChild(copy);
-            slotList.appendChild(label);
-          });
+          renderSlots(data);
         } catch (error) {
-          bookingForm.querySelector('button').disabled = true;
-          statusNode.textContent = error.message;
+          renderSlots(fallbackSlots());
+          statusNode.textContent = 'Showing the current fixed weekly slots.';
         }
       }
 
