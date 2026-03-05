@@ -23,9 +23,9 @@ const dataDir = storageRoot;
 const bookingsPath = path.join(dataDir, 'bookings.json');
 const freePolishPath = path.join(dataDir, 'free-polish.json');
 const weeklySlotSchedule = [
-  { weekday: 2, hour: 10, minute: 0, label: 'Tuesday — 10:00' },
-  { weekday: 3, hour: 14, minute: 0, label: 'Wednesday — 14:00' },
-  { weekday: 5, hour: 11, minute: 0, label: 'Friday — 11:00' }
+  { weekday: 2, hour: 10, minute: 0, label: 'Tuesday — 10:00 GMT' },
+  { weekday: 3, hour: 14, minute: 0, label: 'Wednesday — 14:00 GMT' },
+  { weekday: 5, hour: 11, minute: 0, label: 'Friday — 11:00 GMT' }
 ];
 const defaultPreparationChecklist = [
   'Send a rough note, voice memo, or messy draft before the session if you have one.',
