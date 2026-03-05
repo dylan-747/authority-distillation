@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Session | Authority Distillation</title>
+    <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=1" />
+    <link rel="shortcut icon" href="/dg-favicon.svg?v=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f2ea;
+        --ink: #23211e;
+        --muted: #66635d;
+        --line: #d0cabf;
+        --accent: #2a2925;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at top, #fbf8f2, var(--bg));
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', sans-serif;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        padding: 1.1rem;
+      }
+
+      .card {
+        width: min(680px, 100%);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.56);
+        padding: 1.2rem;
+      }
+
+      .kicker {
+        margin: 0 0 0.5rem;
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+      }
+
+      h1 {
+        margin: 0;
+        font-family: 'Fraunces', serif;
+        font-weight: 400;
+        font-size: clamp(1.5rem, 5vw, 2.2rem);
+      }
+
+      p { margin: 0.5rem 0; }
+
+      form {
+        margin-top: 1rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid #c6c1b6;
+        border-radius: 9px;
+        background: #fffdf8;
+        color: var(--ink);
+        padding: 0.65rem 0.72rem;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+
+      button {
+        justify-self: start;
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: #f6f4ef;
+        border-radius: 999px;
+        padding: 0.58rem 0.98rem;
+        cursor: pointer;
+      }
+
+      .status {
+        min-height: 1.1rem;
+        margin: 0;
+        color: #4b4842;
+      }
+
+      .muted { color: var(--muted); font-size: 0.88rem; }
+
+      .prep {
+        margin-top: 1rem;
+        padding-top: 0.95rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .prep ul {
+        margin: 0.55rem 0 0;
+        padding-left: 1.1rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <p class="kicker">Booking</p>
+      <h1>Payment received. Choose your session time.</h1>
+      <p class="muted">One 90-minute working session, then one written articulation you can actually use.</p>
+
+      <form id="bookingForm">
+        <input id="bookingTime" name="bookingTime" type="datetime-local" required />
+        <textarea
+          id="focus"
+          name="focus"
+          maxlength="500"
+          placeholder="Optional: what one problem should we focus on?"
+        ></textarea>
+        <button type="submit">Confirm Booking</button>
+        <p class="status" id="status"></p>
+      </form>
+
+      <section class="prep" aria-label="Preparation guidance">
+        <p class="muted">Before the call:</p>
+        <ul>
+          <li>Bring one articulation problem, not a bundle of adjacent issues.</li>
+          <li>If you have a rough draft, memo, or voice note, mention it in the focus field.</li>
+          <li>You will see next-step preparation instructions again after booking.</li>
+        </ul>
+      </section>
+    </main>
+
+    <script>
+      const bookingForm = document.getElementById('bookingForm');
+      const statusNode = document.getElementById('status');
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+
+      if (!sessionId) {
+        statusNode.textContent = 'Missing payment session. Please complete payment first.';
+        bookingForm.querySelector('button').disabled = true;
+      }
+
+      bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!sessionId) return;
+
+        statusNode.textContent = 'Saving booking...';
+
+        const payload = {
+          sessionId,
+          bookingTime: bookingForm.bookingTime.value,
+          focus: bookingForm.focus.value.trim()
+        };
+
+        try {
+          const response = await fetch('/api/book-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || 'Unable to save booking.');
+          }
+
+          window.location.href = `/confirmation.html?session_id=${encodeURIComponent(sessionId)}`;
+        } catch (error) {
+          statusNode.textContent = error.message;
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Authority Distillation</title>
+    <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=1" />
+    <link rel="shortcut icon" href="/dg-favicon.svg?v=1" />
+    <meta
+      name="description"
+      content="Authority Distillation for founders and operators: from raw thinking to clear written articulation."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f3ec;
+        --panel: #faf8f2;
+        --ink: #1e1d1a;
+        --muted: #64625c;
+        --line: #cec9bf;
+        --accent: #272622;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: radial-gradient(circle at 10% 10%, #fbf9f4, var(--bg));
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', sans-serif;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .app {
+        min-height: 100dvh;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.9rem;
+        padding: 0.8rem 1rem;
+        background: rgba(245, 243, 236, 0.92);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(6px);
+      }
+
+      .brand {
+        margin: 0;
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 0.32rem;
+      }
+
+      .nav-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        border: 1px solid #908c82;
+        background: transparent;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .nav-dot.active {
+        background: #4d4a43;
+      }
+
+      .hint {
+        font-size: 0.75rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .canvas {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        overscroll-behavior-x: contain;
+      }
+
+      .canvas::-webkit-scrollbar {
+        display: none;
+      }
+
+      .panel {
+        flex: 0 0 100%;
+        min-height: calc(100dvh - 58px);
+        scroll-snap-align: start;
+        padding: 1.7rem 1.05rem 2.2rem;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(170deg, var(--panel), #f7f4ec);
+        display: grid;
+        align-content: start;
+      }
+
+      .panel:nth-child(odd) {
+        background: linear-gradient(160deg, #f1eee6, #ece8dd);
+      }
+
+      .kicker {
+        margin: 0 0 1rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        font-family: 'Fraunces', serif;
+        font-weight: 400;
+        line-height: 1.08;
+      }
+
+      h1 {
+        font-size: clamp(1.75rem, 6vw, 2.8rem);
+      }
+
+      h2 {
+        font-size: clamp(1.35rem, 4.8vw, 2rem);
+      }
+
+      p {
+        margin: 0.45rem 0;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .raw-lines {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 1.08rem;
+      }
+
+      .raw-lines li {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(1.05rem, 3.4vw, 1.5rem);
+        line-height: 1.33;
+        max-width: 34ch;
+      }
+
+      .raw-lines li:nth-child(even) {
+        opacity: 0.88;
+      }
+
+      .raw-intro h1 {
+        margin-bottom: 1.25rem;
+        max-width: 16ch;
+      }
+
+      .identity h1,
+      .identity h2 {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+      }
+
+      .transform-line {
+        margin: -0.45rem 0 1.15rem;
+        font-size: 0.84rem;
+        color: var(--muted);
+        letter-spacing: 0.02em;
+      }
+
+      .raw-head::after {
+        content: '';
+        display: inline-block;
+        width: 2px;
+        height: 1.05em;
+        margin-left: 0.32rem;
+        background: #57524a;
+        vertical-align: -0.12em;
+        animation: blink-caret 1.05s steps(1, end) infinite;
+        transition: opacity 120ms ease;
+      }
+
+      .raw-intro:focus-within .raw-head::after {
+        opacity: 0;
+      }
+
+      .raw-head:focus::after {
+        opacity: 0;
+      }
+
+      .raw-intro.activated .raw-head::after {
+        opacity: 0;
+        animation: none;
+      }
+
+      @keyframes blink-caret {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .editable {
+        font-family: 'Fraunces', serif;
+      }
+
+      .editable:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      .panel-cta {
+        margin-top: 1.2rem;
+        justify-self: start;
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: #f6f4ef;
+        border-radius: 999px;
+        padding: 0.55rem 0.95rem;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .essay-list,
+      .work-list,
+      .distill-points,
+      .summary-list {
+        margin: 1rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.68rem;
+      }
+
+      .essay-list li,
+      .work-list li,
+      .distill-points li,
+      .summary-list li {
+        border-left: 2px solid #bcb6aa;
+        padding-left: 0.65rem;
+      }
+
+      .price {
+        margin-top: 1rem;
+        font-size: 1.05rem;
+      }
+
+      .pay-shell {
+        margin-top: 1.2rem;
+        max-width: 560px;
+      }
+
+      .pay-card {
+        border: 1px solid #c8c2b6;
+        border-radius: 16px;
+        padding: 1rem 0.92rem;
+        background: linear-gradient(170deg, rgba(255, 255, 255, 0.78), rgba(246, 242, 233, 0.74));
+        box-shadow: 0 14px 30px rgba(108, 101, 90, 0.08);
+      }
+
+      .pay-summary {
+        margin: 0.1rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.58rem;
+      }
+
+      .pay-summary li {
+        border-left: 2px solid #bcb6aa;
+        padding-left: 0.62rem;
+      }
+
+      .steps {
+        margin-top: 0.9rem;
+        display: grid;
+        gap: 0.4rem;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .pay-actions {
+        margin-top: 0.95rem;
+        display: grid;
+        justify-content: start;
+      }
+
+      .btn-primary {
+        border-radius: 999px;
+        font: inherit;
+        font-size: 0.93rem;
+        padding: 0.6rem 1.08rem;
+        cursor: pointer;
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: #f6f4ef;
+      }
+
+      .status {
+        margin-top: 0.65rem;
+        min-height: 1.1rem;
+        font-size: 0.86rem;
+        color: #5a564f;
+      }
+
+      .subtle {
+        font-size: 0.83rem;
+        color: var(--muted);
+      }
+
+      .credibility {
+        margin-top: 1rem;
+        max-width: 40ch;
+        color: var(--muted);
+      }
+
+      .example-wrap {
+        margin-top: 1rem;
+        display: grid;
+        gap: 0.7rem;
+        max-width: 620px;
+      }
+
+      .example-row {
+        border: 1px solid #c8c2b6;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.52);
+        padding: 0.7rem 0.75rem;
+      }
+
+      .example-row.raw-copy {
+        color: #7a756b;
+      }
+
+      .example-row.distilled-copy {
+        color: #23211d;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .example-label {
+        margin: 0 0 0.35rem;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.13em;
+        color: var(--muted);
+      }
+
+      .example-arrow {
+        margin: 0.1rem auto;
+        width: fit-content;
+        display: block;
+        color: #807b71;
+        font-size: 0.92rem;
+      }
+
+      .polish-card {
+        margin-top: 1rem;
+        border: 1px solid #c8c2b6;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.52);
+        padding: 0.85rem 0.8rem;
+        max-width: 560px;
+      }
+
+      .polish-form {
+        margin-top: 0.7rem;
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      .polish-form input,
+      .polish-form textarea {
+        width: 100%;
+        border: 1px solid #c6c1b6;
+        border-radius: 9px;
+        background: #fffdf8;
+        color: var(--ink);
+        padding: 0.62rem 0.68rem;
+        font: inherit;
+      }
+
+      .polish-form textarea {
+        min-height: 88px;
+        resize: vertical;
+      }
+
+      @media (min-width: 980px) {
+        .topbar {
+          padding: 0.8rem 1.4rem;
+        }
+
+        .panel {
+          padding: 2.8rem 2.3rem 2.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <p class="brand">Authority Distillation</p>
+        <div class="nav" id="nav"></div>
+        <p class="hint">Swipe or drag left and right</p>
+      </header>
+
+      <section class="canvas" id="canvas" aria-label="Horizontal thinking canvas">
+        <article class="panel raw-intro" data-title="Raw Thinking">
+          <p class="kicker">Raw Thinking</p>
+          <h1 class="editable raw-head" contenteditable="true" spellcheck="false">You know what you mean. Other people still do not.</h1>
+          <p class="transform-line editable" contenteditable="true" spellcheck="false">Raw Thinking → Clear Articulation</p>
+          <ul class="raw-lines">
+            <li class="editable" contenteditable="true" spellcheck="false">The company has changed direction but the story has not.</li>
+            <li class="editable" contenteditable="true" spellcheck="false">The product is clear internally but hard to explain externally.</li>
+            <li class="editable" contenteditable="true" spellcheck="false">Investors do not quite understand what makes this different.</li>
+            <li class="editable" contenteditable="true" spellcheck="false">There is something important here but I cannot articulate it yet.</li>
+          </ul>
+          <button class="panel-cta" id="startDistillation" type="button">Start Distillation</button>
+        </article>
+
+        <article class="panel identity" data-title="Distillation">
+          <p class="kicker">Distillation</p>
+          <h1>Dylan Galloway</h1>
+          <p class="muted">Founder Articulation</p>
+          <h2 style="margin-top: 1.3rem">
+            For founders who know exactly what they mean
+            <br />
+            but have not articulated it clearly yet.
+          </h2>
+          <ul class="distill-points">
+            <li>90-minute thinking session</li>
+            <li>One problem</li>
+            <li>One Clear Articulation</li>
+            <li>Raw Thinking → Clear Articulation</li>
+          </ul>
+          <p class="price">Price: £450</p>
+          <p class="credibility">
+            Best when the issue is not lack of intelligence, but lack of exact language:
+            positioning, fundraising narrative, strategic memo, or founder essay.
+          </p>
+        </article>
+
+        <article class="panel" data-title="Essays">
+          <p class="kicker">Essays / Notes</p>
+          <h2>Drafts, essays, and notes worth finishing.</h2>
+          <ul class="essay-list">
+            <li>Rough founder note -> publishable argument</li>
+            <li>Strategic idea -> language that lands without posturing</li>
+            <li>Voice memo or messy draft -> clean piece in your actual tone</li>
+          </ul>
+          <section class="polish-card">
+            <p class="subtle">If you have a draft, I can polish one post for free.</p>
+            <form class="polish-form" id="freePolishForm">
+              <input
+                id="polishEmail"
+                name="email"
+                type="email"
+                placeholder="Email"
+                autocomplete="email"
+                required
+              />
+              <textarea
+                id="polishNote"
+                name="note"
+                maxlength="500"
+                placeholder="What is the draft, and what do you want sharpened?"
+                required
+              ></textarea>
+              <div>
+                <button class="btn-primary" id="freePolishBtn" type="submit">Request Free Polish</button>
+              </div>
+              <p class="status" id="freePolishStatus"></p>
+            </form>
+          </section>
+        </article>
+
+        <article class="panel" data-title="Work">
+          <p class="kicker">What Leaves The Room</p>
+          <h2>What this usually produces.</h2>
+          <ul class="work-list">
+            <li>Positioning language that makes the company legible and non-generic</li>
+            <li>Fundraising narrative that connects traction, ambition, and why now</li>
+            <li>Memo, essay, or internal note that sounds like you on your clearest day</li>
+          </ul>
+          <p class="credibility">
+            You are buying a sharper articulation, not generalized advice. The deliverable should be usable in a room where stakes are real.
+          </p>
+        </article>
+
+        <article class="panel" data-title="Example">
+          <p class="kicker">Shift 1</p>
+          <h2>When the company changed before the story did.</h2>
+          <div class="example-wrap">
+            <section class="example-row raw-copy">
+              <p class="example-label">Raw Thinking</p>
+              <p>
+                We built for one use case, customers use it for another, and now our story sounds inconsistent in investor meetings.
+              </p>
+            </section>
+              <p class="example-arrow">↓</p>
+            <section class="example-row distilled-copy">
+              <p class="example-label">Distilled Articulation</p>
+              <p>
+                We started with a narrow use case.
+                Customer behaviour revealed the larger problem: coordination across teams.
+                The company is now positioned around that broader operational need.
+              </p>
+            </section>
+          </div>
+        </article>
+
+        <article class="panel" data-title="Example 2">
+          <p class="kicker">Shift 2</p>
+          <h2>When the product is strong but the differentiation is blurred.</h2>
+          <div class="example-wrap">
+            <section class="example-row raw-copy">
+              <p class="example-label">Raw Thinking</p>
+              <p>
+                Our product does a lot of things well but it is hard to explain what makes us different from competitors.
+              </p>
+            </section>
+              <p class="example-arrow">↓</p>
+            <section class="example-row distilled-copy">
+              <p class="example-label">Distilled Articulation</p>
+              <p>
+                Most tools improve one isolated step.
+                This product gives a company control across the whole operating system.
+                The advantage is not a feature.
+                It is command of the larger process.
+              </p>
+            </section>
+          </div>
+        </article>
+
+        <article class="panel" data-title="Example 3">
+          <p class="kicker">Shift 3</p>
+          <h2>When the market sees service, but the business is becoming software.</h2>
+          <div class="example-wrap">
+            <section class="example-row raw-copy">
+              <p class="example-label">Raw Thinking</p>
+              <p>
+                Investors think we are a services company but we are actually building software.
+              </p>
+            </section>
+              <p class="example-arrow">↓</p>
+            <section class="example-row distilled-copy">
+              <p class="example-label">Distilled Articulation</p>
+              <p>
+                Services were the wedge.
+                The real company is the product that replaces the manual work.
+                What looks like a service today becomes infrastructure over time.
+              </p>
+            </section>
+          </div>
+        </article>
+
+        <article class="panel" data-title="Distill">
+          <p class="kicker">Purchase</p>
+          <div class="pay-shell">
+            <section class="pay-card">
+              <h2>Authority Distillation</h2>
+              <ul class="pay-summary">
+                <li>90-minute working session</li>
+                <li>One idea clarified</li>
+                <li>One written articulation delivered after the call</li>
+              </ul>
+              <p class="price">£450</p>
+
+              <div class="steps">
+                <span>1. Secure payment via Stripe</span>
+                <span>2. Choose your calendar slot</span>
+                <span>3. Receive confirmation and preparation instructions</span>
+                <span>4. Bring one problem; leave with one sharper articulation</span>
+              </div>
+
+              <div class="pay-actions">
+                <button class="btn-primary" id="payNowBtn" type="button">Distill a Thought</button>
+              </div>
+              <p class="status" id="payStatus"></p>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      const canvas = document.getElementById('canvas');
+      const panels = Array.from(canvas.querySelectorAll('.panel'));
+      const nav = document.getElementById('nav');
+      const payNowBtn = document.getElementById('payNowBtn');
+      const payStatus = document.getElementById('payStatus');
+      const freePolishForm = document.getElementById('freePolishForm');
+      const freePolishStatus = document.getElementById('freePolishStatus');
+      const startDistillation = document.getElementById('startDistillation');
+      const rawIntro = document.querySelector('.raw-intro');
+      const rawTitleNode = document.querySelector('.raw-intro h1.editable');
+      const transformLineNode = document.querySelector('.raw-intro .transform-line.editable');
+      const rawLineNodes = Array.from(document.querySelectorAll('.raw-intro .raw-lines .editable'));
+      const RAW_TITLE_DEFAULT = rawTitleNode.textContent;
+      const RAW_LINES_DEFAULT = rawLineNodes.map((node) => node.textContent);
+      const TRANSFORM_DEFAULT = 'Raw Thinking → Clear Articulation';
+      payStatus.textContent = 'Secure checkout opens instantly.';
+
+      const dots = panels.map((panel, index) => {
+        const dot = document.createElement('button');
+        dot.className = 'nav-dot';
+        dot.type = 'button';
+        dot.ariaLabel = panel.dataset.title;
+        dot.addEventListener('click', () => {
+          canvas.scrollTo({ left: index * canvas.clientWidth, behavior: 'smooth' });
+        });
+        nav.appendChild(dot);
+        return dot;
+      });
+
+      let lastPanelIndex = 0;
+      function updateActiveDot() {
+        const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        if (lastPanelIndex === 0 && index !== 0) {
+          rawTitleNode.textContent = RAW_TITLE_DEFAULT;
+          transformLineNode.textContent = TRANSFORM_DEFAULT;
+          rawLineNodes.forEach((node, i) => {
+            node.textContent = RAW_LINES_DEFAULT[i];
+          });
+        }
+        lastPanelIndex = index;
+      }
+
+      canvas.addEventListener('scroll', updateActiveDot, { passive: true });
+      window.addEventListener('resize', updateActiveDot);
+      updateActiveDot();
+
+      startDistillation.addEventListener('click', () => {
+        canvas.scrollTo({ left: canvas.clientWidth, behavior: 'smooth' });
+      });
+
+      rawIntro.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.editable')) rawIntro.classList.add('activated');
+      });
+
+      rawIntro.addEventListener('keydown', () => {
+        rawIntro.classList.add('activated');
+      });
+
+      let dragging = false;
+      let startX = 0;
+      let startLeft = 0;
+
+      canvas.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('button, input, textarea, form, a')) return;
+        dragging = true;
+        startX = e.clientX;
+        startLeft = canvas.scrollLeft;
+        canvas.setPointerCapture(e.pointerId);
+        canvas.style.scrollBehavior = 'auto';
+      });
+
+      canvas.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        canvas.scrollLeft = startLeft - dx;
+      });
+
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        canvas.releasePointerCapture(e.pointerId);
+        canvas.style.scrollBehavior = 'smooth';
+        const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
+        canvas.scrollTo({ left: index * canvas.clientWidth, behavior: 'smooth' });
+      }
+
+      canvas.addEventListener('pointerup', endDrag);
+      canvas.addEventListener('pointercancel', endDrag);
+
+      async function startCheckout() {
+        payStatus.textContent = 'Preparing Stripe checkout...';
+        try {
+          const response = await fetch('/api/create-checkout-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || 'Unable to start checkout.');
+          }
+          window.location.href = data.url;
+        } catch (error) {
+          payStatus.textContent = error.message;
+        }
+      }
+
+      payNowBtn.addEventListener('click', () => {
+        startCheckout();
+      });
+
+      freePolishForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        freePolishStatus.textContent = 'Saving your note...';
+
+        try {
+          const response = await fetch('/api/free-polish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: freePolishForm.email.value,
+              note: freePolishForm.note.value.trim()
+            })
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || 'Unable to save your request.');
+          }
+
+          freePolishForm.reset();
+          freePolishStatus.textContent = 'Request received. I will follow up by email.';
+        } catch (error) {
+          freePolishStatus.textContent = error.message;
+        }
+      });
+
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('cancelled') === '1') {
+        payStatus.textContent = 'Checkout cancelled. You can secure your session when ready.';
+        canvas.scrollTo({ left: (panels.length - 1) * canvas.clientWidth, behavior: 'smooth' });
+      }
+    </script>
+  </body>
+</html>
