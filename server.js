@@ -185,6 +185,14 @@ function saveFreePolishRequest(entry) {
   writeJsonFile(freePolishPath, requests);
 }
 
+function getSessionCustomerEmail(session) {
+  return session.customer_email || session.customer_details?.email || null;
+}
+
+function getSessionCustomerName(session) {
+  return session.customer_details?.name || null;
+}
+
 function emailNotificationsEnabled() {
   return Boolean(resendApiKey && notifyToEmail && notifyFromEmail);
 }
@@ -287,7 +295,7 @@ app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res
       id: session.id,
       amount_total: session.amount_total,
       currency: session.currency,
-      customer_email: session.customer_email
+      customer_email: getSessionCustomerEmail(session)
     });
   }
 
@@ -301,6 +309,7 @@ app.post('/api/create-checkout-session', async (_req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      customer_creation: 'always',
       billing_address_collection: 'auto',
       line_items: [
         {
@@ -364,8 +373,8 @@ app.post('/api/book-session', async (req, res) => {
 
     try {
       await sendBookingNotifications({
-        customerEmail: session.customer_email,
-        customerName: session.customer_details?.name || '',
+        customerEmail: getSessionCustomerEmail(session),
+        customerName: getSessionCustomerName(session) || '',
         bookingLabel: booking.bookingLabel,
         focus: booking.focus
       });
@@ -410,8 +419,8 @@ app.get('/api/checkout-session/:id', async (req, res) => {
     return res.json({
       status: session.status,
       payment_status: session.payment_status,
-      customer_email: session.customer_email,
-      customer_name: session.customer_details?.name || null,
+      customer_email: getSessionCustomerEmail(session),
+      customer_name: getSessionCustomerName(session),
       amount_total: session.amount_total,
       currency: session.currency,
       booking,
