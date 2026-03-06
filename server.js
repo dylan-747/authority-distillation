@@ -22,6 +22,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const dataDir = storageRoot;
 const bookingsPath = path.join(dataDir, 'bookings.json');
 const freePolishPath = path.join(dataDir, 'free-polish.json');
+const resendApiKey = process.env.RESEND_API_KEY || '';
+const notifyToEmail = process.env.NOTIFY_TO_EMAIL || '';
+const notifyFromEmail = process.env.NOTIFY_FROM_EMAIL || '';
 const weeklySlotSchedule = [
   { weekday: 2, weekdayName: 'Tuesday', hour: 10, minute: 0 },
   { weekday: 3, weekdayName: 'Wednesday', hour: 14, minute: 0 },
@@ -182,6 +185,82 @@ function saveFreePolishRequest(entry) {
   writeJsonFile(freePolishPath, requests);
 }
 
+function emailNotificationsEnabled() {
+  return Boolean(resendApiKey && notifyToEmail && notifyFromEmail);
+}
+
+async function sendEmail({ to, subject, text, replyTo }) {
+  if (!emailNotificationsEnabled()) {
+    return { sent: false, reason: 'Email notifications not configured.' };
+  }
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${resendApiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      from: notifyFromEmail,
+      to: Array.isArray(to) ? to : [to],
+      reply_to: replyTo || undefined,
+      subject,
+      text
+    })
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Resend error ${response.status}: ${body}`);
+  }
+
+  return { sent: true };
+}
+
+async function sendBookingNotifications({ customerEmail, customerName, bookingLabel, focus }) {
+  if (!emailNotificationsEnabled()) {
+    return;
+  }
+
+  const ownerText = [
+    'New Authority Distillation booking',
+    '',
+    `Client: ${customerName || 'Unknown'}`,
+    `Email: ${customerEmail || 'Unknown'}`,
+    `Session: ${bookingLabel}`,
+    `Focus: ${focus || 'None provided'}`
+  ].join('\n');
+
+  const clientText = [
+    `Authority Distillation confirmed${customerName ? `, ${customerName.split(/\s+/)[0]}` : ''}.`,
+    '',
+    `Session time: ${bookingLabel}`,
+    'Session length: 90 minutes',
+    'Location: Google Meet or Zoom',
+    '',
+    'Before the session:',
+    'Bring the one idea you want to articulate clearly.',
+    'Optional: send 2-3 sentences of context beforehand.'
+  ].join('\n');
+
+  await Promise.all([
+    sendEmail({
+      to: notifyToEmail,
+      subject: `New booking: ${bookingLabel}`,
+      text: ownerText,
+      replyTo: customerEmail || undefined
+    }),
+    customerEmail
+      ? sendEmail({
+          to: customerEmail,
+          subject: 'Authority Distillation confirmed',
+          text: clientText,
+          replyTo: notifyToEmail
+        })
+      : Promise.resolve()
+  ]);
+}
+
 app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -270,12 +349,24 @@ app.post('/api/book-session', async (req, res) => {
       return res.status(403).json({ error: 'Payment required before booking.' });
     }
 
-    saveBooking(sessionId, {
+    const booking = {
       bookingTime,
       bookingLabel: selectedSlot.label,
       focus: (focus || '').toString().slice(0, 500),
       updatedAt: new Date().toISOString()
-    });
+    };
+    saveBooking(sessionId, booking);
+
+    try {
+      await sendBookingNotifications({
+        customerEmail: session.customer_email,
+        customerName: session.customer_details?.name || '',
+        bookingLabel: booking.bookingLabel,
+        focus: booking.focus
+      });
+    } catch (notificationError) {
+      console.error('Booking notification error:', notificationError);
+    }
 
     return res.json({ ok: true });
   } catch (error) {
