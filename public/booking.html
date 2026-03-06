@@ -59,6 +59,15 @@
         font-size: clamp(1.5rem, 5vw, 2.2rem);
       }
 
+      .intro-copy {
+        margin-top: 0.85rem;
+        max-width: 26ch;
+        font-family: 'Fraunces', serif;
+        font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+        line-height: 1.2;
+        color: #4e4b45;
+      }
+
       p { margin: 0.5rem 0; }
 
       form {
@@ -89,14 +98,21 @@
       }
 
       .slot-option {
-        border: 1px solid #c6c1b6;
+        border: 1px solid #bdb6aa;
         border-radius: 12px;
-        background: #fffdf8;
-        padding: 0.8rem 0.9rem;
+        background: rgba(255, 253, 248, 0.92);
+        padding: 0.95rem 1rem;
         display: flex;
         align-items: center;
         gap: 0.7rem;
         cursor: pointer;
+        transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+      }
+
+      .slot-option:has(input:checked) {
+        border-color: #2a2925;
+        background: #fffdf8;
+        transform: translateY(-1px);
       }
 
       .slot-option input {
@@ -110,6 +126,7 @@
 
       .slot-label {
         font-weight: 500;
+        font-size: 1rem;
       }
 
       .slot-note {
@@ -123,7 +140,7 @@
         background: var(--accent);
         color: #f6f4ef;
         border-radius: 999px;
-        padding: 0.58rem 0.98rem;
+        padding: 0.68rem 1.14rem;
         cursor: pointer;
       }
 
@@ -152,11 +169,15 @@
     <main class="card">
       <p class="kicker">Booking</p>
       <h1>Good decision.</h1>
-      <p class="muted">Now choose a time for the session.</p>
+      <p class="intro-copy">
+        Most founders know exactly what they mean.
+        The articulation simply hasn't caught up yet.
+      </p>
+      <p class="muted">Choose a time for the session.</p>
 
       <form id="bookingForm">
         <div>
-          <p class="muted" id="slotHeading">Available times</p>
+          <p class="muted" id="slotHeading">Available session this week</p>
           <div class="slot-list" id="slotList">
             <p class="muted">Loading available slots...</p>
           </div>
@@ -165,19 +186,19 @@
           id="focus"
           name="focus"
           maxlength="500"
-          placeholder="Optional: what one problem should we focus on?"
+          placeholder="Optional: what are we trying to articulate?"
         ></textarea>
         <button type="submit">Confirm Booking</button>
         <p class="status" id="status"></p>
       </form>
 
       <section class="prep" aria-label="Preparation guidance">
-        <p class="muted">Authority Distillation confirmed.</p>
+        <p class="muted">Authority Distillation</p>
         <ul>
-          <li>Session length: 90 minutes</li>
-          <li>Location: Google Meet / Zoom</li>
-          <li>Before the session: bring the one idea you want to articulate clearly.</li>
-          <li>Optional: send 2-3 sentences of context beforehand.</li>
+          <li>90-minute working session</li>
+          <li>Location: Google Meet or Zoom</li>
+          <li>Bring the one idea you want to articulate clearly</li>
+          <li>Optional: send 2-3 sentences of context beforehand</li>
         </ul>
       </section>
     </main>
@@ -252,7 +273,7 @@
         }
 
         return {
-          heading: 'Available appointment slots',
+          heading: 'Available session this week',
           slots: slots.slice(0, 3)
         };
       }
@@ -287,7 +308,7 @@
 
           const note = document.createElement('span');
           note.className = 'slot-note';
-          note.textContent = 'One 90-minute session.';
+          note.textContent = 'Authority Distillation session · 90 minutes';
 
           copy.appendChild(title);
           copy.appendChild(note);
@@ -310,7 +331,7 @@
           renderSlots(data);
         } catch (error) {
           renderSlots(fallbackSlots());
-          statusNode.textContent = 'Showing the current fixed weekly slots.';
+          statusNode.textContent = '';
         }
       }
 
