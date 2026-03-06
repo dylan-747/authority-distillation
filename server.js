@@ -232,15 +232,20 @@ async function sendBookingNotifications({ customerEmail, customerName, bookingLa
   ].join('\n');
 
   const clientText = [
-    `Authority Distillation confirmed${customerName ? `, ${customerName.split(/\s+/)[0]}` : ''}.`,
+    'Authority Distillation confirmed.',
     '',
-    `Session time: ${bookingLabel}`,
-    'Session length: 90 minutes',
-    'Location: Google Meet or Zoom',
+    'We have a 90-minute working session scheduled.',
     '',
-    'Before the session:',
-    'Bring the one idea you want to articulate clearly.',
-    'Optional: send 2-3 sentences of context beforehand.'
+    'You will receive a calendar invitation shortly with the meeting link.',
+    '',
+    'Before the session, bring the one idea you want to articulate clearly.',
+    'It could be a narrative, positioning question, or something you have been trying to express but cannot quite say yet.',
+    '',
+    'Optional: if helpful, reply with 2-3 sentences describing what we are trying to clarify.',
+    '',
+    'Looking forward to it.',
+    '',
+    '— Dylan'
   ].join('\n');
 
   await Promise.all([
