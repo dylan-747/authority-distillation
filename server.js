@@ -279,8 +279,10 @@ app.post('/api/book-session', async (req, res) => {
 
     return res.json({ ok: true });
   } catch (error) {
-    console.error('Booking error:', error.message);
-    return res.status(500).json({ error: 'Unable to save booking.' });
+    console.error('Booking error:', error);
+    return res.status(500).json({
+      error: error && error.message ? error.message : 'Unable to save booking.'
+    });
   }
 });
 
