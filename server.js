@@ -247,11 +247,11 @@ async function sendBookingNotifications({ customerEmail, customerName, bookingLa
     'You will receive a calendar invitation shortly with the meeting link.',
     '',
     'Before the session, bring the one idea you want to articulate clearly.',
-    'It could be a narrative, positioning question, or something you have been trying to express but cannot quite say yet.',
+    'It might be a narrative, positioning question, or something you’ve been trying to express but haven’t quite found the language for.',
     '',
-    'Optional: if helpful, reply with 2-3 sentences describing what we are trying to clarify.',
+    'If helpful, you can reply with a few sentences of context beforehand.',
     '',
-    'Looking forward to it.',
+    'Looking forward to the conversation.',
     '',
     '— Dylan'
   ].join('\n');
