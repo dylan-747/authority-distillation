@@ -545,24 +545,27 @@
 
       <section class="canvas" id="canvas" aria-label="Horizontal thinking canvas">
         <article class="panel raw-intro" data-title="For Founders">
-          <p class="kicker">For Founders</p>
-          <h1 class="editable raw-head" contenteditable="true" spellcheck="false">You know what you mean. Other people still do not.</h1>
-          <p class="transform-line editable" contenteditable="true" spellcheck="false">Raw thinking → Clear articulation</p>
-          <p class="hero-copy">
-            So your product, positioning, and ideas are understood immediately.
+          <p class="kicker">Authority Distillation</p>
+          <h1 class="editable raw-head" contenteditable="true" spellcheck="false">Most founders sound smart. I make them understood.</h1>
+          <p class="transform-line editable" contenteditable="true" spellcheck="false">Bring the raw thinking. Leave with language you can actually use.</p>
+          <p class="hero-proof" style="margin-top:0.6rem;">
+            £450 &middot; 90 minutes &middot; One idea, clearly articulated
           </p>
-          <p class="hero-proof">
-            If people don’t understand it, it doesn’t matter how good it is.
-          </p>
+          <button class="panel-cta" id="startDistillation" type="button">Send me your last voice note</button>
+          <button class="panel-cta" style="background:transparent;border-color:transparent;color:var(--muted);margin-top:0.3rem;font-size:0.85rem;" id="exploreProcess" type="button">Or explore the process</button>
+        </article>
+
+        <article class="panel raw-examples" data-title="Raw Thinking">
+          <p class="kicker">Raw Thinking</p>
+          <h2 style="margin-bottom:1.1rem;">This is what that looks like in practice.</h2>
           <ul class="raw-lines">
-            <li class="editable" contenteditable="true" spellcheck="false">The company has changed direction but the story has not.</li>
-            <li class="editable" contenteditable="true" spellcheck="false">The product is clear internally but hard to explain externally.</li>
-            <li class="editable" contenteditable="true" spellcheck="false">Investors do not quite understand what makes this different.</li>
-            <li class="editable" contenteditable="true" spellcheck="false">There is something important here but I cannot articulate it yet.</li>
+            <li class="editable" contenteditable="true" spellcheck="false">The company has changed direction. The story hasn’t.</li>
+            <li class="editable" contenteditable="true" spellcheck="false">The product is clear internally. Hard to explain externally.</li>
+            <li class="editable" contenteditable="true" spellcheck="false">Investors don’t quite understand what makes this different.</li>
+            <li class="editable" contenteditable="true" spellcheck="false">There’s something important here. I just can’t articulate it yet.</li>
           </ul>
-          <button class="panel-cta" id="startDistillation" type="button">Send your thinking</button>
-          <button class="panel-cta" style="background:transparent;border-color:transparent;color:var(--muted);margin-top:0.3rem;font-size:0.85rem;" id="exploreProcess" type="button">Or explore the process</button>
-          <button class="panel-cta" style="background:transparent;border-color:transparent;color:var(--muted);margin-top:0.3rem;font-size:0.85rem;" id="exploreProcess" type="button">Or explore the process</button>
+          <p class="transform-line" style="margin-top:1.1rem;">Raw thinking → Clear articulation</p>
+          <button class="panel-cta" id="exploreExamples" type="button">See the work</button>
         </article>
 
         <article class="panel notepad-example" data-title="Example 1">
@@ -758,6 +761,8 @@
       const payNowBtn = document.getElementById('payNowBtn');
       const payStatus = document.getElementById('payStatus');
       const startDistillation = document.getElementById('startDistillation');
+      const exploreProcess = document.getElementById('exploreProcess');
+      const exploreExamples = document.getElementById('exploreExamples');
       const rawIntro = document.querySelector('.raw-intro');
       const rawTitleNode = document.querySelector('.raw-intro h1.editable');
       const transformLineNode = document.querySelector('.raw-intro .transform-line.editable');
@@ -812,8 +817,7 @@
       updateActiveDot();
 
       exploreProcess.addEventListener("click", () => { canvas.scrollTo({ left: canvas.clientWidth, behavior: "smooth" }); });
-
-      exploreProcess.addEventListener("click", () => { canvas.scrollTo({ left: canvas.clientWidth, behavior: "smooth" }); });
+      if (exploreExamples) exploreExamples.addEventListener("click", () => { canvas.scrollTo({ left: 2 * canvas.clientWidth, behavior: "smooth" }); });
 
       startDistillation.addEventListener('click', () => {
         canvas.scrollTo({ left: canvas.clientWidth, behavior: 'smooth' });
