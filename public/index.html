@@ -495,6 +495,19 @@
         color: var(--muted);
       }
 
+      .proof-card {
+        margin-top: 1rem;
+        max-width: 620px;
+        border: 1px solid #c8c2b6;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.56);
+        padding: 0.95rem 0.9rem;
+      }
+
+      .proof-card .example-wrap {
+        margin-top: 0.8rem;
+      }
+
       .section-intro {
         margin-top: 0.55rem;
         max-width: 34ch;
@@ -629,9 +642,9 @@
           <h2 style="margin-bottom:1.1rem;">This is for founders who are already onto something.</h2>
           <ul class="raw-lines">
             <li>You sound sharper in conversation than you do on the page.</li>
-            <li>The business has moved, but the language is still describing an earlier version.</li>
+            <li>The business changed. The language did not.</li>
             <li>The product matters, but every explanation keeps collapsing into features.</li>
-            <li>You do not need more content. You need the right articulation.</li>
+            <li>You do not need more words. You need the right ones.</li>
           </ul>
           <p class="transform-line" style="margin-top:1.1rem;">Not more words. Clearer ones.</p>
           <button class="panel-cta" data-scroll-to="panel-example" type="button">See an example</button>
@@ -667,7 +680,7 @@
             <br />
             One written articulation.</h1>
           <p class="muted">Founder articulation for high-stakes ideas.</p>
-          <p class="trust-line">Bring a page, deck, memo, draft, voice note, or half-formed thought. We work on one thing until it lands.</p>
+          <p class="trust-line">Bring one problem. We work on it until the sentence is right.</p>
           <h2 style="margin-top: 1.3rem">
             Most of the work
             <br />
@@ -720,6 +733,27 @@
               </a>
             </li>
           </ul>
+          <section class="proof-card">
+            <p class="subtle">Anonymous example</p>
+            <p class="section-intro">Founder had real clarity in conversation, but the website was still describing an earlier, smaller version of the company.</p>
+            <div class="example-wrap">
+              <section class="example-row raw-copy">
+                <p class="example-label">Before</p>
+                <p>
+                  We help teams manage cross-functional work more efficiently with a combination of software and expert support.
+                </p>
+              </section>
+              <p class="example-arrow">↓</p>
+              <section class="example-row distilled-copy">
+                <p class="example-label">After</p>
+                <p>
+                  We started as a service.
+                  The real product is the system that removes the manual coordination work altogether.
+                  What looks supportive on the surface is actually control infrastructure underneath.
+                </p>
+              </section>
+            </div>
+          </section>
           <section class="polish-card">
             <p class="subtle">Not ready to book?</p>
             <div class="polish-form">
@@ -760,7 +794,7 @@
               <div class="pay-actions">
                 <button class="btn-primary" id="payNowBtn" type="button">Book authority distillation</button>
               </div>
-              <p class="offer-note">Best when the cost of being almost clear is already showing up somewhere important.</p>
+              <p class="offer-note">This is for people who can already feel the cost of being unclear.</p>
               <p class="status" id="payStatus"></p>
             </section>
           </div>
