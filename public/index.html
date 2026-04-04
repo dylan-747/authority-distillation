@@ -222,12 +222,11 @@
         content: '';
         display: inline-block;
         width: 2px;
-        height: 1.05em;
-        margin-left: 0.32rem;
+        height: 1.02em;
+        margin-left: 0.28rem;
         background: #57524a;
         vertical-align: -0.12em;
         animation: blink-caret 1.05s steps(1, end) infinite;
-        transition: opacity 120ms ease;
       }
 
       .raw-head {
@@ -235,6 +234,7 @@
       }
 
       .raw-head:focus {
+        outline: none;
         caret-color: var(--ink);
       }
 
@@ -255,15 +255,62 @@
         }
       }
 
-      .editable {
-        font-family: 'Fraunces', serif;
-        font-variant-ligatures: none;
-        font-feature-settings: 'liga' 0, 'clig' 0;
+      .notepad-shell {
+        margin-top: 1rem;
+        max-width: 32rem;
+        padding: 1rem 0.95rem;
+        border: 1px solid #d2cdbf;
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(246, 241, 231, 0.7)),
+          repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 2.1rem,
+            rgba(170, 162, 148, 0.18) 2.1rem,
+            rgba(170, 162, 148, 0.18) 2.16rem
+          );
+        box-shadow: 0 16px 36px rgba(108, 101, 90, 0.08);
       }
 
-      .editable:focus {
-        outline: none;
-        box-shadow: none;
+      .prompt-lines {
+        list-style: none;
+        margin: 0.7rem 0 0;
+        padding: 0;
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .prompt-lines li {
+        opacity: 0;
+        transform: translateY(8px);
+        font-family: 'Fraunces', serif;
+        font-size: clamp(1rem, 2.5vw, 1.12rem);
+        line-height: 1.35;
+        color: #49453e;
+      }
+
+      .raw-intro.ready .prompt-lines li {
+        animation: prompt-rise 480ms ease forwards;
+      }
+
+      .raw-intro.ready .prompt-lines li:nth-child(1) {
+        animation-delay: 220ms;
+      }
+
+      .raw-intro.ready .prompt-lines li:nth-child(2) {
+        animation-delay: 520ms;
+      }
+
+      .raw-intro.ready .prompt-lines li:nth-child(3) {
+        animation-delay: 820ms;
+      }
+
+      @keyframes prompt-rise {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .panel-cta {
@@ -276,6 +323,13 @@
         padding: 0.55rem 0.95rem;
         font: inherit;
         cursor: pointer;
+      }
+
+      .panel-cta.secondary {
+        background: transparent;
+        color: var(--muted);
+        border-color: transparent;
+        padding-left: 0;
       }
 
       .essay-list,
@@ -441,6 +495,12 @@
         color: var(--muted);
       }
 
+      .section-intro {
+        margin-top: 0.55rem;
+        max-width: 34ch;
+        color: var(--muted);
+      }
+
       .notepad-example h2 {
         max-width: 15ch;
       }
@@ -540,173 +600,112 @@
       <header class="topbar">
         <p class="brand">Authority Distillation</p>
         <div class="nav" id="nav"></div>
-        <p class="hint">Swipe or drag left and right</p>
+        <p class="hint">Use the dots or swipe across</p>
       </header>
 
       <section class="canvas" id="canvas" aria-label="Horizontal thinking canvas">
-        <article class="panel raw-intro" data-title="For Founders">
+        <article class="panel raw-intro" id="panel-intro" data-title="Start">
           <p class="kicker">Authority Distillation</p>
-          <h1 class="editable raw-head" contenteditable="true" spellcheck="false">Most founders sound smart. I make them understood.</h1>
-          <p class="transform-line editable" contenteditable="true" spellcheck="false">Bring the raw thinking. Leave with language you can actually use.</p>
-          <p class="hero-proof" style="margin-top:0.6rem;">
-            £450 &middot; 90 minutes &middot; One idea, clearly articulated
+          <h1 class="raw-head" contenteditable="true" spellcheck="false">Most founders sound smart. I make them understood.</h1>
+          <p class="transform-line">Bring the raw thinking. Leave with language you can actually use.</p>
+          <p class="hero-copy">
+            A focused session for founders who know there is something real in the business, but the language still is not landing cleanly.
           </p>
-          <button class="panel-cta" id="startDistillation" type="button">Send me your last voice note</button>
-          <button class="panel-cta" style="background:transparent;border-color:transparent;color:var(--muted);margin-top:0.3rem;font-size:0.85rem;" id="exploreProcess" type="button">Or explore the process</button>
+          <div class="notepad-shell">
+            <p class="subtle">rough note</p>
+            <ul class="prompt-lines">
+              <li>The company changed. The language didn’t.</li>
+              <li>The product is strong. The explanation still sounds generic.</li>
+              <li>I know what I mean. It just hasn’t survived onto the page yet.</li>
+            </ul>
+          </div>
+          <p class="hero-proof">£450 &middot; 90 minutes &middot; one idea clarified</p>
+          <button class="panel-cta" data-scroll-to="panel-fit" type="button">See if this fits</button>
+          <button class="panel-cta secondary" data-scroll-to="panel-purchase" type="button">Or book now</button>
         </article>
 
-        <article class="panel raw-examples" data-title="Raw Thinking">
-          <p class="kicker">Raw Thinking</p>
-          <h2 style="margin-bottom:1.1rem;">This is what that looks like in practice.</h2>
+        <article class="panel raw-examples" id="panel-fit" data-title="Fit">
+          <p class="kicker">Fit</p>
+          <h2 style="margin-bottom:1.1rem;">This is for founders who are already onto something.</h2>
           <ul class="raw-lines">
-            <li class="editable" contenteditable="true" spellcheck="false">The company has changed direction. The story hasn’t.</li>
-            <li class="editable" contenteditable="true" spellcheck="false">The product is clear internally. Hard to explain externally.</li>
-            <li class="editable" contenteditable="true" spellcheck="false">Investors don’t quite understand what makes this different.</li>
-            <li class="editable" contenteditable="true" spellcheck="false">There’s something important here. I just can’t articulate it yet.</li>
+            <li>You sound sharper in conversation than you do on the page.</li>
+            <li>The business has moved, but the language is still describing an earlier version.</li>
+            <li>The product matters, but every explanation keeps collapsing into features.</li>
+            <li>You do not need more content. You need the right articulation.</li>
           </ul>
-          <p class="transform-line" style="margin-top:1.1rem;">Raw thinking → Clear articulation</p>
-          <button class="panel-cta" id="exploreExamples" type="button">See the work</button>
+          <p class="transform-line" style="margin-top:1.1rem;">Not more words. Clearer ones.</p>
+          <button class="panel-cta" data-scroll-to="panel-example" type="button">See an example</button>
         </article>
 
-        <article class="panel notepad-example" data-title="Example 1">
+        <article class="panel notepad-example" id="panel-example" data-title="Example">
           <p class="kicker">Example</p>
-          <h2>This is what the work sounds like.</h2>
-          <p class="example-note">One company shift, written clearly enough to use immediately.</p>
+          <h2>When the company changed and the language did not.</h2>
+          <p class="example-note">The point is not to sound smarter. The point is to say the truer thing cleanly.</p>
           <div class="example-wrap">
             <section class="example-row raw-copy">
               <p class="example-label">Raw thinking</p>
               <p>
-                We built for one use case, customers use it for another, and now our story sounds inconsistent.
+                We are still describing the company the way it made sense six months ago. The business has moved. The language hasn’t. So every conversation sounds polished, but slightly false.
               </p>
             </section>
             <p class="example-arrow">↓</p>
             <section class="example-row distilled-copy">
-              <p class="example-label">Clear articulation</p>
+              <p class="example-label">Distilled articulation</p>
               <p>
-                We started with a narrow use case.
-                Customer behaviour revealed the larger problem: coordination across teams.
-                The company is now positioned around that broader need.
+                We started with a narrow wedge.
+                What customer behaviour revealed was a broader coordination problem.
+                The company now sits at that higher layer, and the language should reflect the business as it actually exists.
               </p>
             </section>
           </div>
+          <button class="panel-cta" data-scroll-to="panel-offer" type="button">See the offer</button>
         </article>
 
-        <article class="panel identity" data-title="Distillation">
-          <p class="kicker">Distillation</p>
-          <h1>Dylan Galloway</h1>
-          <p class="muted">Founder Articulation</p>
-          <p class="trust-line">I work directly with founders to clarify what matters most.</p>
-          <h2 style="margin-top: 1.3rem">
-            For founders who know exactly what they mean
+        <article class="panel identity" id="panel-offer" data-title="Offer">
+          <p class="kicker">The Offer</p>
+          <h1>One focused session.
             <br />
-            but have not articulated it clearly yet.
+            One written articulation.</h1>
+          <p class="muted">Founder articulation for high-stakes ideas.</p>
+          <p class="trust-line">Bring a page, deck, memo, draft, voice note, or half-formed thought. We work on one thing until it lands.</p>
+          <h2 style="margin-top: 1.3rem">
+            Most of the work
+            <br />
+            is already there.
           </h2>
           <ul class="distill-points">
-            <li>90-minute thinking session</li>
-            <li>One problem</li>
-            <li>One clear articulation</li>
-            <li>Raw thinking → Clear articulation</li>
+            <li>90-minute working session</li>
+            <li>One problem only</li>
+            <li>Written articulation delivered after the call</li>
           </ul>
-          <p class="offer-note">A piece of writing you can use immediately (investors, website, memo, or post)</p>
-          <p class="price">£450 — one session, one articulation you can use immediately</p>
+          <p class="offer-note">Use it on a website, in a memo, on a key page, or anywhere the current wording is underselling the real thing.</p>
+          <p class="price">£450</p>
           <p class="credibility">
-            Best when the issue isn’t intelligence, but language.
+            A focused articulation session with a written result.
           </p>
-          <p class="offer-note">Best for:</p>
-          <ul class="best-for">
-            <li>founders</li>
-            <li>operators</li>
-            <li>people with something real but hard to express</li>
-          </ul>
+          <button class="panel-cta" data-scroll-to="panel-proof" type="button">Judge the quality</button>
         </article>
 
-        <article class="panel" data-title="Essays">
-          <p class="kicker">Essays / Notes</p>
-          <h2>Drafts, essays, and notes worth finishing.</h2>
-          <ul class="essay-list">
-            <li>Rough founder note -> publishable argument</li>
-            <li>Strategic idea -> language that lands without posturing</li>
-            <li>Voice memo or messy draft -> clean piece in your actual tone</li>
-          </ul>
-          <section class="polish-card">
-            <p class="subtle">Send me a rough draft.</p>
-            <div class="polish-form">
-              <p class="muted">I’ll rewrite one piece so you can see the difference.</p>
-              <div>
-                <a
-                  class="btn-primary polish-link"
-                  href="mailto:dylan.galloway@proton.me?subject=Free%20Polish%20Request&body=Hi%20Dylan%2C%0A%0AHere%20is%20my%20draft%20or%20note%3A%0A%0AWhat%20I%20want%20sharpened%3A%0A"
-                >
-                  Send a Draft
-                </a>
-              </div>
-              <p class="status">No obligation. If it’s useful, we can go further.</p>
-            </div>
-          </section>
-        </article>
-
-        <article class="panel" data-title="Work">
-          <p class="kicker">What Leaves The Room</p>
-          <h2>What this usually produces.</h2>
+        <article class="panel" data-title="How It Works">
+          <p class="kicker">How It Works</p>
+          <h2>Simple on purpose.</h2>
+          <p class="section-intro">A slick process is only useful if it gets to the point. This one does.</p>
           <ul class="work-list">
-            <li>Positioning language that makes the company legible and non-generic</li>
-            <li>Fundraising narrative that connects traction, ambition, and why now</li>
-            <li>Memo, essay, or internal note that sounds like you on your clearest day</li>
+            <li>1. Bring one problem in any form: page, deck, draft, memo, voice note, or half-formed thought</li>
+            <li>2. We work on that one problem for 90 minutes</li>
+            <li>3. I send a written articulation after the session</li>
           </ul>
           <p class="credibility">
-            You are buying a sharper articulation, not generalized advice. The deliverable should be usable in a room where stakes are real.
+            The output should be usable on a page, in a meeting, or inside a decision that matters.
           </p>
-          <p class="offer-note">This is what people actually understand.</p>
+          <p class="offer-note">You are not buying more words. You are buying wording strong enough to carry what is already true.</p>
+          <button class="panel-cta" data-scroll-to="panel-purchase" type="button">See pricing</button>
         </article>
 
-        <article class="panel" data-title="Example 2">
-          <p class="kicker">Example 2</p>
-          <h2>When the company changed before the story did.</h2>
-          <div class="example-wrap">
-            <section class="example-row raw-copy">
-              <p class="example-label">For Founders</p>
-              <p>
-                We built for one use case, customers use it for another, and now our story sounds inconsistent in investor meetings.
-              </p>
-            </section>
-              <p class="example-arrow">↓</p>
-            <section class="example-row distilled-copy">
-              <p class="example-label">Distilled Articulation</p>
-              <p>
-                We started with a narrow use case.
-                Customer behaviour revealed the larger problem: coordination across teams.
-                The company is now positioned around that broader operational need.
-              </p>
-            </section>
-          </div>
-        </article>
-
-        <article class="panel" data-title="Example 3">
-          <p class="kicker">Example 3</p>
-          <h2>When the product is strong but the differentiation is blurred.</h2>
-          <div class="example-wrap">
-            <section class="example-row raw-copy">
-              <p class="example-label">For Founders</p>
-              <p>
-                Our product does a lot of things well but it is hard to explain what makes us different from competitors.
-              </p>
-            </section>
-              <p class="example-arrow">↓</p>
-            <section class="example-row distilled-copy">
-              <p class="example-label">Distilled Articulation</p>
-              <p>
-                Most tools improve one isolated step.
-                This product gives a company control across the whole operating system.
-                The advantage is not a feature.
-                It is command of the larger process.
-              </p>
-            </section>
-          </div>
-        </article>
-
-        <article class="panel" data-title="Reading">
-          <p class="kicker">Reading</p>
-          <h2>Two notebooks.</h2>
+        <article class="panel" id="panel-proof" data-title="Proof">
+          <p class="kicker">Read The Work</p>
+          <h2>If you are judging the quality, start here.</h2>
+          <p class="section-intro">The Lens is the founder-facing side of this work. Glass &amp; Dust is where the longer pressure behind it lives.</p>
           <ul class="reading-list">
             <li>
               <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">
@@ -721,32 +720,47 @@
               </a>
             </li>
           </ul>
+          <section class="polish-card">
+            <p class="subtle">Not ready to book?</p>
+            <div class="polish-form">
+              <p class="muted">Send me a rough draft and I’ll sharpen one piece so you can see the difference.</p>
+              <div>
+                <a
+                  class="btn-primary polish-link"
+                  href="mailto:dylan.galloway@proton.me?subject=Free%20Polish%20Request&body=Hi%20Dylan%2C%0A%0AHere%20is%20my%20draft%20or%20note%3A%0A%0AWhat%20I%20want%20sharpened%3A%0A"
+                >
+                  Send a Draft
+                </a>
+              </div>
+              <p class="status">No obligation. If it’s useful, we can go further.</p>
+            </div>
+          </section>
         </article>
 
-        <article class="panel" data-title="Distill">
-          <p class="kicker">Purchase</p>
+        <article class="panel" id="panel-purchase" data-title="Book">
+          <p class="kicker">Book</p>
           <div class="pay-shell">
             <section class="pay-card">
               <h2>Authority Distillation</h2>
-              <p class="offer-note">If something important is stuck in your head, this will move it forward.</p>
+              <p class="offer-note">For founders with something real to say and language that is not carrying it yet.</p>
               <ul class="pay-summary">
                 <li>90-minute working session</li>
-                <li>One idea clarified</li>
+                <li>One problem clarified</li>
                 <li>One written articulation delivered after the call</li>
               </ul>
               <p class="price">£450</p>
 
               <div class="steps">
                 <span>1. Secure payment via Stripe</span>
-                <span>2. Choose your calendar slot</span>
-                <span>3. Receive confirmation and preparation instructions</span>
-                <span>4. Bring one problem; leave with one sharper articulation</span>
+                <span>2. Choose a calendar slot</span>
+                <span>3. Send context in whatever form you have it</span>
+                <span>4. Leave with language you can actually use</span>
               </div>
 
               <div class="pay-actions">
-                <button class="btn-primary" id="payNowBtn" type="button">Fix one idea</button>
+                <button class="btn-primary" id="payNowBtn" type="button">Book authority distillation</button>
               </div>
-              <p class="offer-note">If it’s not useful, we don’t continue.</p>
+              <p class="offer-note">Best when the cost of being almost clear is already showing up somewhere important.</p>
               <p class="status" id="payStatus"></p>
             </section>
           </div>
@@ -760,17 +774,13 @@
       const nav = document.getElementById('nav');
       const payNowBtn = document.getElementById('payNowBtn');
       const payStatus = document.getElementById('payStatus');
-      const startDistillation = document.getElementById('startDistillation');
-      const exploreProcess = document.getElementById('exploreProcess');
-      const exploreExamples = document.getElementById('exploreExamples');
+      const scrollButtons = Array.from(document.querySelectorAll('[data-scroll-to]'));
       const rawIntro = document.querySelector('.raw-intro');
-      const rawTitleNode = document.querySelector('.raw-intro h1.editable');
-      const transformLineNode = document.querySelector('.raw-intro .transform-line.editable');
-      const rawLineNodes = Array.from(document.querySelectorAll('.raw-intro .raw-lines .editable'));
-      const RAW_TITLE_DEFAULT = rawTitleNode.textContent;
-      const RAW_LINES_DEFAULT = rawLineNodes.map((node) => node.textContent);
-      const TRANSFORM_DEFAULT = 'Raw thinking → Clear articulation';
+      const rawTitleNode = document.querySelector('.raw-intro .raw-head');
       payStatus.textContent = 'Secure checkout opens instantly.';
+      requestAnimationFrame(() => {
+        rawIntro.classList.add('ready');
+      });
 
       const dots = panels.map((panel, index) => {
         const dot = document.createElement('button');
@@ -784,7 +794,24 @@
         return dot;
       });
 
-      let lastPanelIndex = 0;
+      function updateActiveDot() {
+        const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+      }
+
+      canvas.addEventListener('scroll', updateActiveDot, { passive: true });
+      window.addEventListener('resize', updateActiveDot);
+      updateActiveDot();
+
+      scrollButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const targetId = button.dataset.scrollTo;
+          const targetPanel = document.getElementById(targetId);
+          if (!targetPanel) return;
+          canvas.scrollTo({ left: targetPanel.offsetLeft, behavior: 'smooth' });
+        });
+      });
+
       function moveCaretToEnd(node) {
         const selection = window.getSelection();
         if (!selection) return;
@@ -795,34 +822,6 @@
         selection.addRange(range);
       }
 
-      function updateActiveDot() {
-        const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-        if (lastPanelIndex === 0 && index !== 0) {
-          if (document.activeElement === rawTitleNode) {
-            rawTitleNode.blur();
-          }
-          rawIntro.classList.remove('typing');
-          rawTitleNode.textContent = RAW_TITLE_DEFAULT;
-          transformLineNode.textContent = TRANSFORM_DEFAULT;
-          rawLineNodes.forEach((node, i) => {
-            node.textContent = RAW_LINES_DEFAULT[i];
-          });
-        }
-        lastPanelIndex = index;
-      }
-
-      canvas.addEventListener('scroll', updateActiveDot, { passive: true });
-      window.addEventListener('resize', updateActiveDot);
-      updateActiveDot();
-
-      exploreProcess.addEventListener("click", () => { canvas.scrollTo({ left: canvas.clientWidth, behavior: "smooth" }); });
-      if (exploreExamples) exploreExamples.addEventListener("click", () => { canvas.scrollTo({ left: 2 * canvas.clientWidth, behavior: "smooth" }); });
-
-      startDistillation.addEventListener('click', () => {
-        canvas.scrollTo({ left: canvas.clientWidth, behavior: 'smooth' });
-      });
-
       rawTitleNode.addEventListener('focus', () => {
         rawIntro.classList.add('typing');
         requestAnimationFrame(() => moveCaretToEnd(rawTitleNode));
@@ -832,10 +831,6 @@
         if (document.activeElement === rawTitleNode) {
           requestAnimationFrame(() => moveCaretToEnd(rawTitleNode));
         }
-      });
-
-      rawTitleNode.addEventListener('input', () => {
-        rawIntro.classList.add('typing');
       });
 
       rawTitleNode.addEventListener('blur', () => {
