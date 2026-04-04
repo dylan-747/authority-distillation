@@ -26,11 +26,17 @@ const freePolishPath = path.join(dataDir, 'free-polish.json');
 const resendApiKey = process.env.RESEND_API_KEY || '';
 const notifyToEmail = process.env.NOTIFY_TO_EMAIL || '';
 const notifyFromEmail = process.env.NOTIFY_FROM_EMAIL || '';
-const weeklySlotSchedule = [
+const defaultWeeklySlotSchedule = [
   { weekday: 2, weekdayName: 'Tuesday', hour: 10, minute: 0 },
   { weekday: 3, weekdayName: 'Wednesday', hour: 14, minute: 0 },
   { weekday: 5, weekdayName: 'Friday', hour: 11, minute: 0 }
 ];
+const temporaryWeeklySlotSchedule = [
+  { weekday: 1, weekdayName: 'Monday', hour: 14, minute: 0 },
+  { weekday: 2, weekdayName: 'Tuesday', hour: 10, minute: 0 },
+  { weekday: 5, weekdayName: 'Friday', hour: 11, minute: 0 }
+];
+const temporaryScheduleEndsAt = new Date(Date.UTC(2026, 4, 1, 0, 0, 0));
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
   'August', 'September', 'October', 'November', 'December'];
 const defaultPreparationChecklist = [
@@ -131,6 +137,12 @@ function buildScheduledSlot(weekStart, slot) {
   };
 }
 
+function scheduleForWeek(weekStart) {
+  return weekStart.getTime() < temporaryScheduleEndsAt.getTime()
+    ? temporaryWeeklySlotSchedule
+    : defaultWeeklySlotSchedule;
+}
+
 function availableSlotsResponse(now = new Date()) {
   const bookings = getBookings();
   const bookedByDate = new Set(
@@ -141,6 +153,7 @@ function availableSlotsResponse(now = new Date()) {
   for (let weekOffset = 0; weekOffset < 6 && slots.length < 3; weekOffset += 1) {
     const weekStart = startOfWeekUtc(now);
     weekStart.setUTCDate(weekStart.getUTCDate() + (weekOffset * 7));
+    const weeklySlotSchedule = scheduleForWeek(weekStart);
 
     const weekSlots = weeklySlotSchedule
       .map((slot) => buildScheduledSlot(weekStart, slot))
