@@ -544,8 +544,8 @@
       </header>
 
       <section class="canvas" id="canvas" aria-label="Horizontal thinking canvas">
-        <article class="panel raw-intro" data-title="Raw Thinking">
-          <p class="kicker">Raw Thinking</p>
+        <article class="panel raw-intro" data-title="For Founders">
+          <p class="kicker">For Founders</p>
           <h1 class="editable raw-head" contenteditable="true" spellcheck="false">You know what you mean. Other people still do not.</h1>
           <p class="transform-line editable" contenteditable="true" spellcheck="false">Raw thinking → Clear articulation</p>
           <p class="hero-copy">
@@ -561,6 +561,8 @@
             <li class="editable" contenteditable="true" spellcheck="false">There is something important here but I cannot articulate it yet.</li>
           </ul>
           <button class="panel-cta" id="startDistillation" type="button">Send your thinking</button>
+          <button class="panel-cta" style="background:transparent;border-color:transparent;color:var(--muted);margin-top:0.3rem;font-size:0.85rem;" id="exploreProcess" type="button">Or explore the process</button>
+          <button class="panel-cta" style="background:transparent;border-color:transparent;color:var(--muted);margin-top:0.3rem;font-size:0.85rem;" id="exploreProcess" type="button">Or explore the process</button>
         </article>
 
         <article class="panel notepad-example" data-title="Example 1">
@@ -659,7 +661,7 @@
           <h2>When the company changed before the story did.</h2>
           <div class="example-wrap">
             <section class="example-row raw-copy">
-              <p class="example-label">Raw Thinking</p>
+              <p class="example-label">For Founders</p>
               <p>
                 We built for one use case, customers use it for another, and now our story sounds inconsistent in investor meetings.
               </p>
@@ -681,7 +683,7 @@
           <h2>When the product is strong but the differentiation is blurred.</h2>
           <div class="example-wrap">
             <section class="example-row raw-copy">
-              <p class="example-label">Raw Thinking</p>
+              <p class="example-label">For Founders</p>
               <p>
                 Our product does a lot of things well but it is hard to explain what makes us different from competitors.
               </p>
@@ -808,6 +810,10 @@
       canvas.addEventListener('scroll', updateActiveDot, { passive: true });
       window.addEventListener('resize', updateActiveDot);
       updateActiveDot();
+
+      exploreProcess.addEventListener("click", () => { canvas.scrollTo({ left: canvas.clientWidth, behavior: "smooth" }); });
+
+      exploreProcess.addEventListener("click", () => { canvas.scrollTo({ left: canvas.clientWidth, behavior: "smooth" }); });
 
       startDistillation.addEventListener('click', () => {
         canvas.scrollTo({ left: canvas.clientWidth, behavior: 'smooth' });
