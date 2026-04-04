@@ -20,6 +20,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const dataDir = storageRoot;
+const publicDir = path.join(__dirname, 'public');
 const bookingsPath = path.join(dataDir, 'bookings.json');
 const freePolishPath = path.join(dataDir, 'free-polish.json');
 const resendApiKey = process.env.RESEND_API_KEY || '';
@@ -197,6 +198,10 @@ function emailNotificationsEnabled() {
   return Boolean(resendApiKey && notifyToEmail && notifyFromEmail);
 }
 
+function sendHtmlFile(res, fileName) {
+  return res.type('html').sendFile(path.join(publicDir, fileName));
+}
+
 async function sendEmail({ to, subject, text, replyTo }) {
   if (!emailNotificationsEnabled()) {
     return { sent: false, reason: 'Email notifications not configured.' };
@@ -303,7 +308,36 @@ app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res
 });
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (_req, res) => {
+  return sendHtmlFile(res, 'index.html');
+});
+
+app.get('/booking', (_req, res) => {
+  return sendHtmlFile(res, 'booking.html');
+});
+
+app.get('/confirmation', (_req, res) => {
+  return sendHtmlFile(res, 'confirmation.html');
+});
+
+app.get('/test', (_req, res) => {
+  return res
+    .type('html')
+    .send(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Authority Distillation Test</title>
+  </head>
+  <body>
+    <h1>Authority Distillation test route</h1>
+    <p>This page confirms the Express server is returning readable HTML.</p>
+  </body>
+</html>`);
+});
+
+app.use(express.static(publicDir));
 
 app.post('/api/create-checkout-session', async (_req, res) => {
   try {
