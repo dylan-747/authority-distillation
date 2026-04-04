@@ -1,49 +1,88 @@
-# Authority Distillation Site
+# Authority Distillation
 
-Minimal horizontal-canvas website for a founder thought partner.
+Minimal horizontal landing page for Dylan Galloway's founder articulation service.
 
-## Experience
-- Calm horizontal navigation by swipe/drag left-right
-- Sections: Raw Thinking, Distillation, Essays, Work, Distill a Thought
-- Distill panel offers two clear paths:
-  - `Distill a Thought — £450` (Stripe payment)
-  - `Request Free Polish` lead capture form
+## What it does
+- Presents the service as a horizontal swipe/drag experience
+- Takes payment with Stripe Checkout
+- Routes paid clients into a booking flow with fixed weekly slots
+- Sends booking notification emails via Resend
+- Sends a client confirmation email after booking
+- Opens a pre-filled mail draft for the free draft-polish entry point
 
-## Payment and booking flow
-1. Click `Secure Session — £450` to open Stripe Checkout
-2. After payment, user lands on booking calendar page
-3. User selects a session time and confirms booking
-4. Confirmation page appears
+## Page flow
+- `Raw Thinking`
+- `Example`
+- `Distillation`
+- `Essays / Notes`
+- `What Leaves The Room`
+- `Example 2`
+- `Example 3`
+- `Reading`
+- `Purchase`
 
-## Quick start
+## Local setup
 1. Install dependencies:
    ```bash
    npm install
    ```
-2. Create env file:
+2. Create a local env file:
    ```bash
    cp .env.example .env
    ```
-3. Set Stripe secret key in `.env` (required to start):
+3. Add at minimum a real Stripe key and local base URL:
    ```env
-   STRIPE_SECRET_KEY=sk_test_your_secret_key
+   STRIPE_SECRET_KEY=sk_test_your_real_key
    BASE_URL=http://localhost:3000
    PORT=3000
    PRICE_GBP_PENCE=45000
    DATA_DIR=./data
    ```
-4. Run:
+4. Start the app:
    ```bash
    npm run dev
    ```
 
-## Webhook (optional, recommended)
+## Environment variables
+- `PORT`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `BASE_URL`
+- `PRICE_GBP_PENCE`
+- `DATA_DIR`
+- `RESEND_API_KEY`
+- `NOTIFY_TO_EMAIL`
+- `NOTIFY_FROM_EMAIL`
+
+## Stripe flow
+1. Visitor clicks the paid CTA
+2. Stripe Checkout opens
+3. After payment, the visitor lands on the booking page
+4. They choose one of the available weekly slots
+5. Booking is saved locally to JSON storage
+6. Client + owner notification emails are sent if Resend is configured
+
+## Booking storage
+- Bookings are stored in `bookings.json` under `DATA_DIR`
+- Free polish requests are not submitted to the server; they open a mail draft instead
+
+## Local webhook testing
 ```bash
 stripe listen --forward-to localhost:3000/webhook/stripe
 ```
-Set the resulting signing secret as `STRIPE_WEBHOOK_SECRET` in `.env`.
 
-## Note
-Booking selections and free polish requests are persisted to local JSON files in `data/`.
-The confirmation flow returns preparation guidance to the client after payment and booking.
-The free polish CTA opens a pre-filled email draft to `dylan.galloway@proton.me`.
+Then set the returned signing secret in `.env` as:
+
+```env
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+## Production notes
+- Production is deployed on Render
+- The live domain is `https://dylangalloway.com`
+- Resend is used for outbound booking emails
+- The sender address is `bookings@updates.dylangalloway.com`
+
+## Notes
+- The booking flow currently uses app-side JSON storage rather than a database
+- Calendar invites are still sent manually
