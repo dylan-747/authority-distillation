@@ -264,60 +264,142 @@
 
       .notepad-shell {
         margin-top: 1rem;
-        max-width: 32rem;
-        padding: 1rem 0.95rem;
-        border: 1px solid #d2cdbf;
+        margin-bottom: 0;
+        max-width: 30.5rem;
+        padding: 0.68rem 0.82rem 0.78rem;
+        border: 1px solid #d0cabd;
         border-radius: 14px;
         background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(246, 241, 231, 0.7)),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(246, 242, 233, 0.84)),
           repeating-linear-gradient(
             to bottom,
             transparent 0,
             transparent 2.1rem,
-            rgba(170, 162, 148, 0.18) 2.1rem,
-            rgba(170, 162, 148, 0.18) 2.16rem
+            rgba(170, 162, 148, 0.16) 2.1rem,
+            rgba(170, 162, 148, 0.16) 2.16rem
           );
-        box-shadow: 0 16px 36px rgba(108, 101, 90, 0.08);
+        box-shadow: 0 14px 30px rgba(108, 101, 90, 0.1);
+        position: relative;
+        overflow: hidden;
+        transform-origin: top left;
+        transition:
+          margin 220ms ease-out,
+          max-height 220ms ease-out,
+          opacity 220ms ease-out,
+          transform 220ms ease-out,
+          padding 220ms ease-out,
+          border-color 220ms ease-out;
+        max-height: 24rem;
       }
 
-      .prompt-lines {
-        list-style: none;
-        margin: 0.7rem 0 0;
+      .notepad-shell:focus-within {
+        border-color: #c6c0b4;
+      }
+
+      .notepad-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin: -0.68rem -0.82rem 0;
+        padding: 0.62rem 0.82rem 0.54rem;
+        border-bottom: 1px solid rgba(193, 186, 172, 0.7);
+        background: linear-gradient(180deg, rgba(250, 248, 242, 0.96), rgba(243, 239, 230, 0.9));
+        position: relative;
+      }
+
+      .notepad-topbar::after {
+        content: '';
+        position: absolute;
+        left: 0.82rem;
+        bottom: -1px;
+        width: 4.6rem;
+        height: 1px;
+        background: rgba(142, 135, 122, 0.28);
+      }
+
+      .notepad-control {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        border: 1px solid #c8c2b6;
+        background: rgba(136, 131, 122, 0.14);
         padding: 0;
-        display: grid;
-        gap: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f7a72;
+        font-size: 8px;
+        line-height: 1;
+        cursor: pointer;
       }
 
-      .prompt-lines li {
+      .notepad-shell.pop {
+        animation: notepad-pop 220ms ease-out;
+      }
+
+      .notepad-shell.closing {
+        animation: notepad-close 220ms ease-out forwards;
+        pointer-events: none;
+      }
+
+      .notepad-shell.closed {
         opacity: 0;
-        transform: translateY(8px);
+        transform: scale(0.97);
+        pointer-events: none;
+        max-height: 0;
+        margin-top: 0.25rem;
+        margin-bottom: -0.2rem;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      @keyframes notepad-pop {
+        0% {
+          transform: scale(1);
+        }
+        45% {
+          transform: scale(0.985);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes notepad-close {
+        0% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        45% {
+          opacity: 0.72;
+          transform: scale(0.985);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.97);
+        }
+      }
+
+      .prompt-editor {
+        margin: 0.42rem 0 0;
+        min-height: 6.2rem;
+        white-space: pre-wrap;
         font-family: 'Fraunces', serif;
         font-size: clamp(1rem, 2.5vw, 1.12rem);
-        line-height: 1.35;
+        line-height: 1.28;
         color: #49453e;
+        outline: none;
       }
 
-      .raw-intro.ready .prompt-lines li {
-        animation: prompt-rise 480ms ease forwards;
+      .prompt-editor p {
+        margin: 0 0 0.72rem;
       }
 
-      .raw-intro.ready .prompt-lines li:nth-child(1) {
-        animation-delay: 220ms;
-      }
-
-      .raw-intro.ready .prompt-lines li:nth-child(2) {
-        animation-delay: 520ms;
-      }
-
-      .raw-intro.ready .prompt-lines li:nth-child(3) {
-        animation-delay: 820ms;
-      }
-
-      @keyframes prompt-rise {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      .prompt-editor p:last-child {
+        margin-bottom: 0;
       }
 
       .panel-cta {
@@ -651,12 +733,15 @@
             A focused session for founders who know there is something real in the business, but the language is not landing cleanly.
           </p>
           <div class="notepad-shell">
-            <p class="subtle">notepad</p>
-            <ul class="prompt-lines">
-              <li>The company changed. The language didn’t.</li>
-              <li>The product is strong. The explanation still sounds generic.</li>
-              <li>I know what I mean. It just hasn’t survived onto the page yet.</li>
-            </ul>
+            <div class="notepad-topbar">
+              <p class="subtle">notepad</p>
+              <button class="notepad-control" id="notepadResetBtn" type="button" aria-label="Reset notepad">&times;</button>
+            </div>
+            <div class="prompt-editor" contenteditable="true" spellcheck="false">
+              <p>The company changed. The language didn’t.</p>
+              <p>The product is strong. The explanation still sounds generic.</p>
+              <p>I know what I mean. It just hasn’t survived onto the page yet.</p>
+            </div>
           </div>
           <p class="price">£450</p>
           <p class="hero-proof">One problem. One clear articulation.<br />Delivered within 72 hours.</p>
@@ -884,6 +969,11 @@
       const scrollButtons = Array.from(document.querySelectorAll('[data-scroll-to]'));
       const rawIntro = document.querySelector('.raw-intro');
       const rawTitleNode = document.querySelector('.raw-intro .raw-head');
+      const rawNoteNode = document.querySelector('.raw-intro .prompt-editor');
+      const notepadShell = document.querySelector('.raw-intro .notepad-shell');
+      const notepadResetBtn = document.getElementById('notepadResetBtn');
+      const defaultRawTitle = rawTitleNode.innerHTML;
+      const defaultRawNote = rawNoteNode.innerHTML;
       payStatus.textContent = 'Secure checkout opens instantly.';
       requestAnimationFrame(() => {
         rawIntro.classList.add('ready');
@@ -901,9 +991,25 @@
         return dot;
       });
 
+      let activePanelIndex = 0;
+
+      function resetIntroPanel() {
+        rawTitleNode.innerHTML = defaultRawTitle;
+        rawNoteNode.innerHTML = defaultRawNote;
+        notepadShell.classList.remove('closing', 'closed', 'pop');
+        rawIntro.classList.remove('typing');
+        if (document.activeElement === rawTitleNode || document.activeElement === rawNoteNode) {
+          document.activeElement.blur();
+        }
+      }
+
       function updateActiveDot() {
         const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
         dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        if (activePanelIndex === 0 && index !== 0) {
+          resetIntroPanel();
+        }
+        activePanelIndex = index;
       }
 
       canvas.addEventListener('scroll', updateActiveDot, { passive: true });
@@ -942,6 +1048,39 @@
 
       rawTitleNode.addEventListener('blur', () => {
         rawIntro.classList.remove('typing');
+      });
+
+      rawNoteNode.addEventListener('focus', () => {
+        rawIntro.classList.add('typing');
+        requestAnimationFrame(() => moveCaretToEnd(rawNoteNode));
+      });
+
+      rawNoteNode.addEventListener('pointerup', () => {
+        if (document.activeElement === rawNoteNode) {
+          requestAnimationFrame(() => moveCaretToEnd(rawNoteNode));
+        }
+      });
+
+      rawNoteNode.addEventListener('blur', () => {
+        rawIntro.classList.remove('typing');
+      });
+
+      notepadResetBtn.addEventListener('click', () => {
+        if (notepadShell.classList.contains('closing') || notepadShell.classList.contains('closed')) return;
+        rawIntro.classList.remove('typing');
+        if (document.activeElement === rawTitleNode || document.activeElement === rawNoteNode) {
+          document.activeElement.blur();
+        }
+        notepadShell.classList.remove('pop');
+        void notepadShell.offsetWidth;
+        notepadShell.classList.add('closing');
+      });
+
+      notepadShell.addEventListener('animationend', (event) => {
+        if (event.animationName === 'notepad-close') {
+          notepadShell.classList.remove('closing');
+          notepadShell.classList.add('closed');
+        }
       });
 
       let dragging = false;
