@@ -178,9 +178,10 @@
       }
 
       .raw-intro h1 {
-        margin-bottom: 1.06rem;
-        max-width: 16ch;
-        font-size: clamp(1.58rem, 5.2vw, 2.48rem);
+        margin-bottom: 0.9rem;
+        max-width: 18ch;
+        font-size: clamp(1.5rem, 4.9vw, 2.34rem);
+        line-height: 1.04;
       }
 
       .identity h1,
@@ -216,6 +217,12 @@
         color: var(--muted);
         font-variant-ligatures: none;
         font-feature-settings: 'liga' 0, 'clig' 0;
+      }
+
+      .hero-proof-support {
+        margin-top: 0.28rem;
+        font-size: 0.84rem;
+        color: var(--muted);
       }
 
       .raw-head::after {
@@ -452,6 +459,25 @@
         border-left: 2px solid #bcb6aa;
       }
 
+      .consequence-block {
+        margin-top: 1rem;
+        max-width: 32rem;
+      }
+
+      .consequence-list {
+        margin: 0.7rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .consequence-list li {
+        border-left: 2px solid #bcb6aa;
+        padding-left: 0.65rem;
+        color: var(--ink);
+      }
+
       .example-wrap {
         margin-top: 1rem;
         display: grid;
@@ -619,22 +645,81 @@
       <section class="canvas" id="canvas" aria-label="Horizontal thinking canvas">
         <article class="panel raw-intro" id="panel-intro" data-title="Start">
           <p class="kicker">Authority Distillation</p>
-          <h1 class="raw-head" contenteditable="true" spellcheck="false">Most founders sound smart. I make them understood.</h1>
+          <h1 class="raw-head" contenteditable="true" spellcheck="false">If your thinking isn’t landing, it’s costing you.<br />I make it understood.</h1>
           <p class="transform-line">Bring the raw thinking. Leave with language you can actually use.</p>
           <p class="hero-copy">
-            A focused session for founders who know there is something real in the business, but the language still is not landing cleanly.
+            A focused session for founders who know there is something real in the business, but the language is not landing cleanly.
           </p>
           <div class="notepad-shell">
-            <p class="subtle">rough note</p>
+            <p class="subtle">notepad</p>
             <ul class="prompt-lines">
               <li>The company changed. The language didn’t.</li>
               <li>The product is strong. The explanation still sounds generic.</li>
               <li>I know what I mean. It just hasn’t survived onto the page yet.</li>
             </ul>
           </div>
-          <p class="hero-proof">£450 &middot; 90 minutes &middot; one idea clarified</p>
+          <p class="price">£450</p>
+          <p class="hero-proof">One problem. One clear articulation.<br />Delivered within 72 hours.</p>
+          <p class="hero-proof-support">Includes a 90-minute working session</p>
           <button class="panel-cta" data-scroll-to="panel-fit" type="button">See if this fits</button>
           <button class="panel-cta secondary" data-scroll-to="panel-purchase" type="button">Or book now</button>
+        </article>
+
+        <article class="panel" id="panel-consequence" data-title="Cost">
+          <p class="kicker">What It Costs</p>
+          <section class="consequence-block" aria-label="Cost of unclear articulation">
+            <h2>When your articulation is off, you lose:</h2>
+            <ul class="consequence-list">
+              <li>investor confidence</li>
+              <li>customer understanding</li>
+              <li>internal alignment</li>
+            </ul>
+          </section>
+          <button class="panel-cta" data-scroll-to="panel-example" type="button">See an example</button>
+        </article>
+
+        <article class="panel notepad-example" id="panel-example" data-title="Example">
+          <p class="kicker">Example</p>
+          <h2>What this sounds like when it lands.</h2>
+          <p class="subtle">From unclear thinking to usable articulation</p>
+          <div class="example-wrap">
+            <section class="example-row raw-copy">
+              <p class="example-label">Raw thinking</p>
+              <p>
+                We’ve evolved a lot as a company, but it’s hard to explain what changed.
+                People still think we’re a consultancy.
+                Every explanation ends up sounding generic.
+              </p>
+            </section>
+            <p class="example-arrow">↓</p>
+            <section class="example-row distilled-copy">
+              <p class="example-label">Distilled articulation</p>
+              <p>
+                We help in-house teams replace external agencies
+                with a system that produces the same output internally,
+                without increasing headcount.
+              </p>
+            </section>
+          </div>
+          <p class="subtle" style="margin-top:1rem;">A shorter version can be even clearer.</p>
+          <div class="example-wrap">
+            <section class="example-row raw-copy">
+              <p class="example-label">Raw thinking</p>
+              <p>
+                We started as a service, but now the product does most of the work.
+                It’s difficult to explain without it sounding like everything else.
+              </p>
+            </section>
+            <p class="example-arrow">↓</p>
+            <section class="example-row distilled-copy">
+              <p class="example-label">Distilled articulation</p>
+              <p>
+                We’re not a service.
+                We’re the system that removes the need for one.
+              </p>
+            </section>
+          </div>
+          <button class="panel-cta" data-scroll-to="panel-offer" type="button">See the offer</button>
         </article>
 
         <article class="panel raw-examples" id="panel-fit" data-title="Fit">
@@ -650,30 +735,6 @@
           <button class="panel-cta" data-scroll-to="panel-example" type="button">See an example</button>
         </article>
 
-        <article class="panel notepad-example" id="panel-example" data-title="Example">
-          <p class="kicker">Example</p>
-          <h2>When the company changed and the language did not.</h2>
-          <p class="example-note">The point is not to sound smarter. The point is to say the truer thing cleanly.</p>
-          <div class="example-wrap">
-            <section class="example-row raw-copy">
-              <p class="example-label">Raw thinking</p>
-              <p>
-                We are still describing the company the way it made sense six months ago. The business has moved. The language hasn’t. So every conversation sounds polished, but slightly false.
-              </p>
-            </section>
-            <p class="example-arrow">↓</p>
-            <section class="example-row distilled-copy">
-              <p class="example-label">Distilled articulation</p>
-              <p>
-                We started with a narrow wedge.
-                What customer behaviour revealed was a broader coordination problem.
-                The company now sits at that higher layer, and the language should reflect the business as it actually exists.
-              </p>
-            </section>
-          </div>
-          <button class="panel-cta" data-scroll-to="panel-offer" type="button">See the offer</button>
-        </article>
-
         <article class="panel identity" id="panel-offer" data-title="Offer">
           <p class="kicker">The Offer</p>
           <h1>One focused session.
@@ -682,9 +743,9 @@
           <p class="muted">Founder articulation for high-stakes ideas.</p>
           <p class="trust-line">Bring one problem. We work on it until the sentence is right.</p>
           <h2 style="margin-top: 1.3rem">
-            Most of the work
+            The thinking is already there.
             <br />
-            is already there.
+            It just isn’t landing yet.
           </h2>
           <ul class="distill-points">
             <li>90-minute working session</li>
@@ -694,9 +755,9 @@
           <p class="offer-note">Use it on a website, in a memo, on a key page, or anywhere the current wording is underselling the real thing.</p>
           <p class="price">£450</p>
           <p class="credibility">
-            A focused articulation session with a written result.
+            A clear articulation you can actually use.
           </p>
-          <button class="panel-cta" data-scroll-to="panel-proof" type="button">Judge the quality</button>
+          <button class="panel-cta" data-scroll-to="panel-proof" type="button">See how this would sound for you</button>
         </article>
 
         <article class="panel" data-title="How It Works">
@@ -769,6 +830,18 @@
               <p class="status">No obligation. If it’s useful, we can go further.</p>
             </div>
           </section>
+        </article>
+
+        <article class="panel" id="panel-after" data-title="After">
+          <p class="kicker">After</p>
+          <h2>What happens after this</h2>
+          <p class="section-intro">Some founders take the articulation and run with it. Others ask me to turn it into consistent output.</p>
+          <ul class="work-list">
+            <li>Ongoing posts</li>
+            <li>Weekly email</li>
+            <li>Continued refinement of thinking</li>
+          </ul>
+          <p class="credibility">Same thinking. Applied consistently.</p>
         </article>
 
         <article class="panel" id="panel-purchase" data-title="Book">
