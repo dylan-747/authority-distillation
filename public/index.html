@@ -130,6 +130,12 @@
         color: var(--muted);
       }
 
+      .panel h2 + .section-intro,
+      .panel h2 + .muted,
+      .panel h2 + .subtle {
+        margin-top: 0.7rem;
+      }
+
       h1,
       h2 {
         margin: 0;
@@ -146,6 +152,12 @@
 
       h2 {
         font-size: clamp(1.35rem, 4.8vw, 2rem);
+      }
+
+      .panel h2 {
+        max-width: 28ch;
+        line-height: 1.12;
+        text-wrap: pretty;
       }
 
       p {
@@ -181,6 +193,43 @@
         max-width: 18ch;
         font-size: clamp(1.5rem, 4.9vw, 2.34rem);
         line-height: 1.04;
+      }
+
+      .raw-head::after {
+        content: '';
+        display: inline-block;
+        width: 2px;
+        height: 1.02em;
+        margin-left: 0.28rem;
+        background: #57524a;
+        vertical-align: -0.12em;
+        animation: blink-caret 1.05s steps(1, end) infinite;
+      }
+
+      .raw-head {
+        caret-color: transparent;
+      }
+
+      .raw-head:focus {
+        outline: none;
+        caret-color: var(--ink);
+      }
+
+      .raw-head:focus::after,
+      .raw-intro.typing .raw-head::after {
+        opacity: 0;
+        animation: none;
+      }
+
+      @keyframes blink-caret {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
       }
 
       .transform-line {
@@ -221,41 +270,56 @@
         color: var(--muted);
       }
 
-      .raw-head::after {
-        content: '';
-        display: inline-block;
-        width: 2px;
-        height: 1.02em;
-        margin-left: 0.28rem;
-        background: #57524a;
-        vertical-align: -0.12em;
-        animation: blink-caret 1.05s steps(1, end) infinite;
+      .hero-qualifier {
+        margin-top: 0.5rem;
+        max-width: 40ch;
+        color: var(--muted);
       }
 
-      .raw-head {
-        caret-color: transparent;
+      .hero-offer-card {
+        margin-top: 1rem;
+        max-width: 34rem;
+        border: 1px solid #c8c2b6;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.58);
+        padding: 0.95rem 0.92rem 1rem;
+        box-shadow: 0 14px 30px rgba(108, 101, 90, 0.08);
       }
 
-      .raw-head:focus {
-        outline: none;
-        caret-color: var(--ink);
+      .hero-price {
+        margin: 0;
+        font-family: 'Fraunces', serif;
+        font-size: clamp(1.55rem, 4vw, 2.35rem);
+        line-height: 1;
       }
 
-      .raw-head:focus::after,
-      .raw-intro.typing .raw-head::after {
-        opacity: 0;
-        animation: none;
+      .hero-points {
+        margin: 0.9rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.58rem;
       }
 
-      @keyframes blink-caret {
-        0%,
-        49% {
-          opacity: 1;
-        }
-        50%,
-        100% {
-          opacity: 0;
-        }
+      .hero-points li {
+        border-left: 2px solid #bcb6aa;
+        padding-left: 0.65rem;
+      }
+
+      .hero-actions {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+      }
+
+      .hero-meta {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-align: center;
+        width: 100%;
       }
 
       .notepad-shell {
@@ -659,14 +723,35 @@
         margin-top: 0.8rem;
       }
 
+      .proof-intro {
+        max-width: 48ch;
+      }
+
+      .proof-stack {
+        display: grid;
+        gap: 1rem;
+        align-content: start;
+      }
+
+      .proof-stack .notepad-shell {
+        margin-top: 0.2rem;
+      }
+
+      .example-stack {
+        display: grid;
+        gap: 1rem;
+        align-content: start;
+        max-width: 760px;
+      }
+
       .section-intro {
         margin-top: 0.55rem;
         max-width: 34ch;
         color: var(--muted);
       }
 
-      .notepad-example h2 {
-        max-width: 28ch;
+      .section-intro.wide {
+        max-width: 52ch;
       }
 
       .notepad-example .example-row p:last-child {
@@ -770,18 +855,6 @@
         gap: 0.55rem;
       }
 
-      #panel-proof h2 {
-        max-width: 36ch;
-      }
-
-      #panel-proof .section-intro {
-        max-width: 32ch;
-      }
-
-      #panel-proof .proof-card .section-intro {
-        max-width: 31ch;
-      }
-
       #panel-proof .subtle {
         letter-spacing: 0.01em;
       }
@@ -870,10 +943,21 @@
 
         .hero-copy,
         .hero-proof,
+        .hero-qualifier,
         .section-intro,
         .offer-note,
         .credibility,
         .trust-line {
+          max-width: 100%;
+        }
+
+        .hero-offer-card,
+        .proof-intro {
+          max-width: 100%;
+        }
+
+        .section-intro.wide,
+        .hero-meta {
           max-width: 100%;
         }
 
@@ -893,12 +977,9 @@
           gap: 0.72rem;
         }
 
-        .notepad-example h2 {
+        .panel h2 {
           max-width: 100%;
-        }
-
-        #panel-proof h2 {
-          max-width: 12ch;
+          text-wrap: initial;
         }
 
         .notepad-example .example-row p:last-child {
@@ -910,6 +991,10 @@
         .polish-card,
         .pay-card {
           padding: 0.82rem 0.76rem;
+        }
+
+        .hero-actions {
+          align-items: flex-start;
         }
 
         .pay-card.back {
@@ -933,7 +1018,108 @@
         }
 
         .panel {
-          padding: 2.8rem 2.3rem 2.8rem;
+          padding: 2.8rem clamp(2.6rem, 5vw, 5.5rem) 3rem;
+        }
+
+        h1 {
+          font-size: clamp(2.7rem, 4vw, 4.4rem);
+        }
+
+        h2 {
+          font-size: clamp(2rem, 2.7vw, 2.9rem);
+        }
+
+        .raw-intro h1 {
+          max-width: 18ch;
+          font-size: clamp(2.7rem, 4.1vw, 4.6rem);
+        }
+
+        .hero-copy {
+          max-width: 48ch;
+          font-size: clamp(1.18rem, 1.55vw, 1.42rem);
+          line-height: 1.4;
+        }
+
+        .hero-qualifier,
+        .proof-intro {
+          max-width: 50ch;
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
+        .hero-proof {
+          max-width: 42ch;
+          font-size: clamp(1.04rem, 1.35vw, 1.18rem);
+        }
+
+        .raw-lines li {
+          max-width: 44ch;
+          font-size: clamp(1.12rem, 1.45vw, 1.32rem);
+          line-height: 1.5;
+        }
+
+        .section-intro,
+        .offer-note,
+        .credibility,
+        .trust-line,
+        .reading-meta {
+          max-width: 50ch;
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
+        .hero-actions {
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .hero-meta,
+        .trust-line,
+        .proof-intro,
+        .section-intro.wide {
+          max-width: 72ch;
+        }
+
+        .consequence-block {
+          max-width: 56rem;
+        }
+
+        .example-wrap,
+        .proof-card,
+        .polish-card,
+        .pay-shell,
+        .reading-list {
+          max-width: 760px;
+        }
+
+        .hero-offer-card {
+          max-width: 42rem;
+          padding: 1.1rem 1.1rem 1.15rem;
+        }
+
+        .hero-meta {
+          flex: 1 1 18rem;
+          width: auto;
+        }
+
+        .notepad-shell {
+          max-width: 42rem;
+        }
+
+        .panel h2 {
+          max-width: none;
+          text-wrap: auto;
+        }
+
+        .notepad-example .example-row p:last-child {
+          max-width: 40ch;
+          font-size: clamp(1.2rem, 1.75vw, 1.7rem);
+        }
+
+        .proof-card,
+        .polish-card,
+        .pay-card {
+          padding: 1.1rem 1.1rem 1.05rem;
         }
       }
     </style>
@@ -951,25 +1137,21 @@
           <p class="kicker">Authority Distillation</p>
           <h1 class="raw-head" contenteditable="true" spellcheck="false">If your thinking isn’t landing, it’s costing you.<br />I make it understood.</h1>
           <p class="transform-line">Bring the raw thinking. Leave with language you can actually use.</p>
-          <p class="hero-copy">
+          <p class="hero-copy hero-qualifier">
             A focused session for founders who know there is something real in the business, but the language is not landing cleanly.
           </p>
-          <div class="notepad-shell">
-            <div class="notepad-topbar">
-              <p class="subtle">notepad</p>
-              <button class="notepad-control" id="notepadResetBtn" type="button" aria-label="Reset notepad">&times;</button>
-            </div>
-            <div class="prompt-editor" contenteditable="true" spellcheck="false">
-              <p>The company changed. The language didn’t.</p>
-              <p>The product is strong. The explanation still sounds generic.</p>
-              <p>I know what I mean. It just hasn’t survived onto the page yet.</p>
+          <div class="hero-offer-card" aria-label="Offer summary">
+            <p class="hero-price">£450</p>
+            <ul class="hero-points">
+              <li>One problem</li>
+              <li>90-minute session</li>
+              <li>Written deliverable within 72 hours</li>
+            </ul>
+            <div class="hero-actions">
+              <button class="panel-cta" data-scroll-to="panel-purchase" type="button">Book a session</button>
+              <p class="hero-meta">For founders who need sharper language, not more noise.</p>
             </div>
           </div>
-          <p class="price">£450</p>
-          <p class="hero-proof">One problem. One clear articulation.<br class="mobile-break" />Delivered within 72 hours.</p>
-          <p class="hero-proof-support">Includes a 90-minute working session</p>
-          <button class="panel-cta" data-scroll-to="panel-fit" type="button">See if this fits</button>
-          <button class="panel-cta secondary" data-scroll-to="panel-purchase" type="button">Or book now</button>
         </article>
 
         <article class="panel" id="panel-consequence" data-title="Cost">
@@ -983,57 +1165,46 @@
               <li>your team interprets things differently</li>
             </ul>
           </section>
-          <p class="section-intro">This is where most founders realise the problem isn’t the idea.</p>
-          <button class="panel-cta" data-scroll-to="panel-example" type="button">See an example</button>
+          <p class="section-intro">The problem is rarely intelligence. It is usually translation.</p>
+          <button class="panel-cta" data-scroll-to="panel-example" type="button">See proof</button>
         </article>
 
         <article class="panel notepad-example" id="panel-example" data-title="Example">
-          <p class="kicker">Example</p>
-          <h2>What this sounds like when it lands.</h2>
-          <p class="subtle">From unclear thinking to usable articulation</p>
-          <div class="example-wrap">
-            <section class="example-row raw-copy">
-              <p class="example-label">Raw thinking</p>
-              <p>
-                We’ve evolved a lot as a company, but it’s hard to explain what changed.
-                People still think we’re a consultancy.
-                Every explanation ends up sounding generic.
-              </p>
-            </section>
-            <p class="example-arrow">↓</p>
-            <section class="example-row distilled-copy">
-              <p class="example-label">Distilled articulation</p>
-              <p>
-                We help in-house teams replace external agencies
-                with a system that produces the same output internally,
-                without increasing headcount.
-              </p>
-            </section>
-          </div>
-          <p class="subtle example-subtle-follow">A shorter version can be even clearer.</p>
-          <div class="example-wrap">
-            <section class="example-row raw-copy">
-              <p class="example-label">Raw thinking</p>
-              <p>
-                We started as a service, but now the product does most of the work.
-                It’s difficult to explain without it sounding like everything else.
-              </p>
-            </section>
-            <p class="example-arrow">↓</p>
-            <section class="example-row distilled-copy">
-              <p class="example-label">Distilled articulation</p>
-              <p>
-                We’re not a service.
-                We’re the system that removes the need for one.
-              </p>
+          <p class="kicker">Proof Of Specificity</p>
+          <h2>Raw note. Clear articulation.</h2>
+          <p class="section-intro">This is the working example: messy founder language first, then the sharper sentence that can actually carry the shift.</p>
+          <div class="example-stack">
+            <div class="notepad-shell" id="exampleNotepad">
+              <div class="notepad-topbar">
+                <p class="subtle">founder’s raw note</p>
+                <button class="notepad-control" id="notepadResetBtn" type="button" aria-label="Reset notepad">&times;</button>
+              </div>
+              <div class="prompt-editor" id="examplePromptEditor" contenteditable="true" spellcheck="false">
+                <p>We are not a consultancy anymore.</p>
+                <p>The product took over, but the story still sounds like services.</p>
+                <p>I know what changed. The page still doesn’t.</p>
+              </div>
+            </div>
+            <section class="proof-card">
+              <p class="subtle">Distillation I provide</p>
+              <p class="section-intro wide proof-intro">What the cleaned-up version has to do is make the shift legible in one pass.</p>
+              <div class="example-wrap">
+                <section class="example-row distilled-copy">
+                  <p class="example-label">After</p>
+                  <p>
+                    We started as a service.
+                    Now we give teams the system that removes the need for one.
+                  </p>
+                </section>
+              </div>
             </section>
           </div>
-          <button class="panel-cta" data-scroll-to="panel-offer" type="button">See the offer</button>
+          <button class="panel-cta" data-scroll-to="panel-fit" type="button">See the process</button>
         </article>
 
         <article class="panel raw-examples" id="panel-fit" data-title="Fit">
-          <p class="kicker">Fit</p>
-          <h2 class="fit-title">This is for founders who are already onto something.</h2>
+          <p class="kicker">What You Bring</p>
+          <h2 class="fit-title">You do not need another idea.<br />You need the right sentence for the one you already have.</h2>
           <ul class="raw-lines">
             <li>You sound sharper in conversation than you do on the page.</li>
             <li>The business changed. The language did not.</li>
@@ -1041,51 +1212,45 @@
             <li>You do not need more words. You need the right ones.</li>
           </ul>
           <p class="transform-line fit-transform">Not more words. Clearer ones.</p>
-          <button class="panel-cta" data-scroll-to="panel-example" type="button">See an example</button>
+          <button class="panel-cta" data-scroll-to="panel-offer" type="button">See what you get</button>
         </article>
 
         <article class="panel identity" id="panel-offer" data-title="Offer">
-          <p class="kicker">The Offer</p>
-          <h1>One focused session. <br class="mobile-break" />One written articulation.</h1>
-          <p class="muted">For founders with something real to say and language that is still underselling it.</p>
-          <p class="trust-line">Start with one problem. If it holds, we can keep going.</p>
-          <h2 class="offer-statement">The thinking is already there. <br class="mobile-break" />It just isn’t landing yet.</h2>
-          <p class="credibility">One clear articulation you can use immediately, then build from.</p>
+          <p class="kicker">What You Get</p>
+          <h1>One focused session. <br class="mobile-break" />One useful articulation.</h1>
+          <p class="muted">A narrow engagement designed to solve one specific communication problem.</p>
+          <p class="trust-line">Start with one point of friction. Leave with wording you can actually use.</p>
           <ul class="distill-points">
             <li>One problem only</li>
             <li>90-minute working session</li>
-            <li>Written articulation delivered after the call</li>
+            <li>Written articulation delivered within 72 hours</li>
           </ul>
           <p class="offer-note">Use it on a website, in a memo, on a key page, or as the starting point for more consistent output.</p>
-          <p class="subtle">A narrow engagement for one problem first. More only if it is useful.</p>
+          <p class="subtle">One problem first. More only if it proves useful.</p>
           <p class="price">£450</p>
-          <p class="credibility">
-            Clear enough to use now. Strong enough to build on later.
-          </p>
-          <button class="panel-cta" data-scroll-to="panel-proof" type="button">See how this would sound for you</button>
+          <p class="credibility">Clear enough to use now. Strong enough to build on later.</p>
+          <button class="panel-cta" data-scroll-to="panel-proof" type="button">See more proof</button>
         </article>
 
         <article class="panel" data-title="How It Works">
           <p class="kicker">How It Works</p>
           <h2>Simple on purpose.</h2>
-          <p class="section-intro">A slick process is only useful if it gets to the point. This one does.</p>
+          <p class="section-intro">We do not wander. We isolate the articulation problem and solve it.</p>
           <ul class="work-list">
             <li>1. Bring one problem in any form: page, deck, draft, memo, voice note, or half-formed thought</li>
             <li>2. We work on that one problem for 90 minutes</li>
-            <li>3. I send a written articulation after the session</li>
+            <li>3. I send a written articulation within 72 hours</li>
           </ul>
-          <p class="credibility">
-            The output should be usable on a page, in a meeting, or inside a decision that matters.
-          </p>
+          <p class="credibility">The output should be usable on a page, in a meeting, or inside a decision that matters.</p>
           <p class="offer-note">You are not buying more words. You are buying wording strong enough to carry what is already true.</p>
-          <button class="panel-cta" data-scroll-to="panel-purchase" type="button">See pricing</button>
+          <button class="panel-cta" data-scroll-to="panel-purchase" type="button">Book a session</button>
         </article>
 
         <article class="panel" id="panel-proof" data-title="Proof">
-          <p class="kicker">Read The Work</p>
+          <p class="kicker">Proof</p>
           <h2>You can usually feel when the sentence is right.</h2>
-          <p class="section-intro">The Lens is the founder-facing side of this work. Glass &amp; Dust is where the longer pressure behind it lives.</p>
-          <p class="subtle reading-kicker">Proof</p>
+          <p class="section-intro proof-intro">The work should feel precise before it feels impressive. These are the public traces of that standard.</p>
+          <p class="subtle reading-kicker">Read the work</p>
           <ul class="reading-list">
             <li>
               <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">
@@ -1139,9 +1304,10 @@
               </section>
             </div>
           </section>
+          <button class="panel-cta" data-scroll-to="panel-purchase" type="button">Book a session</button>
         </article>
 
-        <article class="panel" id="panel-after" data-title="After">
+        <article class="panel" id="panel-after" data-title="After" hidden>
           <p class="kicker">After</p>
           <h2>What happens after this.</h2>
           <p class="section-intro">Some founders take the articulation and run with it. Others ask me to turn it into consistent output.</p>
@@ -1165,9 +1331,9 @@
                 <h2>Authority Distillation</h2>
                 <p class="offer-note">For founders with something real to say and language that is not carrying it yet.</p>
                 <ul class="pay-summary">
-                  <li>90-minute working session</li>
                   <li>One problem clarified</li>
-                  <li>One written articulation delivered after the call</li>
+                  <li>One written articulation delivered within 72 hours</li>
+                  <li>90-minute working session</li>
                 </ul>
                 <p class="price">£450</p>
 
@@ -1175,7 +1341,7 @@
                   <span>1. Secure payment via Stripe</span>
                   <span>2. Choose a calendar slot</span>
                   <span>3. Send context in whatever form you have it</span>
-                  <span>4. Leave with language you can actually use</span>
+                  <span>4. Leave with one point made clear enough to use</span>
                 </div>
 
                 <div class="pay-actions">
@@ -1215,7 +1381,7 @@
 
     <script>
       const canvas = document.getElementById('canvas');
-      const panels = Array.from(canvas.querySelectorAll('.panel'));
+      const panels = Array.from(canvas.querySelectorAll('.panel')).filter((panel) => !panel.hidden);
       const nav = document.getElementById('nav');
       const payNowBtn = document.getElementById('payNowBtn');
       const payStatus = document.getElementById('payStatus');
@@ -1228,19 +1394,17 @@
       const scrollButtons = Array.from(document.querySelectorAll('[data-scroll-to]'));
       const rawIntro = document.querySelector('.raw-intro');
       const rawTitleNode = document.querySelector('.raw-intro .raw-head');
-      const rawNoteNode = document.querySelector('.raw-intro .prompt-editor');
-      const notepadShell = document.querySelector('.raw-intro .notepad-shell');
+      const exampleNotepad = document.getElementById('exampleNotepad');
+      const examplePromptEditor = document.getElementById('examplePromptEditor');
       const notepadResetBtn = document.getElementById('notepadResetBtn');
+      const examplePanel = document.getElementById('panel-example');
+      const examplePanelIndex = panels.indexOf(examplePanel);
       const proofPanel = document.getElementById('panel-proof');
       const proofPanelIndex = panels.indexOf(proofPanel);
       const polishCard = document.querySelector('.polish-card');
       const polishResetBtn = document.getElementById('polishResetBtn');
-      const defaultRawTitle = rawTitleNode.innerHTML;
-      const defaultRawNote = rawNoteNode.innerHTML;
+      const defaultExampleNote = examplePromptEditor.innerHTML;
       payStatus.textContent = 'Secure checkout opens instantly.';
-      requestAnimationFrame(() => {
-        rawIntro.classList.add('ready');
-      });
 
       const dots = panels.map((panel, index) => {
         const dot = document.createElement('button');
@@ -1270,12 +1434,10 @@
         payTryCard.classList.remove('pop');
       }
 
-      function resetIntroPanel() {
-        rawTitleNode.innerHTML = defaultRawTitle;
-        rawNoteNode.innerHTML = defaultRawNote;
-        notepadShell.classList.remove('closing', 'closed', 'pop');
-        rawIntro.classList.remove('typing');
-        if (document.activeElement === rawTitleNode || document.activeElement === rawNoteNode) {
+      function resetExamplePanel() {
+        examplePromptEditor.innerHTML = defaultExampleNote;
+        exampleNotepad.classList.remove('closing', 'closed', 'pop');
+        if (document.activeElement === examplePromptEditor) {
           document.activeElement.blur();
         }
       }
@@ -1288,7 +1450,13 @@
         const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
         dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
         if (activePanelIndex === 0 && index !== 0) {
-          resetIntroPanel();
+          rawIntro.classList.remove('typing');
+          if (document.activeElement === rawTitleNode) {
+            rawTitleNode.blur();
+          }
+        }
+        if (activePanelIndex === examplePanelIndex && index !== examplePanelIndex) {
+          resetExamplePanel();
         }
         if (activePanelIndex === proofPanelIndex && index !== proofPanelIndex) {
           resetProofPanel();
@@ -1337,36 +1505,30 @@
         rawIntro.classList.remove('typing');
       });
 
-      rawNoteNode.addEventListener('focus', () => {
-        rawIntro.classList.add('typing');
-        requestAnimationFrame(() => moveCaretToEnd(rawNoteNode));
+      examplePromptEditor.addEventListener('focus', () => {
+        requestAnimationFrame(() => moveCaretToEnd(examplePromptEditor));
       });
 
-      rawNoteNode.addEventListener('pointerup', () => {
-        if (document.activeElement === rawNoteNode) {
-          requestAnimationFrame(() => moveCaretToEnd(rawNoteNode));
+      examplePromptEditor.addEventListener('pointerup', () => {
+        if (document.activeElement === examplePromptEditor) {
+          requestAnimationFrame(() => moveCaretToEnd(examplePromptEditor));
         }
-      });
-
-      rawNoteNode.addEventListener('blur', () => {
-        rawIntro.classList.remove('typing');
       });
 
       notepadResetBtn.addEventListener('click', () => {
-        if (notepadShell.classList.contains('closing') || notepadShell.classList.contains('closed')) return;
-        rawIntro.classList.remove('typing');
-        if (document.activeElement === rawTitleNode || document.activeElement === rawNoteNode) {
+        if (exampleNotepad.classList.contains('closing') || exampleNotepad.classList.contains('closed')) return;
+        if (document.activeElement === examplePromptEditor) {
           document.activeElement.blur();
         }
-        notepadShell.classList.remove('pop');
-        void notepadShell.offsetWidth;
-        notepadShell.classList.add('closing');
+        exampleNotepad.classList.remove('pop');
+        void exampleNotepad.offsetWidth;
+        exampleNotepad.classList.add('closing');
       });
 
-      notepadShell.addEventListener('animationend', (event) => {
+      exampleNotepad.addEventListener('animationend', (event) => {
         if (event.animationName === 'notepad-close') {
-          notepadShell.classList.remove('closing');
-          notepadShell.classList.add('closed');
+          exampleNotepad.classList.remove('closing');
+          exampleNotepad.classList.add('closed');
         }
       });
 
