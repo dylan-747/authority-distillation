@@ -1307,18 +1307,6 @@
           <button class="panel-cta" data-scroll-to="panel-purchase" type="button">Book a session</button>
         </article>
 
-        <article class="panel" id="panel-after" data-title="After" hidden>
-          <p class="kicker">After</p>
-          <h2>What happens after this.</h2>
-          <p class="section-intro">Some founders take the articulation and run with it. Others ask me to turn it into consistent output.</p>
-          <ul class="work-list">
-            <li>Ongoing posts</li>
-            <li>Weekly email</li>
-            <li>Continued refinement of thinking</li>
-          </ul>
-          <p class="credibility">Same thinking. Applied consistently.</p>
-        </article>
-
         <article class="panel" id="panel-purchase" data-title="Book">
           <p class="kicker">Book</p>
           <div class="pay-shell">
@@ -1447,7 +1435,8 @@
       }
 
       function updateActiveDot() {
-        const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
+        const rawIndex = Math.round(canvas.scrollLeft / canvas.clientWidth);
+        const index = Math.min(Math.max(rawIndex, 0), panels.length - 1);
         dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
         if (activePanelIndex === 0 && index !== 0) {
           rawIntro.classList.remove('typing');
