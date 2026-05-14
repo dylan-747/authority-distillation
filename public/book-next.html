@@ -88,16 +88,6 @@
         color: #f8f4ed;
       }
 
-      .calendar-frame {
-        display: none;
-        width: 100%;
-        min-height: 720px;
-        margin-top: 1.4rem;
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        background: #fff;
-      }
-
       .status {
         margin-top: 1rem;
         font-size: 0.95rem;
@@ -119,20 +109,18 @@
       <p class="kicker">Payment received</p>
       <h1>Choose the session time.</h1>
       <p>
-        Your session is paid. Pick a weekday slot below, or reply to the receipt and I'll schedule it directly.
+        Your session is paid. Open the calendar to pick a time, or reply to the receipt and I'll schedule it directly.
       </p>
       <div class="actions">
-        <a class="btn btn-primary" id="calendarLink" href="#">Open calendar</a>
+        <a class="btn btn-primary" id="calendarLink" href="#" target="_blank" rel="noopener">Open calendar</a>
         <a class="btn" id="emailLink" href="#">Book via email</a>
       </div>
       <p class="status" id="status">Loading calendar details...</p>
-      <iframe class="calendar-frame" id="calendarFrame" title="Calendar booking"></iframe>
     </main>
 
     <script>
       const calendarLink = document.getElementById('calendarLink');
       const emailLink = document.getElementById('emailLink');
-      const calendarFrame = document.getElementById('calendarFrame');
       const statusNode = document.getElementById('status');
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id') || '';
@@ -164,9 +152,7 @@
             const calendarUrl = new URL(config.calendarUrl);
             if (sessionId) calendarUrl.searchParams.set('stripe_session_id', sessionId);
             calendarLink.href = calendarUrl.toString();
-            calendarFrame.src = calendarUrl.toString();
-            calendarFrame.style.display = 'block';
-            statusNode.textContent = 'Use the embedded calendar, or open it in a new tab if you prefer.';
+            statusNode.textContent = 'The calendar opens in a new tab. Email is the backup if anything goes wrong.';
             return;
           }
 
