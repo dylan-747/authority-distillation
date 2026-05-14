@@ -119,8 +119,7 @@
       <p class="kicker">Payment received</p>
       <h1>Choose the session time.</h1>
       <p>
-        Your £450 Authority Distillation session is paid. Pick a real weekday slot below. If the calendar is not connected yet,
-        email me and I will arrange the time manually.
+        Your session is paid. Pick a weekday slot below, or reply to the receipt and I'll schedule it directly.
       </p>
       <div class="actions">
         <a class="btn btn-primary" id="calendarLink" href="#">Open calendar</a>
@@ -173,13 +172,13 @@
 
           calendarLink.href = buildMailto(email);
           calendarLink.textContent = 'Email to arrange time';
-          statusNode.textContent = 'Calendar URL is not configured locally yet. This page is ready for Cal.com or Calendly.';
+          statusNode.textContent = "I'll send the booking link to your email within a few hours.";
         } catch (_error) {
           const fallbackEmail = 'dylan.galloway@proton.me';
           calendarLink.href = buildMailto(fallbackEmail);
           emailLink.href = buildMailto(fallbackEmail);
           calendarLink.textContent = 'Email to arrange time';
-          statusNode.textContent = 'Calendar details could not load. Email booking is available.';
+          statusNode.textContent = "I'll send the booking link to your email within a few hours.";
         }
       }
 
