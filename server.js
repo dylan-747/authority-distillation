@@ -44,6 +44,9 @@ const defaultPreparationChecklist = [
   'Bring one specific articulation problem, not three adjacent ones.',
   'Expect a written articulation after the call that you can use as a memo, narrative, or draft.'
 ];
+const lensFeedUrl = process.env.LENS_FEED_URL || 'https://lensbrief.substack.com/feed';
+const calendarBookingUrl = process.env.CALENDAR_BOOKING_URL || '';
+const bookingEmail = process.env.BOOKING_EMAIL || 'dylan.galloway@proton.me';
 
 function ensureDataFile(filePath, fallbackValue) {
   if (!fs.existsSync(dataDir)) {
@@ -215,6 +218,82 @@ function sendHtmlFile(res, fileName) {
   return res.type('html').sendFile(path.join(publicDir, fileName));
 }
 
+function decodeXmlEntities(value = '') {
+  return String(value)
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#(\d+);/g, (_match, code) => String.fromCharCode(Number(code)));
+}
+
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function tagValue(xml, tagName) {
+  const match = xml.match(new RegExp(`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tagName}>`, 'i'));
+  return match ? decodeXmlEntities(match[1]).trim() : '';
+}
+
+function stripHtml(value = '') {
+  return decodeXmlEntities(String(value).replace(/<[^>]+>/g, ' '))
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function estimateReadingMinutes(value = '') {
+  const wordCount = stripHtml(value).split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(wordCount / 230));
+}
+
+function sanitizeLensHtml(html = '') {
+  return decodeXmlEntities(html)
+    .replace(/<div><hr><\/div>[\s\S]*$/i, '')
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+    .replace(/<form[\s\S]*?<\/form>/gi, '')
+    .replace(/\son\w+="[^"]*"/gi, '')
+    .replace(/\son\w+='[^']*'/gi, '')
+    .replace(/\sstyle=(["'])[\s\S]*?\1/gi, '')
+    .replace(/\sdata-[\w-]+=(["'])[\s\S]*?\1/gi, '')
+    .replace(/\shref=(["'])javascript:[\s\S]*?\1/gi, ' href="#"')
+    .replace(/\ssrc=(["'])javascript:[\s\S]*?\1/gi, '');
+}
+
+function parseLensFeed(xml) {
+  const itemMatches = Array.from(String(xml).matchAll(/<item\b[\s\S]*?<\/item>/gi)).slice(0, 3);
+
+  return itemMatches.map((match, index) => {
+    const itemXml = match[0];
+    const title = tagValue(itemXml, 'title') || `The Lens ${index + 1}`;
+    const link = tagValue(itemXml, 'link');
+    const publishedAt = tagValue(itemXml, 'pubDate');
+    const rawContent = tagValue(itemXml, 'content:encoded') || tagValue(itemXml, 'description');
+    const plainText = stripHtml(rawContent);
+    const fallbackContent = `<p>${escapeHtml(plainText || 'Essay content is temporarily unavailable.')}</p>`;
+
+    return {
+      id: String(index + 1),
+      title,
+      link,
+      publishedAt,
+      byline: 'Dylan Galloway',
+      readingMinutes: estimateReadingMinutes(rawContent),
+      excerpt: plainText.length > 180 ? `${plainText.slice(0, 177).trim()}...` : plainText,
+      html: sanitizeLensHtml(rawContent || fallbackContent)
+    };
+  });
+}
+
 async function sendEmail({ to, subject, text, replyTo }) {
   if (!emailNotificationsEnabled()) {
     return { sent: false, reason: 'Email notifications not configured.' };
@@ -333,6 +412,43 @@ app.get('/confirmation', (_req, res) => {
   return sendHtmlFile(res, 'confirmation.html');
 });
 
+app.get('/v2', (_req, res) => {
+  return sendHtmlFile(res, 'index.html');
+});
+
+app.get('/api/calendar-config', (_req, res) => {
+  return res.json({
+    calendarUrl: calendarBookingUrl,
+    bookingEmail
+  });
+});
+
+app.get('/api/lens-posts', async (_req, res) => {
+  try {
+    const response = await fetch(lensFeedUrl, {
+      headers: {
+        Accept: 'application/rss+xml, application/xml, text/xml'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Lens feed returned ${response.status}`);
+    }
+
+    const xml = await response.text();
+    return res.json({
+      source: lensFeedUrl,
+      posts: parseLensFeed(xml)
+    });
+  } catch (error) {
+    console.error('Lens feed error:', error.message);
+    return res.status(502).json({
+      error: 'Unable to load The Lens right now.',
+      posts: []
+    });
+  }
+});
+
 app.get('/test', (_req, res) => {
   return res
     .type('html')
@@ -374,7 +490,7 @@ app.post('/api/create-checkout-session', async (_req, res) => {
       metadata: {
         product: 'authority_distillation'
       },
-      success_url: `${baseUrl}/booking.html?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${baseUrl}/book-next.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/?cancelled=1`
     });
 
@@ -385,57 +501,10 @@ app.post('/api/create-checkout-session', async (_req, res) => {
   }
 });
 
-app.post('/api/book-session', async (req, res) => {
-  try {
-    const { sessionId, bookingTime, focus } = req.body || {};
-    if (!sessionId || !bookingTime) {
-      return res.status(400).json({ error: 'Missing sessionId or bookingTime.' });
-    }
-
-    if (!isWeekdayBooking(bookingTime)) {
-      return res.status(400).json({ error: 'Please choose a Monday to Friday session time.' });
-    }
-
-    const selectedSlot = findAvailableSlot(bookingTime);
-    if (!selectedSlot) {
-      return res.status(409).json({ error: 'That slot is no longer available. Please choose another available time.' });
-    }
-
-    if (hasExistingBookingOnDate(bookingTime, sessionId)) {
-      return res.status(409).json({ error: 'That day is already booked. Please choose another weekday.' });
-    }
-
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-    if (session.payment_status !== 'paid') {
-      return res.status(403).json({ error: 'Payment required before booking.' });
-    }
-
-    const booking = {
-      bookingTime,
-      bookingLabel: selectedSlot.label,
-      focus: (focus || '').toString().slice(0, 500),
-      updatedAt: new Date().toISOString()
-    };
-    saveBooking(sessionId, booking);
-
-    try {
-      await sendBookingNotifications({
-        customerEmail: getSessionCustomerEmail(session),
-        customerName: getSessionCustomerName(session) || '',
-        bookingLabel: booking.bookingLabel,
-        focus: booking.focus
-      });
-    } catch (notificationError) {
-      console.error('Booking notification error:', notificationError);
-    }
-
-    return res.json({ ok: true });
-  } catch (error) {
-    console.error('Booking error:', error);
-    return res.status(500).json({
-      error: error && error.message ? error.message : 'Unable to save booking.'
-    });
-  }
+app.post('/api/book-session', (_req, res) => {
+  return res.status(410).json({
+    error: 'App-side slot booking has been removed. Use the real calendar handoff after checkout.'
+  });
 });
 
 app.post('/api/free-polish', (req, res) => {
@@ -455,7 +524,9 @@ app.post('/api/free-polish', (req, res) => {
 });
 
 app.get('/api/available-slots', (_req, res) => {
-  return res.json(availableSlotsResponse());
+  return res.status(410).json({
+    error: 'Fixed weekly slots have been removed. Use the real calendar handoff after checkout.'
+  });
 });
 
 app.get('/api/checkout-session/:id', async (req, res) => {

@@ -4,61 +4,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Authority Distillation</title>
-    <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=1" />
-    <link rel="shortcut icon" href="/dg-favicon.svg?v=1" />
     <meta
       name="description"
-      content="Authority Distillation for founders and operators: from raw thinking to clear written articulation."
+      content="Authority Distillation for founders who are sharper in conversation than they are on the page."
     />
+    <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=1" />
+    <link rel="shortcut icon" href="/dg-favicon.svg?v=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg: #f5f3ec;
-        --panel: #faf8f2;
-        --ink: #1e1d1a;
-        --muted: #64625c;
-        --line: #cec9bf;
-        --accent: #272622;
+        --bg: #f4f0e7;
+        --paper: #fffaf1;
+        --ink: #1e211f;
+        --muted: #62665f;
+        --line: #c7c2b8;
+        --accent: #1e211f;
+        --green: #596f62;
+        --clay: #a65f45;
+        --blue: #405f78;
+        --shadow: 0 18px 46px rgba(45, 47, 42, 0.12);
+        --max: 1080px;
       }
 
       * {
         box-sizing: border-box;
       }
 
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        background: radial-gradient(circle at 10% 10%, #fbf9f4, var(--bg));
-        color: var(--ink);
-        font-family: 'IBM Plex Sans', sans-serif;
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
+      html {
+        scroll-behavior: smooth;
       }
 
-      .app {
-        min-height: 100dvh;
-        display: grid;
-        grid-template-rows: auto 1fr;
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #fbf8f1 0%, var(--bg) 48%, #e9ece5 100%);
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      body.reader-open {
+        overflow: hidden;
+      }
+
+      a {
+        color: inherit;
       }
 
       .topbar {
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 30;
+        background: rgba(244, 240, 231, 0.88);
+        border-bottom: 1px solid rgba(199, 194, 184, 0.82);
+        backdrop-filter: blur(14px);
+      }
+
+      .topbar-inner,
+      .section,
+      .hero-inner,
+      .footer-inner {
+        width: min(calc(100% - 2rem), var(--max));
+        margin: 0 auto;
+      }
+
+      .topbar-inner {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 0.9rem;
-        padding: 0.8rem 1rem;
-        background: rgba(245, 243, 236, 0.92);
-        border-bottom: 1px solid var(--line);
-        backdrop-filter: blur(6px);
+        gap: 1rem;
+        padding: 0.9rem 0;
       }
 
       .brand {
@@ -69,1503 +89,693 @@
         color: var(--muted);
       }
 
-      .nav {
+      .topnav {
         display: flex;
         align-items: center;
-        gap: 0.32rem;
-      }
-
-      .nav-dot {
-        width: 9px;
-        height: 9px;
-        border-radius: 999px;
-        border: 1px solid #908c82;
-        background: transparent;
-        padding: 0;
-        cursor: pointer;
-      }
-
-      .nav-dot.active {
-        background: #4d4a43;
-      }
-
-      .hint {
-        font-size: 0.75rem;
-        color: var(--muted);
-        white-space: nowrap;
-      }
-
-      .canvas {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        overscroll-behavior-x: contain;
-      }
-
-      .canvas::-webkit-scrollbar {
-        display: none;
-      }
-
-      .panel {
-        flex: 0 0 100%;
-        min-height: calc(100dvh - 58px);
-        scroll-snap-align: start;
-        padding: 1.7rem 1.05rem 2.2rem;
-        border-right: 1px solid var(--line);
-        background: linear-gradient(170deg, var(--panel), #f7f4ec);
-        display: grid;
-        align-content: start;
-      }
-
-      .panel:nth-child(odd) {
-        background: linear-gradient(160deg, #f1eee6, #ece8dd);
-      }
-
-      .kicker {
-        margin: 0 0 1rem;
-        font-size: 0.72rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .panel h2 + .section-intro,
-      .panel h2 + .muted,
-      .panel h2 + .subtle {
-        margin-top: 0.7rem;
-      }
-
-      h1,
-      h2 {
-        margin: 0;
-        font-family: 'Fraunces', serif;
-        font-weight: 400;
-        line-height: 1.08;
-        font-variant-ligatures: none;
-        font-feature-settings: 'liga' 0, 'clig' 0;
-      }
-
-      h1 {
-        font-size: clamp(1.75rem, 6vw, 2.8rem);
-      }
-
-      h2 {
-        font-size: clamp(1.35rem, 4.8vw, 2rem);
-      }
-
-      .panel h2 {
-        max-width: 28ch;
-        line-height: 1.12;
-        text-wrap: pretty;
-      }
-
-      p {
-        margin: 0.45rem 0;
-      }
-
-      .muted {
-        color: var(--muted);
-      }
-
-      .raw-lines {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        gap: 0.92rem;
-      }
-
-      .raw-lines li {
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: clamp(1rem, 2.6vw, 1.16rem);
-        line-height: 1.42;
-        font-weight: 400;
-        max-width: 34ch;
-      }
-
-      .raw-lines li:nth-child(even) {
-        opacity: 0.88;
-      }
-
-      .raw-intro h1 {
-        margin-bottom: 0.9rem;
-        max-width: 18ch;
-        font-size: clamp(1.5rem, 4.9vw, 2.34rem);
-        line-height: 1.04;
-      }
-
-      .raw-head::after {
-        content: '';
-        display: inline-block;
-        width: 2px;
-        height: 1.02em;
-        margin-left: 0.28rem;
-        background: #57524a;
-        vertical-align: -0.12em;
-        animation: blink-caret 1.05s steps(1, end) infinite;
-      }
-
-      .raw-head {
-        caret-color: transparent;
-      }
-
-      .raw-head:focus {
-        outline: none;
-        caret-color: var(--ink);
-      }
-
-      .raw-head:focus::after,
-      .raw-intro.typing .raw-head::after {
-        opacity: 0;
-        animation: none;
-      }
-
-      @keyframes blink-caret {
-        0%,
-        49% {
-          opacity: 1;
-        }
-        50%,
-        100% {
-          opacity: 0;
-        }
-      }
-
-      .transform-line {
-        margin: -0.42rem 0 1rem;
-        font-size: 0.84rem;
-        color: var(--muted);
-        letter-spacing: 0.02em;
-      }
-
-      .mobile-break {
-        display: none;
-      }
-
-      .hero-copy {
-        max-width: 34ch;
-        margin: 0.4rem 0 0;
-        font-family: 'Fraunces', serif;
-        font-size: clamp(1rem, 2.8vw, 1.16rem);
-        line-height: 1.35;
-        font-variant-ligatures: none;
-        font-feature-settings: 'liga' 0, 'clig' 0;
-      }
-
-      .hero-proof {
-        max-width: 34ch;
-        margin-top: 0.72rem;
-        font-family: 'Fraunces', serif;
-        font-size: clamp(0.98rem, 2.6vw, 1.08rem);
-        line-height: 1.35;
-        color: var(--muted);
-        font-variant-ligatures: none;
-        font-feature-settings: 'liga' 0, 'clig' 0;
-      }
-
-      .hero-proof-support {
-        margin-top: 0.28rem;
-        font-size: 0.84rem;
-        color: var(--muted);
-      }
-
-      .hero-qualifier {
-        margin-top: 0.5rem;
-        max-width: 40ch;
-        color: var(--muted);
-      }
-
-      .hero-offer-card {
-        margin-top: 1rem;
-        max-width: 34rem;
-        border: 1px solid #c8c2b6;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.58);
-        padding: 0.95rem 0.92rem 1rem;
-        box-shadow: 0 14px 30px rgba(108, 101, 90, 0.08);
-      }
-
-      .hero-price {
-        margin: 0;
-        font-family: 'Fraunces', serif;
-        font-size: clamp(1.55rem, 4vw, 2.35rem);
-        line-height: 1;
-      }
-
-      .hero-points {
-        margin: 0.9rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.58rem;
-      }
-
-      .hero-points li {
-        border-left: 2px solid #bcb6aa;
-        padding-left: 0.65rem;
-      }
-
-      .hero-actions {
-        margin-top: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        flex-wrap: wrap;
-      }
-
-      .hero-meta {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.9rem;
-        text-align: center;
-        width: 100%;
-      }
-
-      .notepad-shell {
-        margin-top: 1rem;
-        margin-bottom: 0;
-        max-width: 30.5rem;
-        padding: 0.68rem 0.82rem 0.78rem;
-        border: 1px solid #c6bfae;
-        border-radius: 14px;
-        background-color: #fffefb;
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(252, 250, 246, 1)),
-          repeating-linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0) 0,
-            rgba(255, 255, 255, 0) 2.1rem,
-            rgba(170, 162, 148, 0.14) 2.1rem,
-            rgba(170, 162, 148, 0.14) 2.16rem
-          );
-        box-shadow: 0 16px 32px rgba(108, 101, 90, 0.1);
-        position: relative;
-        overflow: hidden;
-        transform-origin: top left;
-        transition:
-          margin 220ms ease-out,
-          max-height 220ms ease-out,
-          opacity 220ms ease-out,
-          transform 220ms ease-out,
-          padding 220ms ease-out,
-          border-color 220ms ease-out;
-        max-height: 24rem;
-      }
-
-      .notepad-shell:focus-within {
-        border-color: #c6c0b4;
-      }
-
-      .notepad-topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        margin: -0.68rem -0.82rem 0;
-        padding: 0.62rem 0.82rem 0.54rem;
-        border-bottom: 1px solid rgba(188, 180, 164, 0.82);
-        background: linear-gradient(180deg, rgba(252, 250, 246, 0.99), rgba(247, 243, 236, 0.97));
-        position: relative;
-      }
-
-      .notepad-topbar::after {
-        content: '';
-        position: absolute;
-        left: 0.82rem;
-        bottom: -1px;
-        width: 4.6rem;
-        height: 1px;
-        background: rgba(142, 135, 122, 0.28);
-      }
-
-      .notepad-control {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        border: 1px solid #c8c2b6;
-        background: rgba(136, 131, 122, 0.14);
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #7f7a72;
-        font-size: 8px;
-        line-height: 1;
-        cursor: pointer;
-      }
-
-      .notepad-shell.pop {
-        animation: notepad-pop 220ms ease-out;
-      }
-
-      .notepad-shell.closing {
-        animation: notepad-close 220ms ease-out forwards;
-        pointer-events: none;
-      }
-
-      .notepad-shell.closed {
-        opacity: 0;
-        transform: scale(0.97);
-        pointer-events: none;
-        max-height: 0;
-        margin-top: 0.25rem;
-        margin-bottom: -0.2rem;
-        padding-top: 0;
-        padding-bottom: 0;
-        border-color: transparent;
-        box-shadow: none;
-      }
-
-      @keyframes notepad-pop {
-        0% {
-          transform: scale(1);
-        }
-        45% {
-          transform: scale(0.985);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      @keyframes notepad-close {
-        0% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        45% {
-          opacity: 0.72;
-          transform: scale(0.985);
-        }
-        100% {
-          opacity: 0;
-          transform: scale(0.97);
-        }
-      }
-
-      .prompt-editor {
-        margin: 0.42rem 0 0;
-        min-height: 6.2rem;
-        white-space: pre-wrap;
-        font-family: 'Fraunces', serif;
-        font-size: clamp(1rem, 2.5vw, 1.12rem);
-        line-height: 1.28;
-        color: #49453e;
-        outline: none;
-      }
-
-      .prompt-editor p {
-        margin: 0 0 0.72rem;
-      }
-
-      .prompt-editor p:last-child {
-        margin-bottom: 0;
-      }
-
-      .panel-cta {
-        margin-top: 0.82rem;
-        justify-self: start;
-        border: 1px solid var(--accent);
-        background: var(--accent);
-        color: #f6f4ef;
-        border-radius: 999px;
-        padding: 0.55rem 0.95rem;
-        font: inherit;
-        cursor: pointer;
-      }
-
-      .panel-cta.secondary {
-        background: transparent;
-        color: var(--muted);
-        border-color: transparent;
-        padding-left: 0;
-      }
-
-      .essay-list,
-      .work-list,
-      .distill-points,
-      .summary-list {
-        margin: 1rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.68rem;
-      }
-
-      .essay-list li,
-      .work-list li,
-      .distill-points li,
-      .summary-list li {
-        border-left: 2px solid #bcb6aa;
-        padding-left: 0.65rem;
-      }
-
-      .price {
-        margin-top: 1rem;
-        font-size: 1.05rem;
-      }
-
-      .pay-shell {
-        margin-top: 1.2rem;
-        max-width: 560px;
-      }
-
-      .pay-stack {
-        display: grid;
-        position: relative;
-        padding: 14px 18px 0 0;
-      }
-
-      .pay-card {
-        grid-area: 1 / 1;
-        border: 1px solid #c8c2b6;
-        border-radius: 16px;
-        padding: 1rem 0.92rem;
-        background: linear-gradient(170deg, #fffefb, #f8f4ec);
-        box-shadow: 0 14px 30px rgba(108, 101, 90, 0.08);
-        transition: transform 220ms ease-out, box-shadow 220ms ease-out, opacity 220ms ease-out;
-      }
-
-      .pay-card.pop {
-        animation: notepad-pop 220ms ease-out;
-      }
-
-      .pay-card.front {
-        z-index: 2;
-        transform: translate(0, 0);
-      }
-
-      .pay-card.back {
-        z-index: 1;
-        transform: translate(18px, 14px) scale(0.986);
-        box-shadow: 0 10px 20px rgba(108, 101, 90, 0.06);
-        overflow: hidden;
-      }
-
-      .pay-card.back > * {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .pay-card.back .pay-card-topbar {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .pay-card.back .pay-card-topbar .subtle {
-        opacity: 0.9;
-      }
-
-      .pay-card-topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        margin-bottom: 0.55rem;
-      }
-
-      .pay-summary {
-        margin: 0.1rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.58rem;
-      }
-
-      .pay-summary li {
-        border-left: 2px solid #bcb6aa;
-        padding-left: 0.62rem;
-      }
-
-      .steps {
-        margin-top: 0.9rem;
-        display: grid;
-        gap: 0.4rem;
-        color: var(--muted);
-        font-size: 0.86rem;
-      }
-
-      .pay-actions {
-        margin-top: 0.95rem;
-        display: grid;
-        justify-content: start;
-      }
-
-      .btn-primary {
-        border-radius: 999px;
-        font: inherit;
-        font-size: 0.93rem;
-        padding: 0.6rem 1.08rem;
-        cursor: pointer;
-        border: 1px solid var(--accent);
-        background: var(--accent);
-        color: #f6f4ef;
-      }
-
-      .status {
-        margin-top: 0.65rem;
-        min-height: 1.1rem;
-        font-size: 0.86rem;
-        color: #5a564f;
-      }
-
-      .subtle {
-        font-size: 0.83rem;
-        color: var(--muted);
-        font-variant-ligatures: none;
-        font-feature-settings: 'liga' 0, 'clig' 0;
-      }
-
-      .credibility {
-        margin-top: 1rem;
-        max-width: 40ch;
-        color: var(--muted);
-      }
-
-      .offer-note {
-        margin-top: 0.7rem;
-        max-width: 32ch;
-        color: var(--muted);
-      }
-
-      .trust-line {
-        margin-top: 0.5rem;
-        max-width: 30ch;
-        color: var(--muted);
-      }
-
-      .best-for {
-        margin: 0.85rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.44rem;
-      }
-
-      .best-for li {
-        padding-left: 0.65rem;
-        border-left: 2px solid #bcb6aa;
-      }
-
-      .consequence-block {
-        margin-top: 1rem;
-        max-width: 42rem;
-      }
-
-      .consequence-list {
-        margin: 0.7rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.5rem;
-      }
-
-      .consequence-list li {
-        border-left: 2px solid #bcb6aa;
-        padding-left: 0.65rem;
-        color: var(--ink);
-      }
-
-      .example-wrap {
-        margin-top: 1rem;
-        display: grid;
-        gap: 0.9rem;
-        max-width: 640px;
-      }
-
-      .example-row {
-        padding: 0 0 0 0.95rem;
-        border-left: 2px solid #bcb6aa;
-        background: transparent;
-      }
-
-      .example-row.raw-copy {
-        color: #7a756b;
-      }
-
-      .example-row.distilled-copy {
-        color: #23211d;
-      }
-
-      .example-label {
-        margin: 0 0 0.35rem;
-        font-size: 0.68rem;
-        text-transform: uppercase;
-        letter-spacing: 0.13em;
-        color: var(--muted);
-      }
-
-      .example-arrow {
-        margin: 0.1rem auto;
-        width: fit-content;
-        display: block;
-        color: #807b71;
-        font-size: 0.92rem;
-      }
-
-      .example-note {
-        margin-top: 0.45rem;
-        max-width: 33ch;
-        color: var(--muted);
-      }
-
-      .proof-card {
-        margin-top: 1rem;
-        max-width: 560px;
-        border: 1px solid #c8c2b6;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.56);
-        padding: 0.9rem 0.82rem;
-      }
-
-      .proof-card .example-wrap {
-        margin-top: 0.8rem;
-      }
-
-      .proof-intro {
-        max-width: 48ch;
-      }
-
-      .proof-stack {
-        display: grid;
-        gap: 1rem;
-        align-content: start;
-      }
-
-      .proof-stack .notepad-shell {
-        margin-top: 0.2rem;
-      }
-
-      .example-stack {
-        display: grid;
-        gap: 1rem;
-        align-content: start;
-        max-width: 760px;
-      }
-
-      .section-intro {
-        margin-top: 0.55rem;
-        max-width: 34ch;
-        color: var(--muted);
-      }
-
-      .section-intro.wide {
-        max-width: 52ch;
-      }
-
-      .notepad-example .example-row p:last-child {
-        margin: 0;
-        font-family: 'Fraunces', serif;
-        font-size: clamp(1.04rem, 3.25vw, 1.45rem);
-        line-height: 1.32;
-        font-variant-ligatures: none;
-        font-feature-settings: 'liga' 0, 'clig' 0;
-        max-width: 31ch;
-      }
-
-      .polish-card {
-        margin-top: 1rem;
-        border: 1px solid #c8c2b6;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.52);
-        padding: 0.85rem 0.8rem;
-        max-width: 560px;
-        overflow: hidden;
-        transform-origin: top left;
-        transition:
-          margin 220ms ease-out,
-          max-height 220ms ease-out,
-          opacity 220ms ease-out,
-          transform 220ms ease-out,
-          padding 220ms ease-out,
-          border-color 220ms ease-out;
-        max-height: 16rem;
-      }
-
-      .polish-card-topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-      }
-
-      .polish-card.closing {
-        animation: notepad-close 220ms ease-out forwards;
-        pointer-events: none;
-      }
-
-      .polish-card.closed {
-        opacity: 0;
-        transform: scale(0.97);
-        pointer-events: none;
-        max-height: 0;
-        margin-top: 0.3rem;
-        margin-bottom: -0.2rem;
-        padding-top: 0;
-        padding-bottom: 0;
-        border-color: transparent;
-      }
-
-      .reading-list {
-        margin: 0.75rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 0.8rem;
-        max-width: 560px;
-      }
-
-      .reading-list li {
-        border-left: 2px solid #bcb6aa;
-        padding-left: 0.75rem;
-      }
-
-      .reading-list a {
-        color: var(--ink);
-        text-decoration: none;
-      }
-
-      .reading-list a:hover {
-        text-decoration: underline;
-      }
-
-      .reading-title {
-        margin: 0;
-        font-family: 'Fraunces', serif;
-        font-size: 1.02rem;
-        line-height: 1.14;
-      }
-
-      .reading-kicker {
-        margin-top: 1rem;
-        margin-bottom: 0.3rem;
-      }
-
-      .reading-meta {
-        margin-top: 0.22rem;
-        color: var(--muted);
-        line-height: 1.32;
-        max-width: 34ch;
-      }
-
-      .polish-form {
-        margin-top: 0.7rem;
-        display: grid;
         gap: 0.55rem;
       }
 
-      #panel-proof .subtle {
-        letter-spacing: 0.01em;
-      }
-
-      .fit-title {
-        margin-bottom: 1.1rem;
-      }
-
-      .fit-transform {
-        margin-top: 1.1rem;
-      }
-
-      .offer-statement {
-        margin-top: 1.3rem;
-      }
-
-      .example-subtle-follow {
-        margin-top: 1rem;
-      }
-
-      .polish-form input,
-      .polish-form textarea {
-        width: 100%;
-        border: 1px solid #c6c1b6;
-        border-radius: 9px;
-        background: #fffdf8;
-        color: var(--ink);
-        padding: 0.62rem 0.68rem;
-        font: inherit;
-      }
-
-      .polish-form textarea {
-        min-height: 88px;
-        resize: vertical;
-      }
-
-      .polish-link {
-        text-decoration: none;
+      .topnav a,
+      .btn {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 250, 241, 0.72);
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.94rem;
+        padding: 0.62rem 0.95rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 160ms ease, transform 160ms ease, border-color 160ms ease;
       }
 
-      @media (max-width: 760px) {
-        .topbar {
-          gap: 0.55rem;
-          padding: 0.72rem 0.78rem 0.68rem;
+      .topnav a:hover,
+      .btn:hover {
+        background: rgba(255, 250, 241, 0.96);
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: #f9f5ee;
+      }
+
+      .btn-primary:hover {
+        background: #333631;
+      }
+
+      .hero {
+        padding: 4.5rem 0 2.2rem;
+      }
+
+      .hero-inner {
+        display: grid;
+        gap: 1.4rem;
+      }
+
+      .eyebrow,
+      .label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.76rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        font-family: 'Fraunces', serif;
+        font-weight: 400;
+        line-height: 1.03;
+      }
+
+      h1 {
+        max-width: 900px;
+        font-size: clamp(3rem, 7vw, 6.5rem);
+      }
+
+      h2 {
+        max-width: 740px;
+        font-size: clamp(2.2rem, 5vw, 4rem);
+      }
+
+      h3 {
+        font-size: 1.35rem;
+      }
+
+      p {
+        line-height: 1.62;
+      }
+
+      .hero-copy {
+        max-width: 650px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 1.12rem;
+      }
+
+      .hero-actions,
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .section {
+        padding: 4rem 0 0;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr;
+        gap: 2rem;
+        align-items: start;
+      }
+
+      .intro-card,
+      .proof-placeholder,
+      .essay-card,
+      .reader-shell,
+      .filter-card {
+        border: 1px solid var(--line);
+        background: rgba(255, 250, 241, 0.74);
+        box-shadow: var(--shadow);
+      }
+
+      .intro-card {
+        padding: 1.4rem;
+        border-radius: 8px;
+      }
+
+      .price {
+        margin: 0 0 0.8rem;
+        font-family: 'Fraunces', serif;
+        font-size: 3.6rem;
+        line-height: 1;
+      }
+
+      .offer-list,
+      .steps,
+      .filter-list {
+        display: grid;
+        gap: 0.72rem;
+        margin: 1rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .offer-list li,
+      .steps li,
+      .filter-list li {
+        border-left: 2px solid var(--line);
+        padding-left: 0.78rem;
+      }
+
+      .proof-placeholder {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        gap: 1rem;
+        padding: 1.2rem;
+        border-radius: 8px;
+      }
+
+      .quote-mark {
+        color: var(--clay);
+        font-family: 'Fraunces', serif;
+        font-size: 4rem;
+        line-height: 0.8;
+      }
+
+      .placeholder-box {
+        min-height: 180px;
+        border: 1px dashed #9d9588;
+        border-radius: 8px;
+        padding: 1rem;
+        color: var(--muted);
+      }
+
+      .steps {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .steps li {
+        padding-top: 0.1rem;
+      }
+
+      .step-num {
+        display: block;
+        margin-bottom: 0.45rem;
+        color: var(--green);
+        font-weight: 600;
+      }
+
+      .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .filter-card {
+        padding: 1.2rem;
+        border-radius: 8px;
+      }
+
+      .filter-card.not {
+        background: rgba(255, 255, 255, 0.48);
+      }
+
+      .lens-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .lens-head p {
+        max-width: 520px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .lens-stack {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(300px, 1.05fr);
+        gap: 1rem;
+      }
+
+      .lens-preview {
+        min-height: 430px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1.2rem;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background:
+          linear-gradient(180deg, rgba(255, 250, 241, 0.9), rgba(234, 236, 229, 0.82)),
+          var(--paper);
+        box-shadow: var(--shadow);
+        padding: 1.25rem;
+      }
+
+      .preview-kicker {
+        margin: 0 0 0.85rem;
+        color: var(--blue);
+        font-size: 0.82rem;
+      }
+
+      .preview-title {
+        max-width: 12ch;
+        font-size: 2.55rem;
+      }
+
+      .preview-prompt {
+        max-width: 32rem;
+        color: var(--ink);
+        font-family: 'Fraunces', serif;
+        font-size: 1.35rem;
+        line-height: 1.24;
+      }
+
+      .preview-excerpt {
+        max-width: 34rem;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .essay-card {
+        min-height: 132px;
+        display: grid;
+        gap: 0.55rem;
+        align-content: start;
+        border-radius: 8px;
+        padding: 1.05rem;
+        text-align: left;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .essay-card.is-active {
+        border-color: var(--accent);
+        background: rgba(255, 250, 241, 0.96);
+      }
+
+      .essay-card h3 {
+        min-height: 3.7rem;
+        font-size: 1.28rem;
+        line-height: 1.12;
+      }
+
+      .essay-card p {
+        margin: 0;
+        color: var(--muted);
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+
+      .essay-list {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .essay-action {
+        color: var(--clay);
+        font-size: 0.9rem;
+      }
+
+      .subscribe-line {
+        margin: 1rem 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .subscribe-line a {
+        color: var(--blue);
+      }
+
+      .essay-meta {
+        color: var(--blue);
+        font-size: 0.86rem;
+      }
+
+      .about-copy,
+      .final-copy {
+        max-width: 680px;
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+
+      .final-cta {
+        margin-top: 4rem;
+        padding: 3rem 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .footer {
+        padding: 2rem 0 3rem;
+      }
+
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .reader {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: none;
+        overflow: auto;
+        background: rgba(244, 240, 231, 0.96);
+        padding: 1rem;
+      }
+
+      .reader-progress {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        height: 3px;
+        margin: -1rem -1rem 0;
+        background: rgba(199, 194, 184, 0.55);
+      }
+
+      .reader-progress span {
+        display: block;
+        width: 0%;
+        height: 100%;
+        background: var(--clay);
+      }
+
+      .reader.open {
+        display: block;
+      }
+
+      .reader-shell {
+        width: min(860px, 100%);
+        margin: 2rem auto;
+        border-radius: 8px;
+        padding: clamp(1.2rem, 4vw, 3rem);
+      }
+
+      .reader-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .reader-close {
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      .reader-title {
+        max-width: 780px;
+        font-size: clamp(2.2rem, 6vw, 4.8rem);
+      }
+
+      .reader-meta {
+        color: var(--muted);
+      }
+
+      .reader-body {
+        margin-top: 2rem;
+        color: #2d302d;
+        font-size: 1.08rem;
+        line-height: 1.75;
+      }
+
+      .reader-body img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .reader-body a {
+        color: var(--blue);
+      }
+
+      .reader-footer {
+        margin-top: 2.5rem;
+        padding-top: 1.4rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .reader-rail {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-top: 1.4rem;
+      }
+
+      .rail-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 250, 241, 0.62);
+        padding: 0.85rem;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .rail-card span {
+        display: block;
+        margin-bottom: 0.45rem;
+        color: var(--blue);
+        font-size: 0.82rem;
+      }
+
+      @media (max-width: 860px) {
+        .topbar-inner,
+        .section,
+        .hero-inner,
+        .footer-inner {
+          width: min(calc(100% - 1.2rem), var(--max));
         }
 
-        .brand {
-          font-size: 0.72rem;
-          line-height: 1.15;
-          max-width: 8.8rem;
-        }
-
-        .nav {
-          margin-left: auto;
-          gap: 0.24rem;
-        }
-
-        .nav-dot {
-          width: 7px;
-          height: 7px;
-        }
-
-        .hint {
-          display: none;
-        }
-
-        .panel {
-          min-height: calc(100dvh - 52px);
-          padding: 1.15rem 0.86rem 1.6rem;
-        }
-
-        .kicker {
-          margin-bottom: 0.82rem;
-        }
-
-        .raw-intro h1 {
-          max-width: 11ch;
-          font-size: clamp(1.15rem, 9vw, 2rem);
-        }
-
-        .mobile-break {
-          display: block;
-        }
-
-        .hero-copy,
-        .hero-proof,
-        .hero-qualifier,
-        .section-intro,
-        .offer-note,
-        .credibility,
-        .trust-line {
-          max-width: 100%;
-        }
-
-        .hero-offer-card,
-        .proof-intro {
-          max-width: 100%;
-        }
-
-        .section-intro.wide,
-        .hero-meta {
-          max-width: 100%;
-        }
-
-        .notepad-shell,
-        .proof-card,
-        .polish-card,
-        .pay-shell,
-        .reading-list {
-          max-width: 100%;
-        }
-
-        .consequence-block {
-          max-width: 22rem;
-        }
-
-        .example-wrap {
-          gap: 0.72rem;
-        }
-
-        .panel h2 {
-          max-width: 100%;
-          text-wrap: initial;
-        }
-
-        .notepad-example .example-row p:last-child {
-          max-width: 100%;
-          font-size: clamp(0.98rem, 5.6vw, 1.25rem);
-        }
-
-        .proof-card,
-        .polish-card,
-        .pay-card {
-          padding: 0.82rem 0.76rem;
-        }
-
-        .hero-actions {
+        .topbar-inner,
+        .footer-inner,
+        .lens-head {
           align-items: flex-start;
+          flex-direction: column;
         }
 
-        .pay-card.back {
-          transform: translate(10px, 10px) scale(0.99);
+        .topnav {
+          width: 100%;
+          flex-wrap: wrap;
         }
 
-        .reading-list {
-          gap: 0.8rem;
+        .topnav a,
+        .topnav .btn {
+          flex: 1 1 auto;
         }
 
-        .work-list,
-        .distill-points,
-        .pay-summary {
-          gap: 0.58rem;
-        }
-      }
-
-      @media (min-width: 980px) {
-        .topbar {
-          padding: 0.8rem 1.4rem;
+        .hero {
+          padding-top: 3rem;
         }
 
-        .panel {
-          padding: 2.8rem clamp(2.6rem, 5vw, 5.5rem) 3rem;
+        .section-grid,
+        .proof-placeholder,
+        .steps,
+        .filter-grid,
+        .lens-stack,
+        .reader-rail {
+          grid-template-columns: 1fr;
         }
 
-        h1 {
-          font-size: clamp(2.7rem, 4vw, 4.4rem);
+        .lens-preview {
+          min-height: 340px;
         }
 
-        h2 {
-          font-size: clamp(2rem, 2.7vw, 2.9rem);
-        }
-
-        .raw-intro h1 {
-          max-width: 18ch;
-          font-size: clamp(2.7rem, 4.1vw, 4.6rem);
-        }
-
-        .hero-copy {
-          max-width: 48ch;
-          font-size: clamp(1.18rem, 1.55vw, 1.42rem);
-          line-height: 1.4;
-        }
-
-        .hero-qualifier,
-        .proof-intro {
-          max-width: 50ch;
-          font-size: 1rem;
-          line-height: 1.5;
-        }
-
-        .hero-proof {
-          max-width: 42ch;
-          font-size: clamp(1.04rem, 1.35vw, 1.18rem);
-        }
-
-        .raw-lines li {
-          max-width: 44ch;
-          font-size: clamp(1.12rem, 1.45vw, 1.32rem);
-          line-height: 1.5;
-        }
-
-        .section-intro,
-        .offer-note,
-        .credibility,
-        .trust-line,
-        .reading-meta {
-          max-width: 50ch;
-          font-size: 1rem;
-          line-height: 1.5;
-        }
-
-        .hero-actions {
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .hero-meta,
-        .trust-line,
-        .proof-intro,
-        .section-intro.wide {
-          max-width: 72ch;
-        }
-
-        .consequence-block {
-          max-width: 56rem;
-        }
-
-        .example-wrap,
-        .proof-card,
-        .polish-card,
-        .pay-shell,
-        .reading-list {
-          max-width: 760px;
-        }
-
-        .hero-offer-card {
-          max-width: 42rem;
-          padding: 1.1rem 1.1rem 1.15rem;
-        }
-
-        .hero-meta {
-          flex: 1 1 18rem;
-          width: auto;
-        }
-
-        .notepad-shell {
-          max-width: 42rem;
-        }
-
-        .panel h2 {
-          max-width: none;
-          text-wrap: auto;
-        }
-
-        .notepad-example .example-row p:last-child {
-          max-width: 40ch;
-          font-size: clamp(1.2rem, 1.75vw, 1.7rem);
-        }
-
-        .proof-card,
-        .polish-card,
-        .pay-card {
-          padding: 1.1rem 1.1rem 1.05rem;
+        .preview-title {
+          font-size: 2.1rem;
         }
       }
     </style>
   </head>
   <body>
-    <main class="app">
-      <header class="topbar">
+    <header class="topbar">
+      <div class="topbar-inner">
         <p class="brand">Authority Distillation</p>
-        <div class="nav" id="nav"></div>
-        <p class="hint">Use the dots or swipe across</p>
-      </header>
+        <nav class="topnav" aria-label="Primary">
+          <a href="#lens">Read first</a>
+          <a href="#about">About</a>
+          <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
+        </nav>
+      </div>
+    </header>
 
-      <section class="canvas" id="canvas" aria-label="Horizontal thinking canvas">
-        <article class="panel raw-intro" id="panel-intro" data-title="Start">
-          <p class="kicker">Authority Distillation</p>
-          <h1 class="raw-head" contenteditable="true" spellcheck="false">If your thinking isn’t landing, it’s costing you.<br />I make it understood.</h1>
-          <p class="transform-line">Bring the raw thinking. Leave with language you can actually use.</p>
-          <p class="hero-copy hero-qualifier">
-            A focused session for founders who know there is something real in the business, but the language is not landing cleanly.
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <p class="eyebrow">For founders who are clearer in conversation than on the page</p>
+          <h1>You sound sharper in the room than you do on the page.</h1>
+          <p class="hero-copy">
+            That gap costs more than it admits. I help founders turn one hard-to-explain point into language sharp enough to use on a website, in a memo, or inside a conversation that matters.
           </p>
-          <div class="hero-offer-card" aria-label="Offer summary">
-            <p class="hero-price">£450</p>
-            <ul class="hero-points">
-              <li>One problem</li>
-              <li>90-minute session</li>
-              <li>Written deliverable within 72 hours</li>
+          <div class="hero-actions">
+            <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="what">
+        <div class="section-grid">
+          <div>
+            <p class="label">What this is</p>
+            <h2>One problem. One working session. One useful articulation.</h2>
+          </div>
+          <article class="intro-card">
+            <p class="price">£450</p>
+            <p>
+              A 90-minute Authority Distillation session for one specific articulation problem, followed by a written articulation within 72 hours.
+            </p>
+            <ul class="offer-list">
+              <li>Bring a page, memo, deck, voice note, or half-formed explanation.</li>
+              <li>You leave with language you can use, not a strategy document.</li>
             </ul>
-            <div class="hero-actions">
-              <button class="panel-cta" data-scroll-to="panel-purchase" type="button">Book a session</button>
-              <p class="hero-meta">For founders who need sharper language, not more noise.</p>
-            </div>
-          </div>
-        </article>
+          </article>
+        </div>
+      </section>
 
-        <article class="panel" id="panel-consequence" data-title="Cost">
-          <p class="kicker">What It Costs</p>
-          <section class="consequence-block" aria-label="Cost of unclear articulation">
-            <h2>When your articulation is off, it costs you:</h2>
-            <p class="section-intro">You feel it in conversations that almost land.</p>
-            <ul class="consequence-list">
-              <li>investors hesitate, even when the idea is strong</li>
-              <li>customers don’t fully get what you actually do</li>
-              <li>your team interprets things differently</li>
+      <section class="section" id="proof">
+        <div class="section-grid">
+          <div>
+            <p class="label">Before / after</p>
+            <h2>A named founder proof block will live here.</h2>
+          </div>
+          <article class="proof-placeholder">
+            <div>
+              <span class="quote-mark">“</span>
+              <h3>Nelson Omoigui, Endorsings.</h3>
+              <p>Named founder proof to drop in here once the final quote arrives.</p>
+            </div>
+            <div class="placeholder-box">
+              <p>[Old sentence Nelson was using.]</p>
+              <p>[New sentence after the session.]</p>
+              <p>"Quote from Nelson on what shifted." - Nelson Omoigui, Endorsings</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="process">
+        <p class="label">How it works</p>
+        <h2>Simple, because the work is already demanding enough.</h2>
+        <ol class="steps">
+          <li><span class="step-num">01</span><strong>Book.</strong><br />Pay through Stripe and choose a weekday slot after checkout.</li>
+          <li><span class="step-num">02</span><strong>Work for 90 minutes.</strong><br />We isolate one articulation problem and stay with it.</li>
+          <li><span class="step-num">03</span><strong>Receive the articulation.</strong><br />Within 72 hours, I send the written version you can use.</li>
+        </ol>
+      </section>
+
+      <section class="section" id="fit">
+        <p class="label">Who this is for</p>
+        <h2>For founders who know what they are doing, but cannot get it cleanly onto the page.</h2>
+        <div class="filter-grid">
+          <article class="filter-card">
+            <h3>This is for you if</h3>
+            <ul class="filter-list">
+              <li>You sound sharper live than your site or deck sounds.</li>
+              <li>The business changed and the language has not caught up.</li>
+              <li>You need one important point to land properly.</li>
             </ul>
-          </section>
-          <p class="section-intro">The problem is rarely intelligence. It is usually translation.</p>
-          <button class="panel-cta" data-scroll-to="panel-example" type="button">See proof</button>
-        </article>
+          </article>
+          <article class="filter-card not">
+            <h3>This is not for you if</h3>
+            <ul class="filter-list">
+              <li>You need a brand, logo, identity system, or marketing plan.</li>
+              <li>You want a full website rewrite or ongoing content calendar.</li>
+              <li>You are looking for generic copywriting volume.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
 
-        <article class="panel notepad-example" id="panel-example" data-title="Example">
-          <p class="kicker">Proof Of Specificity</p>
-          <h2>Raw note. Clear articulation.</h2>
-          <p class="section-intro">This is the working example: messy founder language first, then the sharper sentence that can actually carry the shift.</p>
-          <div class="example-stack">
-            <div class="notepad-shell" id="exampleNotepad">
-              <div class="notepad-topbar">
-                <p class="subtle">founder’s raw note</p>
-                <button class="notepad-control" id="notepadResetBtn" type="button" aria-label="Reset notepad">&times;</button>
-              </div>
-              <div class="prompt-editor" id="examplePromptEditor" contenteditable="true" spellcheck="false">
-                <p>We are not a consultancy anymore.</p>
-                <p>The product took over, but the story still sounds like services.</p>
-                <p>I know what changed. The page still doesn’t.</p>
-              </div>
-            </div>
-            <section class="proof-card">
-              <p class="subtle">Distillation I provide</p>
-              <p class="section-intro wide proof-intro">What the cleaned-up version has to do is make the shift legible in one pass.</p>
-              <div class="example-wrap">
-                <section class="example-row distilled-copy">
-                  <p class="example-label">After</p>
-                  <p>
-                    We started as a service.
-                    Now we give teams the system that removes the need for one.
-                  </p>
-                </section>
-              </div>
-            </section>
+      <section class="section" id="lens">
+        <div class="lens-head">
+          <div>
+            <p class="label">Read first</p>
+            <h2>The Lens</h2>
           </div>
-          <button class="panel-cta" data-scroll-to="panel-fit" type="button">See the process</button>
-        </article>
-
-        <article class="panel raw-examples" id="panel-fit" data-title="Fit">
-          <p class="kicker">What You Bring</p>
-          <h2 class="fit-title">You do not need another idea.<br />You need the right sentence for the one you already have.</h2>
-          <ul class="raw-lines">
-            <li>You sound sharper in conversation than you do on the page.</li>
-            <li>The business changed. The language did not.</li>
-            <li>The product matters, but every explanation keeps collapsing into features.</li>
-            <li>You do not need more words. You need the right ones.</li>
-          </ul>
-          <p class="transform-line fit-transform">Not more words. Clearer ones.</p>
-          <button class="panel-cta" data-scroll-to="panel-offer" type="button">See what you get</button>
-        </article>
-
-        <article class="panel identity" id="panel-offer" data-title="Offer">
-          <p class="kicker">What You Get</p>
-          <h1>One focused session. <br class="mobile-break" />One useful articulation.</h1>
-          <p class="muted">A narrow engagement designed to solve one specific communication problem.</p>
-          <p class="trust-line">Start with one point of friction. Leave with wording you can actually use.</p>
-          <ul class="distill-points">
-            <li>One problem only</li>
-            <li>90-minute working session</li>
-            <li>Written articulation delivered within 72 hours</li>
-          </ul>
-          <p class="offer-note">Use it on a website, in a memo, on a key page, or as the starting point for more consistent output.</p>
-          <p class="subtle">One problem first. More only if it proves useful.</p>
-          <p class="price">£450</p>
-          <p class="credibility">Clear enough to use now. Strong enough to build on later.</p>
-          <button class="panel-cta" data-scroll-to="panel-proof" type="button">See more proof</button>
-        </article>
-
-        <article class="panel" data-title="How It Works">
-          <p class="kicker">How It Works</p>
-          <h2>Simple on purpose.</h2>
-          <p class="section-intro">We do not wander. We isolate the articulation problem and solve it.</p>
-          <ul class="work-list">
-            <li>1. Bring one problem in any form: page, deck, draft, memo, voice note, or half-formed thought</li>
-            <li>2. We work on that one problem for 90 minutes</li>
-            <li>3. I send a written articulation within 72 hours</li>
-          </ul>
-          <p class="credibility">The output should be usable on a page, in a meeting, or inside a decision that matters.</p>
-          <p class="offer-note">You are not buying more words. You are buying wording strong enough to carry what is already true.</p>
-          <button class="panel-cta" data-scroll-to="panel-purchase" type="button">Book a session</button>
-        </article>
-
-        <article class="panel" id="panel-proof" data-title="Proof">
-          <p class="kicker">Proof</p>
-          <h2>You can usually feel when the sentence is right.</h2>
-          <p class="section-intro proof-intro">The work should feel precise before it feels impressive. These are the public traces of that standard.</p>
-          <p class="subtle reading-kicker">Read the work</p>
-          <ul class="reading-list">
-            <li>
-              <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">
-                <p class="reading-title">The Lens</p>
-                <p class="reading-meta">Founder notes on articulation, story, and why clear thinking rarely survives first contact.</p>
-              </a>
-            </li>
-            <li>
-              <a href="https://dylanjg.substack.com/" target="_blank" rel="noreferrer">
-                <p class="reading-title">Glass &amp; Dust</p>
-                <p class="reading-meta">Personal essays and fragments. Slower, quieter, and separate from the founder work.</p>
-              </a>
-            </li>
-          </ul>
-          <section class="polish-card">
-            <div class="polish-card-topbar">
-              <p class="subtle">Not ready to book?</p>
-              <button class="notepad-control" id="polishResetBtn" type="button" aria-label="Close draft card">&times;</button>
+          <p>Recent founder notes from The Lens, pulled into this site so the thread does not break.</p>
+        </div>
+        <div class="lens-stack" id="lensStack">
+          <article class="lens-preview">
+            <div>
+              <p class="preview-kicker">Loading The Lens</p>
+              <h3 class="preview-title">Fetching latest essays...</h3>
             </div>
-            <div class="polish-form">
-              <p class="muted">Send me a rough draft and I’ll sharpen one piece so you can see the difference.</p>
-              <div>
-                <a
-                  class="btn-primary polish-link"
-                  href="mailto:dylan.galloway@proton.me?subject=Free%20Polish%20Request&body=Hi%20Dylan%2C%0A%0AHere%20is%20my%20draft%20or%20note%3A%0A%0AWhat%20I%20want%20sharpened%3A%0A"
-                >
-                  Send a Draft
-                </a>
-              </div>
-              <p class="status">No obligation. If it’s useful, we can go further.</p>
-            </div>
-          </section>
-          <section class="proof-card">
-            <p class="subtle">Anonymous example</p>
-            <p class="section-intro">Founder had real clarity in conversation, but the website was still describing an earlier, smaller version of the company.</p>
-            <div class="example-wrap">
-              <section class="example-row raw-copy">
-                <p class="example-label">Before</p>
-                <p>
-                  We help teams manage cross-functional work more efficiently with a combination of software and expert support.
-                </p>
-              </section>
-              <p class="example-arrow">↓</p>
-              <section class="example-row distilled-copy">
-                <p class="example-label">After</p>
-                <p>
-                  We started as a service.
-                  The real product is the system that removes the manual coordination work altogether.
-                  What looks supportive on the surface is actually control infrastructure underneath.
-                </p>
-              </section>
-            </div>
-          </section>
-          <button class="panel-cta" data-scroll-to="panel-purchase" type="button">Book a session</button>
-        </article>
+            <p class="preview-excerpt">The latest notes from The Lens will appear here.</p>
+          </article>
+        </div>
+        <p class="subscribe-line">Subscribe at <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">lensbrief.substack.com</a>.</p>
+      </section>
 
-        <article class="panel" id="panel-purchase" data-title="Book">
-          <p class="kicker">Book</p>
-          <div class="pay-shell">
-            <div class="pay-stack">
-              <section class="pay-card front" id="payOfferCard">
-                <div class="pay-card-topbar">
-                  <p class="subtle">Offer</p>
-                  <button class="notepad-control" id="payOfferToggleBtn" type="button" aria-label="Show try me option">&times;</button>
-                </div>
-                <h2>Authority Distillation</h2>
-                <p class="offer-note">For founders with something real to say and language that is not carrying it yet.</p>
-                <ul class="pay-summary">
-                  <li>One problem clarified</li>
-                  <li>One written articulation delivered within 72 hours</li>
-                  <li>90-minute working session</li>
-                </ul>
-                <p class="price">£450</p>
+      <section class="section" id="about">
+        <p class="label">About</p>
+        <h2>I care about the sentence because the sentence is where thinking stops hiding.</h2>
+        <p class="about-copy">
+          I am Dylan Galloway. I write The Lens, read too much, and have spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. I do this because clarity is not decoration. It is the difference between being felt in the room and being understood when you are not there. The £450 is for one concentrated session, not a bundle of theatre around it.
+        </p>
+      </section>
 
-                <div class="steps">
-                  <span>1. Secure payment via Stripe</span>
-                  <span>2. Choose a calendar slot</span>
-                  <span>3. Send context in whatever form you have it</span>
-                  <span>4. Leave with one point made clear enough to use</span>
-                </div>
-
-                <div class="pay-actions">
-                  <button class="btn-primary" id="payNowBtn" type="button">Book authority distillation</button>
-                </div>
-                <p class="offer-note">This is for people who can already feel the cost of being unclear.</p>
-                <p class="status" id="payStatus"></p>
-              </section>
-
-              <section class="pay-card back" id="payTryCard">
-                <div class="pay-card-topbar">
-                  <p class="subtle">Still not ready to book?</p>
-                  <button class="notepad-control" id="payTryToggleBtn" type="button" aria-label="Show booking option">&times;</button>
-                </div>
-                <h2>Try me first</h2>
-                <p class="offer-note">Send me a rough draft and I’ll sharpen one piece so you can see the difference.</p>
-                <ul class="pay-summary">
-                  <li>One piece only</li>
-                  <li>I sharpen one section so you can feel the difference</li>
-                  <li>No payment required</li>
-                </ul>
-                <div class="pay-actions">
-                  <a
-                    class="btn-primary polish-link"
-                    href="mailto:dylan.galloway@proton.me?subject=Free%20Polish%20Request&body=Hi%20Dylan%2C%0A%0AHere%20is%20my%20draft%20or%20note%3A%0A%0AWhat%20I%20want%20sharpened%3A%0A"
-                  >
-                    Send a Draft
-                  </a>
-                </div>
-                <p class="status">If it is useful, we can take the next step from there.</p>
-              </section>
-            </div>
-          </div>
-        </article>
+      <section class="section final-cta" id="book">
+        <p class="label">Book</p>
+        <h2>Bring one thing that is not landing.</h2>
+        <p class="final-copy">We will work it until the useful version exists.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
+        </div>
       </section>
     </main>
 
+    <footer class="footer">
+      <div class="footer-inner">
+        <p>Authority Distillation</p>
+        <p>The Lens, and one focused session for clearer founder articulation.</p>
+      </div>
+    </footer>
+
+    <aside class="reader" id="reader" aria-hidden="true">
+      <div class="reader-progress" aria-hidden="true"><span id="readerProgress"></span></div>
+      <article class="reader-shell">
+        <div class="reader-top">
+          <div>
+            <p class="label">The Lens</p>
+            <p class="reader-meta" id="readerMeta">Dylan Galloway</p>
+          </div>
+          <button class="reader-close" id="readerClose" type="button" aria-label="Close essay">×</button>
+        </div>
+        <h2 class="reader-title" id="readerTitle"></h2>
+        <div class="reader-body" id="readerBody"></div>
+        <footer class="reader-footer">
+          <p class="label">Next step</p>
+          <h3>Want this applied to your own articulation problem?</h3>
+          <p>Book the 90-minute Authority Distillation session.</p>
+          <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
+          <div class="reader-rail" id="readerRail"></div>
+        </footer>
+      </article>
+    </aside>
+
     <script>
-      const canvas = document.getElementById('canvas');
-      const panels = Array.from(canvas.querySelectorAll('.panel')).filter((panel) => !panel.hidden);
-      const nav = document.getElementById('nav');
-      const payNowBtn = document.getElementById('payNowBtn');
-      const payStatus = document.getElementById('payStatus');
-      const payOfferCard = document.getElementById('payOfferCard');
-      const payTryCard = document.getElementById('payTryCard');
-      const payOfferToggleBtn = document.getElementById('payOfferToggleBtn');
-      const payTryToggleBtn = document.getElementById('payTryToggleBtn');
-      const purchasePanel = document.getElementById('panel-purchase');
-      const purchasePanelIndex = panels.indexOf(purchasePanel);
-      const scrollButtons = Array.from(document.querySelectorAll('[data-scroll-to]'));
-      const rawIntro = document.querySelector('.raw-intro');
-      const rawTitleNode = document.querySelector('.raw-intro .raw-head');
-      const exampleNotepad = document.getElementById('exampleNotepad');
-      const examplePromptEditor = document.getElementById('examplePromptEditor');
-      const notepadResetBtn = document.getElementById('notepadResetBtn');
-      const examplePanel = document.getElementById('panel-example');
-      const examplePanelIndex = panels.indexOf(examplePanel);
-      const proofPanel = document.getElementById('panel-proof');
-      const proofPanelIndex = panels.indexOf(proofPanel);
-      const polishCard = document.querySelector('.polish-card');
-      const polishResetBtn = document.getElementById('polishResetBtn');
-      const defaultExampleNote = examplePromptEditor.innerHTML;
-      payStatus.textContent = 'Secure checkout opens instantly.';
+      const checkoutButtons = Array.from(document.querySelectorAll('[data-checkout]'));
+      const lensStack = document.getElementById('lensStack');
+      const reader = document.getElementById('reader');
+      const readerClose = document.getElementById('readerClose');
+      const readerTitle = document.getElementById('readerTitle');
+      const readerMeta = document.getElementById('readerMeta');
+      const readerBody = document.getElementById('readerBody');
+      const readerProgress = document.getElementById('readerProgress');
+      const readerRail = document.getElementById('readerRail');
+      let lensPosts = [];
+      let activeLensIndex = 0;
 
-      const dots = panels.map((panel, index) => {
-        const dot = document.createElement('button');
-        dot.className = 'nav-dot';
-        dot.type = 'button';
-        dot.ariaLabel = panel.dataset.title;
-        dot.addEventListener('click', () => {
-          canvas.scrollTo({ left: index * canvas.clientWidth, behavior: 'smooth' });
-        });
-        nav.appendChild(dot);
-        return dot;
-      });
+      async function startCheckout(button) {
+        const original = button.textContent;
+        button.textContent = 'Opening Stripe...';
+        button.disabled = true;
 
-      let activePanelIndex = 0;
-
-      function setPayMode(mode) {
-        const offerFront = mode === 'offer';
-        payOfferCard.classList.toggle('front', offerFront);
-        payOfferCard.classList.toggle('back', !offerFront);
-        payTryCard.classList.toggle('front', !offerFront);
-        payTryCard.classList.toggle('back', offerFront);
-      }
-
-      function resetPurchasePanel() {
-        setPayMode('offer');
-        payOfferCard.classList.remove('pop');
-        payTryCard.classList.remove('pop');
-      }
-
-      function resetExamplePanel() {
-        examplePromptEditor.innerHTML = defaultExampleNote;
-        exampleNotepad.classList.remove('closing', 'closed', 'pop');
-        if (document.activeElement === examplePromptEditor) {
-          document.activeElement.blur();
-        }
-      }
-
-      function resetProofPanel() {
-        polishCard.classList.remove('closing', 'closed');
-      }
-
-      function updateActiveDot() {
-        const rawIndex = Math.round(canvas.scrollLeft / canvas.clientWidth);
-        const index = Math.min(Math.max(rawIndex, 0), panels.length - 1);
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-        if (activePanelIndex === 0 && index !== 0) {
-          rawIntro.classList.remove('typing');
-          if (document.activeElement === rawTitleNode) {
-            rawTitleNode.blur();
-          }
-        }
-        if (activePanelIndex === examplePanelIndex && index !== examplePanelIndex) {
-          resetExamplePanel();
-        }
-        if (activePanelIndex === proofPanelIndex && index !== proofPanelIndex) {
-          resetProofPanel();
-        }
-        if (activePanelIndex === purchasePanelIndex && index !== purchasePanelIndex) {
-          resetPurchasePanel();
-        }
-        activePanelIndex = index;
-      }
-
-      canvas.addEventListener('scroll', updateActiveDot, { passive: true });
-      window.addEventListener('resize', updateActiveDot);
-      updateActiveDot();
-
-      scrollButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-          const targetId = button.dataset.scrollTo;
-          const targetPanel = document.getElementById(targetId);
-          if (!targetPanel) return;
-          canvas.scrollTo({ left: targetPanel.offsetLeft, behavior: 'smooth' });
-        });
-      });
-
-      function moveCaretToEnd(node) {
-        const selection = window.getSelection();
-        if (!selection) return;
-        const range = document.createRange();
-        range.selectNodeContents(node);
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-
-      rawTitleNode.addEventListener('focus', () => {
-        rawIntro.classList.add('typing');
-        requestAnimationFrame(() => moveCaretToEnd(rawTitleNode));
-      });
-
-      rawTitleNode.addEventListener('pointerup', () => {
-        if (document.activeElement === rawTitleNode) {
-          requestAnimationFrame(() => moveCaretToEnd(rawTitleNode));
-        }
-      });
-
-      rawTitleNode.addEventListener('blur', () => {
-        rawIntro.classList.remove('typing');
-      });
-
-      examplePromptEditor.addEventListener('focus', () => {
-        requestAnimationFrame(() => moveCaretToEnd(examplePromptEditor));
-      });
-
-      examplePromptEditor.addEventListener('pointerup', () => {
-        if (document.activeElement === examplePromptEditor) {
-          requestAnimationFrame(() => moveCaretToEnd(examplePromptEditor));
-        }
-      });
-
-      notepadResetBtn.addEventListener('click', () => {
-        if (exampleNotepad.classList.contains('closing') || exampleNotepad.classList.contains('closed')) return;
-        if (document.activeElement === examplePromptEditor) {
-          document.activeElement.blur();
-        }
-        exampleNotepad.classList.remove('pop');
-        void exampleNotepad.offsetWidth;
-        exampleNotepad.classList.add('closing');
-      });
-
-      exampleNotepad.addEventListener('animationend', (event) => {
-        if (event.animationName === 'notepad-close') {
-          exampleNotepad.classList.remove('closing');
-          exampleNotepad.classList.add('closed');
-        }
-      });
-
-      polishResetBtn.addEventListener('click', () => {
-        if (polishCard.classList.contains('closing') || polishCard.classList.contains('closed')) return;
-        polishCard.classList.add('closing');
-      });
-
-      polishCard.addEventListener('animationend', (event) => {
-        if (event.animationName === 'notepad-close') {
-          polishCard.classList.remove('closing');
-          polishCard.classList.add('closed');
-        }
-      });
-
-      let dragging = false;
-      let startX = 0;
-      let startLeft = 0;
-
-      canvas.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('button, input, textarea, form, a')) return;
-        dragging = true;
-        startX = e.clientX;
-        startLeft = canvas.scrollLeft;
-        canvas.setPointerCapture(e.pointerId);
-        canvas.style.scrollBehavior = 'auto';
-      });
-
-      canvas.addEventListener('pointermove', (e) => {
-        if (!dragging) return;
-        const dx = e.clientX - startX;
-        canvas.scrollLeft = startLeft - dx;
-      });
-
-      function endDrag(e) {
-        if (!dragging) return;
-        dragging = false;
-        canvas.releasePointerCapture(e.pointerId);
-        canvas.style.scrollBehavior = 'smooth';
-        const index = Math.round(canvas.scrollLeft / canvas.clientWidth);
-        canvas.scrollTo({ left: index * canvas.clientWidth, behavior: 'smooth' });
-      }
-
-      canvas.addEventListener('pointerup', endDrag);
-      canvas.addEventListener('pointercancel', endDrag);
-
-      async function startCheckout() {
-        payStatus.textContent = 'Preparing Stripe checkout...';
         try {
           const response = await fetch('/api/create-checkout-session', {
             method: 'POST',
@@ -1573,40 +783,195 @@
             body: JSON.stringify({})
           });
           const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.error || 'Unable to start checkout.');
-          }
+          if (!response.ok) throw new Error(data.error || 'Unable to start checkout.');
           window.location.href = data.url;
         } catch (error) {
-          payStatus.textContent = error.message;
+          button.textContent = error.message || 'Unable to open Stripe';
+          setTimeout(() => {
+            button.textContent = original;
+            button.disabled = false;
+          }, 2600);
         }
       }
 
-      payNowBtn.addEventListener('click', () => {
-        startCheckout();
+      checkoutButtons.forEach((button) => {
+        button.addEventListener('click', () => startCheckout(button));
       });
 
-      function swapPayCards(mode) {
-        const frontCard = mode === 'offer' ? payOfferCard : payTryCard;
-        setPayMode(mode);
-        frontCard.classList.remove('pop');
-        void frontCard.offsetWidth;
-        frontCard.classList.add('pop');
+      function formatDate(value) {
+        if (!value) return 'Dylan Galloway';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return 'Dylan Galloway';
+        return `Dylan Galloway · ${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`;
       }
 
-      payOfferToggleBtn.addEventListener('click', () => {
-        swapPayCards('try');
-      });
-
-      payTryToggleBtn.addEventListener('click', () => {
-        swapPayCards('offer');
-      });
-
-      const url = new URL(window.location.href);
-      if (url.searchParams.get('cancelled') === '1') {
-        payStatus.textContent = 'Checkout cancelled. You can secure your session when ready.';
-        canvas.scrollTo({ left: (panels.length - 1) * canvas.clientWidth, behavior: 'smooth' });
+      function postMeta(post) {
+        const minutes = post.readingMinutes ? `${post.readingMinutes} min read` : 'Essay';
+        return `${formatDate(post.publishedAt)} · ${minutes}`;
       }
+
+      function lensPrompt(post) {
+        const title = (post.title || '').toLowerCase();
+        if (title.includes('proximity')) {
+          return 'For the founder who keeps entering rooms that make the work smoother, safer, and less original.';
+        }
+        if (title.includes('replaced')) {
+          return 'For the founder trying to become more than the company bio, product update, or LinkedIn presence.';
+        }
+        if (title.includes('complicate')) {
+          return 'For the moment when the explanation keeps getting longer and somehow less true.';
+        }
+        return 'For founders who want sharper thinking before they ask for sharper language.';
+      }
+
+      function renderReaderRail(activeIndex) {
+        readerRail.innerHTML = '';
+        lensPosts
+          .map((post, index) => ({ post, index }))
+          .filter((item) => item.index !== activeIndex)
+          .forEach(({ post, index }) => {
+            const button = document.createElement('button');
+            button.className = 'rail-card';
+            button.type = 'button';
+
+            const meta = document.createElement('span');
+            meta.textContent = post.readingMinutes ? `${post.readingMinutes} min read` : 'The Lens';
+
+            const title = document.createElement('strong');
+            title.textContent = post.title;
+
+            button.append(meta, title);
+            button.addEventListener('click', () => openReader(lensPosts[index], index));
+            readerRail.appendChild(button);
+          });
+      }
+
+      function openReader(post, index = 0) {
+        readerTitle.textContent = post.title;
+        readerMeta.textContent = postMeta(post);
+        readerBody.innerHTML = post.html;
+        renderReaderRail(index);
+        reader.classList.add('open');
+        reader.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('reader-open');
+        reader.scrollTop = 0;
+        readerProgress.style.width = '0%';
+      }
+
+      function closeReader() {
+        reader.classList.remove('open');
+        reader.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('reader-open');
+      }
+
+      function renderPosts(posts) {
+        lensStack.innerHTML = '';
+        if (!posts.length) {
+          lensStack.innerHTML = `
+            <article class="lens-preview">
+              <div>
+                <p class="preview-kicker">The Lens</p>
+                <h3 class="preview-title">The latest essays are on Substack.</h3>
+              </div>
+              <p class="preview-excerpt"><a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">Read recent notes at lensbrief.substack.com.</a></p>
+            </article>
+          `;
+          return;
+        }
+
+        const preview = document.createElement('article');
+        preview.className = 'lens-preview';
+        preview.innerHTML = `
+          <div>
+            <p class="preview-kicker" id="lensPreviewMeta"></p>
+            <h3 class="preview-title" id="lensPreviewTitle"></h3>
+          </div>
+          <div>
+            <p class="preview-prompt" id="lensPreviewPrompt"></p>
+            <p class="preview-excerpt" id="lensPreviewExcerpt"></p>
+          </div>
+          <button class="btn btn-primary" id="lensPreviewButton" type="button">Open essay</button>
+        `;
+
+        const essayList = document.createElement('div');
+        essayList.className = 'essay-list';
+
+        posts.forEach((post, index) => {
+          essayList.appendChild(createEssayCard(post, index));
+        });
+
+        lensStack.append(preview, essayList);
+        updateLensPreview(0);
+      }
+
+      function updateLensPreview(index) {
+        activeLensIndex = index;
+        const post = lensPosts[index];
+        if (!post) return;
+
+        document.getElementById('lensPreviewMeta').textContent = postMeta(post);
+        document.getElementById('lensPreviewTitle').textContent = post.title;
+        document.getElementById('lensPreviewPrompt').textContent = lensPrompt(post);
+        document.getElementById('lensPreviewExcerpt').textContent = post.excerpt || 'Read the essay in place.';
+        document.getElementById('lensPreviewButton').onclick = () => openReader(post, index);
+
+        Array.from(lensStack.querySelectorAll('.essay-card')).forEach((card, cardIndex) => {
+          card.classList.toggle('is-active', cardIndex === index);
+        });
+      }
+
+      function createEssayCard(post, index) {
+        const card = document.createElement('button');
+        card.className = 'essay-card';
+        card.type = 'button';
+
+        const meta = document.createElement('span');
+        meta.className = 'essay-meta';
+        meta.textContent = postMeta(post);
+
+        const title = document.createElement('h3');
+        title.textContent = post.title;
+
+        const excerpt = document.createElement('p');
+        excerpt.textContent = post.excerpt || 'Read the essay in place.';
+
+        const action = document.createElement('span');
+        action.className = 'essay-action';
+        action.textContent = 'Open essay';
+
+        card.append(meta, title, excerpt, action);
+        card.addEventListener('mouseenter', () => updateLensPreview(index));
+        card.addEventListener('focus', () => updateLensPreview(index));
+        card.addEventListener('click', () => openReader(lensPosts[index], index));
+        return card;
+      }
+
+      async function loadLensPosts() {
+        try {
+          const response = await fetch('/api/lens-posts');
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Unable to load posts.');
+          lensPosts = data.posts || [];
+          renderPosts(lensPosts);
+        } catch (_error) {
+          renderPosts([]);
+        }
+      }
+
+      readerClose.addEventListener('click', closeReader);
+      reader.addEventListener('click', (event) => {
+        if (event.target === reader) closeReader();
+      });
+      reader.addEventListener('scroll', () => {
+        const scrollable = reader.scrollHeight - reader.clientHeight;
+        const progress = scrollable > 0 ? (reader.scrollTop / scrollable) * 100 : 0;
+        readerProgress.style.width = `${Math.min(progress, 100)}%`;
+      }, { passive: true });
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeReader();
+      });
+
+      loadLensPosts();
     </script>
   </body>
 </html>

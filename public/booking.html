@@ -14,367 +14,83 @@
     />
     <style>
       :root {
-        --bg: #f5f2ea;
-        --ink: #23211e;
-        --muted: #66635d;
-        --line: #d0cabf;
-        --accent: #2a2925;
+        --bg: #f4f0e7;
+        --ink: #1f211f;
+        --muted: #62665f;
+        --line: #c5c1b8;
+        --accent: #1f211f;
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
       body {
         margin: 0;
         min-height: 100dvh;
         display: grid;
         place-items: center;
-        background: radial-gradient(circle at top, #fbf8f2, var(--bg));
+        background: linear-gradient(180deg, #fbf8f1, var(--bg));
         color: var(--ink);
         font-family: 'IBM Plex Sans', sans-serif;
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
         padding: 1.1rem;
       }
 
-      .card {
-        width: min(680px, 100%);
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.56);
-        padding: 1.2rem;
+      main {
+        width: min(720px, 100%);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: 2rem 0;
       }
 
       .kicker {
-        margin: 0 0 0.5rem;
-        font-size: 0.74rem;
-        text-transform: uppercase;
-        letter-spacing: 0.14em;
+        margin: 0 0 0.8rem;
         color: var(--muted);
+        font-size: 0.76rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
       }
 
       h1 {
         margin: 0;
+        max-width: 12ch;
         font-family: 'Fraunces', serif;
+        font-size: clamp(2rem, 9vw, 4rem);
         font-weight: 400;
-        font-size: clamp(1.5rem, 5vw, 2.2rem);
+        line-height: 1;
       }
 
-      .intro-copy {
-        margin-top: 0.85rem;
-        max-width: 26ch;
-        font-family: 'Fraunces', serif;
-        font-size: clamp(1.1rem, 3.5vw, 1.35rem);
-        line-height: 1.2;
-        color: #4e4b45;
-      }
-
-      p { margin: 0.5rem 0; }
-
-      form {
-        margin-top: 1rem;
-        display: grid;
-        gap: 0.65rem;
-      }
-
-      textarea {
-        width: 100%;
-        border: 1px solid #c6c1b6;
-        border-radius: 9px;
-        background: #fffdf8;
-        color: var(--ink);
-        padding: 0.65rem 0.72rem;
-        font: inherit;
-      }
-
-      textarea {
-        min-height: 90px;
-        max-height: 90px;
-        resize: vertical;
-      }
-
-      .slot-list {
-        display: grid;
-        gap: 0.6rem;
-        margin-top: 0.2rem;
-      }
-
-      .slot-option {
-        border: 1px solid #bdb6aa;
-        border-radius: 12px;
-        background: rgba(255, 253, 248, 0.92);
-        padding: 0.95rem 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-        cursor: pointer;
-        transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
-      }
-
-      .slot-option:has(input:checked) {
-        border-color: #2a2925;
-        background: #fffdf8;
-        transform: translateY(-1px);
-      }
-
-      .slot-option input {
-        margin: 0;
-      }
-
-      .slot-copy {
-        display: grid;
-        gap: 0.1rem;
-      }
-
-      .slot-label {
-        font-weight: 500;
-        font-size: 1rem;
-      }
-
-      .slot-note {
+      p {
+        max-width: 40rem;
         color: var(--muted);
-        font-size: 0.84rem;
+        line-height: 1.6;
       }
 
-      button {
-        justify-self: start;
+      a {
+        display: inline-flex;
+        margin-top: 1rem;
         border: 1px solid var(--accent);
-        background: var(--accent);
-        color: #f6f4ef;
         border-radius: 999px;
-        padding: 0.68rem 1.14rem;
-        cursor: pointer;
-      }
-
-      .status {
-        min-height: 1.1rem;
-        margin: 0;
-        color: #4b4842;
-      }
-
-      .muted { color: var(--muted); font-size: 0.88rem; }
-
-      .prep {
-        margin-top: 1rem;
-        padding-top: 0.95rem;
-        border-top: 1px solid var(--line);
-      }
-
-      .prep ul {
-        margin: 0.55rem 0 0;
-        padding-left: 1.1rem;
-        color: var(--muted);
+        background: var(--accent);
+        color: #f8f4ed;
+        padding: 0.72rem 1.05rem;
+        text-decoration: none;
       }
     </style>
   </head>
   <body>
-    <main class="card">
+    <main>
       <p class="kicker">Booking</p>
-      <h1>Good decision.</h1>
-      <p class="intro-copy">
-        Most founders know exactly what they mean.
-        The articulation simply hasn't caught up yet.
+      <h1>Let’s arrange the session.</h1>
+      <p>
+        The old fixed-slot calendar has been removed. Until the real weekday calendar is connected,
+        email me and I will arrange the 90-minute Authority Distillation session directly.
       </p>
-      <p class="muted">Choose a time for the session.</p>
-
-      <form id="bookingForm">
-        <div>
-          <p class="muted" id="slotHeading">Available session this week</p>
-          <div class="slot-list" id="slotList">
-            <p class="muted">Loading available slots...</p>
-          </div>
-        </div>
-        <p class="muted">Optional: send a few sentences before the session.</p>
-        <textarea
-          id="focus"
-          name="focus"
-          maxlength="2000"
-          placeholder="What is changing, what is hard to explain, and who needs to understand it?"
-        ></textarea>
-        <button type="submit">Confirm Booking</button>
-        <p class="status" id="status"></p>
-      </form>
-
-      <section class="prep" aria-label="Preparation guidance">
-        <p class="muted">Authority Distillation</p>
-        <ul>
-          <li>90-minute working session</li>
-          <li>Location: Google Meet or Zoom</li>
-          <li>Bring the one idea you want to articulate clearly</li>
-          <li>Optional: send 2-3 sentences of context beforehand</li>
-        </ul>
-      </section>
+      <a
+        href="mailto:dylan.galloway@proton.me?subject=Authority%20Distillation%20booking&body=Hi%20Dylan%2C%0A%0AI%20want%20to%20book%20the%20%C2%A3450%20Authority%20Distillation%20session.%0A%0AMy%20availability%20this%20week%3A%0A"
+      >
+        Book via email
+      </a>
     </main>
-
-    <script>
-      const bookingForm = document.getElementById('bookingForm');
-      const slotHeading = document.getElementById('slotHeading');
-      const slotList = document.getElementById('slotList');
-      const statusNode = document.getElementById('status');
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get('session_id');
-      const weeklySlotSchedule = [
-        { weekday: 2, weekdayName: 'Tuesday', hour: 10, minute: 0 },
-        { weekday: 3, weekdayName: 'Wednesday', hour: 14, minute: 0 },
-        { weekday: 5, weekdayName: 'Friday', hour: 11, minute: 0 }
-      ];
-      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-        'August', 'September', 'October', 'November', 'December'];
-
-      if (!sessionId) {
-        statusNode.textContent = 'Missing payment session. Please complete payment first.';
-        bookingForm.querySelector('button').disabled = true;
-      }
-
-      function formatDateKey(date) {
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-      }
-
-      function formatIsoDateTime(date) {
-        return `${formatDateKey(date)}T${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
-      }
-
-      function startOfWeekUtc(date) {
-        const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-        const day = utcDate.getUTCDay();
-        const diffToMonday = day === 0 ? -6 : 1 - day;
-        utcDate.setUTCDate(utcDate.getUTCDate() + diffToMonday);
-        return utcDate;
-      }
-
-      function buildScheduledSlot(weekStart, slot) {
-        const date = new Date(weekStart);
-        date.setUTCDate(weekStart.getUTCDate() + (slot.weekday - 1));
-        date.setUTCHours(slot.hour, slot.minute, 0, 0);
-
-        return {
-          bookingTime: formatIsoDateTime(date),
-          label: `${slot.weekdayName} ${date.getUTCDate()} ${monthNames[date.getUTCMonth()]} — ${String(slot.hour).padStart(2, '0')}:${String(slot.minute).padStart(2, '0')} GMT`,
-          date
-        };
-      }
-
-      function fallbackSlots(now = new Date()) {
-        const slots = [];
-
-        for (let weekOffset = 0; weekOffset < 6 && slots.length < 3; weekOffset += 1) {
-          const weekStart = startOfWeekUtc(now);
-          weekStart.setUTCDate(weekStart.getUTCDate() + (weekOffset * 7));
-
-          const weekSlots = weeklySlotSchedule
-            .map((slot) => buildScheduledSlot(weekStart, slot))
-            .filter((slot) => slot.date.getTime() > now.getTime())
-            .map((slot) => ({
-              bookingTime: slot.bookingTime,
-              label: slot.label
-            }));
-
-          slots.push(...weekSlots);
-        }
-
-        return {
-          heading: 'Available session this week',
-          slots: slots.slice(0, 3)
-        };
-      }
-
-      function renderSlots(data) {
-        slotHeading.textContent = data.heading || 'Available times';
-        slotList.innerHTML = '';
-
-        if (!data.slots || data.slots.length === 0) {
-          bookingForm.querySelector('button').disabled = true;
-          slotList.innerHTML = '<p class="muted">No slots are available right now. Email me and I will arrange one manually.</p>';
-          return;
-        }
-
-        data.slots.forEach((slot, index) => {
-          const label = document.createElement('label');
-          label.className = 'slot-option';
-
-          const input = document.createElement('input');
-          input.type = 'radio';
-          input.name = 'bookingTime';
-          input.value = slot.bookingTime;
-          input.required = true;
-          if (index === 0) input.checked = true;
-
-          const copy = document.createElement('div');
-          copy.className = 'slot-copy';
-
-          const title = document.createElement('span');
-          title.className = 'slot-label';
-          title.textContent = slot.label;
-
-          const note = document.createElement('span');
-          note.className = 'slot-note';
-          note.textContent = 'Authority Distillation session · 90 minutes';
-
-          copy.appendChild(title);
-          copy.appendChild(note);
-          label.appendChild(input);
-          label.appendChild(copy);
-          slotList.appendChild(label);
-        });
-      }
-
-      async function loadSlots() {
-        try {
-          const response = await fetch('/api/available-slots');
-          const text = await response.text();
-          const data = text ? JSON.parse(text) : {};
-
-          if (!response.ok) {
-            throw new Error(data.error || 'Unable to load available slots.');
-          }
-
-          renderSlots(data);
-        } catch (error) {
-          renderSlots(fallbackSlots());
-          statusNode.textContent = '';
-        }
-      }
-
-      bookingForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!sessionId) return;
-
-        const selectedSlot = bookingForm.querySelector('input[name="bookingTime"]:checked');
-        if (!selectedSlot) {
-          statusNode.textContent = 'Please choose one of the available times.';
-          return;
-        }
-
-        statusNode.textContent = 'Saving booking...';
-
-        const payload = {
-          sessionId,
-          bookingTime: selectedSlot.value,
-          focus: bookingForm.focus.value.trim()
-        };
-
-        try {
-          const response = await fetch('/api/book-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          const text = await response.text();
-          const data = text ? JSON.parse(text) : {};
-          if (!response.ok) {
-            throw new Error(data.error || text || 'Unable to save booking.');
-          }
-
-          window.location.href = `/confirmation.html?session_id=${encodeURIComponent(sessionId)}`;
-        } catch (error) {
-          statusNode.textContent = error.message || 'Unable to save booking.';
-        }
-      });
-
-      loadSlots();
-    </script>
   </body>
 </html>

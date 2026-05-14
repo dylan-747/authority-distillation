@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Choose A Time | Authority Distillation</title>
+    <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=1" />
+    <link rel="shortcut icon" href="/dg-favicon.svg?v=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f4f0e7;
+        --ink: #1f211f;
+        --muted: #62665f;
+        --line: #c5c1b8;
+        --accent: #1f211f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #fbf8f1, var(--bg));
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', sans-serif;
+        padding: 1.1rem;
+      }
+
+      main {
+        width: min(760px, 100%);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: 2rem 0;
+      }
+
+      .kicker {
+        margin: 0 0 0.8rem;
+        color: var(--muted);
+        font-size: 0.76rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 12ch;
+        font-family: 'Fraunces', serif;
+        font-size: clamp(2.1rem, 9vw, 4.5rem);
+        font-weight: 400;
+        line-height: 1;
+      }
+
+      p {
+        max-width: 42rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.2rem;
+      }
+
+      .btn {
+        border: 1px solid var(--accent);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink);
+        padding: 0.72rem 1.05rem;
+        font: inherit;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #f8f4ed;
+      }
+
+      .calendar-frame {
+        display: none;
+        width: 100%;
+        min-height: 720px;
+        margin-top: 1.4rem;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+      }
+
+      .status {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 640px) {
+        .actions {
+          display: grid;
+        }
+
+        .btn {
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="kicker">Payment received</p>
+      <h1>Choose the session time.</h1>
+      <p>
+        Your £450 Authority Distillation session is paid. Pick a real weekday slot below. If the calendar is not connected yet,
+        email me and I will arrange the time manually.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" id="calendarLink" href="#">Open calendar</a>
+        <a class="btn" id="emailLink" href="#">Book via email</a>
+      </div>
+      <p class="status" id="status">Loading calendar details...</p>
+      <iframe class="calendar-frame" id="calendarFrame" title="Calendar booking"></iframe>
+    </main>
+
+    <script>
+      const calendarLink = document.getElementById('calendarLink');
+      const emailLink = document.getElementById('emailLink');
+      const calendarFrame = document.getElementById('calendarFrame');
+      const statusNode = document.getElementById('status');
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id') || '';
+
+      function buildMailto(email) {
+        const subject = encodeURIComponent('Authority Distillation booking');
+        const body = encodeURIComponent([
+          'Hi Dylan,',
+          '',
+          'I have paid for Authority Distillation and need to book the 90-minute session.',
+          sessionId ? `Stripe session: ${sessionId}` : '',
+          '',
+          'My availability this week:',
+          ''
+        ].filter(Boolean).join('\n'));
+
+        return `mailto:${email}?subject=${subject}&body=${body}`;
+      }
+
+      async function loadCalendar() {
+        try {
+          const response = await fetch('/api/calendar-config');
+          const config = await response.json();
+          const email = config.bookingEmail || 'dylan.galloway@proton.me';
+
+          emailLink.href = buildMailto(email);
+
+          if (config.calendarUrl) {
+            const calendarUrl = new URL(config.calendarUrl);
+            if (sessionId) calendarUrl.searchParams.set('stripe_session_id', sessionId);
+            calendarLink.href = calendarUrl.toString();
+            calendarFrame.src = calendarUrl.toString();
+            calendarFrame.style.display = 'block';
+            statusNode.textContent = 'Use the embedded calendar, or open it in a new tab if you prefer.';
+            return;
+          }
+
+          calendarLink.href = buildMailto(email);
+          calendarLink.textContent = 'Email to arrange time';
+          statusNode.textContent = 'Calendar URL is not configured locally yet. This page is ready for Cal.com or Calendly.';
+        } catch (_error) {
+          const fallbackEmail = 'dylan.galloway@proton.me';
+          calendarLink.href = buildMailto(fallbackEmail);
+          emailLink.href = buildMailto(fallbackEmail);
+          calendarLink.textContent = 'Email to arrange time';
+          statusNode.textContent = 'Calendar details could not load. Email booking is available.';
+        }
+      }
+
+      loadCalendar();
+    </script>
+  </body>
+</html>
