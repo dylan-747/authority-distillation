@@ -116,8 +116,8 @@
         const sessionId = params.get('session_id');
 
         if (!sessionId) {
-          sessionLine.textContent = 'Confirmation unavailable.';
-          metaLine.textContent = 'Missing payment session id.';
+          sessionLine.textContent = 'This page is for confirming a paid session.';
+          metaLine.textContent = "If you've just paid, your confirmation will arrive by email shortly.";
           return;
         }
 
