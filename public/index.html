@@ -211,7 +211,7 @@
       }
 
       .intro-card,
-      .proof-placeholder,
+      .proof-card,
       .essay-card,
       .reader-shell,
       .filter-card {
@@ -223,6 +223,27 @@
       .intro-card {
         padding: 1.4rem;
         border-radius: 8px;
+      }
+
+      .proof-card {
+        padding: 1.6rem 1.8rem 1.8rem;
+        border-radius: 8px;
+      }
+
+      .proof-quote {
+        margin: 0;
+        font-family: 'Fraunces', serif;
+        font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+        line-height: 1.32;
+        color: var(--ink);
+      }
+
+      .proof-cite {
+        display: block;
+        margin-top: 1.1rem;
+        color: var(--muted);
+        font-style: normal;
+        font-size: 0.95rem;
       }
 
       .price {
@@ -249,27 +270,13 @@
         padding-left: 0.78rem;
       }
 
-      .proof-placeholder {
-        display: grid;
-        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-        gap: 1rem;
-        padding: 1.2rem;
-        border-radius: 8px;
-      }
-
       .quote-mark {
+        display: block;
+        margin-bottom: 0.4rem;
         color: var(--clay);
         font-family: 'Fraunces', serif;
-        font-size: 4rem;
-        line-height: 0.8;
-      }
-
-      .placeholder-box {
-        min-height: 180px;
-        border: 1px dashed #9d9588;
-        border-radius: 8px;
-        padding: 1rem;
-        color: var(--muted);
+        font-size: 3.4rem;
+        line-height: 0.6;
       }
 
       .steps {
@@ -589,7 +596,6 @@
         }
 
         .section-grid,
-        .proof-placeholder,
         .steps,
         .filter-grid,
         .lens-stack,
@@ -652,29 +658,19 @@
         </div>
       </section>
 
-      <!-- Proof section hidden until Nelson's quote arrives. Restore the block below to re-enable. -->
-      <!--
       <section class="section" id="proof">
         <div class="section-grid">
           <div>
-            <p class="label">Before / after</p>
-            <h2>A named founder proof block will live here.</h2>
+            <p class="label">Proof</p>
+            <h2>What changes after the session.</h2>
           </div>
-          <article class="proof-placeholder">
-            <div>
-              <span class="quote-mark">“</span>
-              <h3>Nelson Omoigui, Endorsings.</h3>
-              <p>Named founder proof to drop in here once the final quote arrives.</p>
-            </div>
-            <div class="placeholder-box">
-              <p>[Old sentence Nelson was using.]</p>
-              <p>[New sentence after the session.]</p>
-              <p>"Quote from Nelson on what shifted." - Nelson Omoigui, Endorsings</p>
-            </div>
+          <article class="proof-card">
+            <span class="quote-mark" aria-hidden="true">“</span>
+            <blockquote class="proof-quote">Dylan helped me see I was selling the product instead of naming the problem. My posts changed after that.</blockquote>
+            <cite class="proof-cite">— Nelson Omoigui, Endorsings</cite>
           </article>
         </div>
       </section>
-      -->
 
 
       <section class="section" id="process">
