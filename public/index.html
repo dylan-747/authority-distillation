@@ -130,6 +130,26 @@
         background: #333631;
       }
 
+      .btn-stack {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.18rem;
+        padding: 0.85rem 1.5rem;
+        line-height: 1.18;
+      }
+
+      .btn-stack .btn-headline {
+        font-size: 1.05rem;
+        font-weight: 500;
+        letter-spacing: 0.005em;
+      }
+
+      .btn-stack .btn-caption {
+        font-size: 0.78rem;
+        font-weight: 400;
+        opacity: 0.78;
+      }
+
       .hero {
         padding: 4.5rem 0 2.2rem;
       }
@@ -661,8 +681,10 @@
             That gap shows up everywhere — investors who leave the call unsure what you do, hires who bounce off the careers page, a homepage that doesn't sell what you can sell in five minutes. I help founders turn one hard-to-explain point into language sharp enough to use.
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
-            <a class="btn" href="https://lensbrief.substack.com/subscribe" target="_blank" rel="noreferrer">Or read The Lens first →</a>
+            <button class="btn btn-primary btn-stack" type="button" data-checkout>
+              <span class="btn-headline">Get the sentence that lands</span>
+              <span class="btn-caption">Book the session</span>
+            </button>
           </div>
           <p class="hero-byline">By Dylan Galloway. I write <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">The Lens</a>.</p>
         </div>
@@ -682,7 +704,6 @@
             <ul class="offer-list">
               <li>Bring a homepage hero, an investor memo, a pricing page, or a voice note of you explaining the point you can't quite write.</li>
               <li>You leave with language you can use, not a strategy document.</li>
-              <li>If the written articulation doesn't feel like you when you read it back, one round of revision is included.</li>
             </ul>
           </article>
         </div>
@@ -707,9 +728,9 @@
         <p class="label">How it works</p>
         <h2>Three steps. No theatre.</h2>
         <ol class="steps">
-          <li><span class="step-num">01</span><strong>Book.</strong><br />Pay, then pick your weekday slot.</li>
-          <li><span class="step-num">02</span><strong>Work for 90 minutes.</strong><br />We isolate one articulation problem and stay with it.</li>
-          <li><span class="step-num">03</span><strong>Receive the articulation.</strong><br />Within 72 hours, I send the written version you can use.</li>
+          <li><span class="step-num">01</span><strong>Book.</strong><br />Pay, pick your weekday slot. You send me the thing that isn't landing — a hero, a memo, a voice note — before we meet.</li>
+          <li><span class="step-num">02</span><strong>Work for 90 minutes.</strong><br />We isolate one articulation problem and stay with it. I push, you talk, we find the sentence underneath the one you've been writing.</li>
+          <li><span class="step-num">03</span><strong>Receive the articulation.</strong><br />Within 72 hours, the written version arrives. If it doesn't sound like you when you read it back, one revision is included.</li>
         </ol>
       </section>
 
@@ -768,7 +789,6 @@
         <p class="final-copy">We will work it until the useful version exists.</p>
         <div class="cta-row">
           <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
-          <a class="btn" href="https://lensbrief.substack.com/subscribe" target="_blank" rel="noreferrer">Or subscribe to The Lens</a>
         </div>
       </section>
     </main>
