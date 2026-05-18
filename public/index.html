@@ -744,15 +744,7 @@
           </div>
           <p>Recent notes on authority, articulation, and the sentences that have to carry weight.</p>
         </div>
-        <div class="lens-stack" id="lensStack">
-          <article class="lens-preview">
-            <div>
-              <p class="preview-kicker">Loading The Lens</p>
-              <h3 class="preview-title">Fetching latest essays...</h3>
-            </div>
-            <p class="preview-excerpt">The latest notes from The Lens will appear here.</p>
-          </article>
-        </div>
+        <div class="lens-stack" id="lensStack" aria-busy="true"></div>
         <aside class="lens-subscribe">
           <div>
             <p class="label">Stay close to the thinking</p>
@@ -810,6 +802,7 @@
       </article>
     </aside>
 
+    <!-- LENS_DATA -->
     <script>
       const checkoutButtons = Array.from(document.querySelectorAll('[data-checkout]'));
       const lensStack = document.getElementById('lensStack');
@@ -1023,7 +1016,24 @@
         if (event.key === 'Escape') closeReader();
       });
 
-      loadLensPosts();
+      function initLensFromServer() {
+        const dataEl = document.getElementById('lens-data');
+        if (!dataEl) return false;
+        try {
+          const posts = JSON.parse(dataEl.textContent);
+          if (!Array.isArray(posts)) return false;
+          lensPosts = posts;
+          renderPosts(posts);
+          lensStack.removeAttribute('aria-busy');
+          return true;
+        } catch (_error) {
+          return false;
+        }
+      }
+
+      if (!initLensFromServer()) {
+        loadLensPosts().finally(() => lensStack.removeAttribute('aria-busy'));
+      }
     </script>
   </body>
 </html>

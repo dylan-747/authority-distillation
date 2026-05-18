@@ -294,6 +294,48 @@ function parseLensFeed(xml) {
   });
 }
 
+const LENS_CACHE_TTL_MS = 60 * 60 * 1000;
+const lensCache = { posts: [], fetchedAt: 0, fetching: null };
+
+async function refreshLensCache() {
+  if (lensCache.fetching) {
+    return lensCache.fetching;
+  }
+
+  lensCache.fetching = (async () => {
+    try {
+      const response = await fetch(lensFeedUrl, {
+        headers: { Accept: 'application/rss+xml, application/xml, text/xml' }
+      });
+      if (!response.ok) {
+        throw new Error(`Lens feed returned ${response.status}`);
+      }
+      const xml = await response.text();
+      lensCache.posts = parseLensFeed(xml);
+      lensCache.fetchedAt = Date.now();
+    } catch (error) {
+      console.error('Lens cache refresh error:', error.message);
+    } finally {
+      lensCache.fetching = null;
+    }
+    return lensCache.posts;
+  })();
+
+  return lensCache.fetching;
+}
+
+async function getLensPosts() {
+  const stale = Date.now() - lensCache.fetchedAt > LENS_CACHE_TTL_MS;
+  if (stale || !lensCache.posts.length) {
+    await refreshLensCache();
+  }
+  return lensCache.posts;
+}
+
+// Warm the cache at startup and refresh hourly.
+refreshLensCache();
+setInterval(refreshLensCache, LENS_CACHE_TTL_MS);
+
 async function sendEmail({ to, subject, text, replyTo }) {
   if (!emailNotificationsEnabled()) {
     return { sent: false, reason: 'Email notifications not configured.' };
@@ -400,8 +442,23 @@ app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res
 });
 
 app.use(express.json());
-app.get('/', (_req, res) => {
-  return sendHtmlFile(res, 'index.html');
+
+function renderIndexWithLens(res) {
+  try {
+    const template = fs.readFileSync(path.join(publicDir, 'index.html'), 'utf8');
+    const safeJson = JSON.stringify(lensCache.posts).replace(/</g, '\\u003c');
+    const dataScript = `<script id="lens-data" type="application/json">${safeJson}</script>`;
+    const html = template.replace('<!-- LENS_DATA -->', dataScript);
+    return res.type('html').send(html);
+  } catch (error) {
+    console.error('Index render error:', error.message);
+    return sendHtmlFile(res, 'index.html');
+  }
+}
+
+app.get('/', async (_req, res) => {
+  await getLensPosts();
+  return renderIndexWithLens(res);
 });
 
 app.get('/booking', (_req, res) => {
@@ -412,8 +469,9 @@ app.get('/confirmation', (_req, res) => {
   return sendHtmlFile(res, 'confirmation.html');
 });
 
-app.get('/v2', (_req, res) => {
-  return sendHtmlFile(res, 'index.html');
+app.get('/v2', async (_req, res) => {
+  await getLensPosts();
+  return renderIndexWithLens(res);
 });
 
 app.get('/api/calendar-config', (_req, res) => {
@@ -425,21 +483,8 @@ app.get('/api/calendar-config', (_req, res) => {
 
 app.get('/api/lens-posts', async (_req, res) => {
   try {
-    const response = await fetch(lensFeedUrl, {
-      headers: {
-        Accept: 'application/rss+xml, application/xml, text/xml'
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Lens feed returned ${response.status}`);
-    }
-
-    const xml = await response.text();
-    return res.json({
-      source: lensFeedUrl,
-      posts: parseLensFeed(xml)
-    });
+    const posts = await getLensPosts();
+    return res.json({ source: lensFeedUrl, posts });
   } catch (error) {
     console.error('Lens feed error:', error.message);
     return res.status(502).json({
