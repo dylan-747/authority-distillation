@@ -199,6 +199,43 @@
         gap: 0.75rem;
       }
 
+      .hero-byline {
+        margin: 0.6rem 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .hero-byline a {
+        color: var(--blue);
+      }
+
+      .lens-subscribe {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.4rem;
+        margin-top: 2rem;
+        padding: 1.6rem 1.8rem;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 250, 241, 0.74);
+        box-shadow: var(--shadow);
+      }
+
+      .lens-subscribe h3 {
+        margin: 0.2rem 0 0.4rem;
+      }
+
+      .lens-subscribe p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .lens-subscribe > div {
+        flex: 1 1 320px;
+      }
+
       .section {
         padding: 4rem 0 0;
       }
@@ -412,16 +449,6 @@
         font-size: 0.9rem;
       }
 
-      .subscribe-line {
-        margin: 1rem 0 0;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-
-      .subscribe-line a {
-        color: var(--blue);
-      }
-
       .essay-meta {
         color: var(--blue);
         font-size: 0.86rem;
@@ -631,11 +658,13 @@
           <p class="eyebrow">For founders who are clearer in conversation than on the page</p>
           <h1>You sound sharper in the room than you do on the page.</h1>
           <p class="hero-copy">
-            That gap costs more than it admits. I help founders turn one hard-to-explain point into language sharp enough to use on a website, in a memo, or inside a conversation that matters.
+            That gap shows up everywhere — investors who leave the call unsure what you do, hires who bounce off the careers page, a homepage that doesn't sell what you can sell in five minutes. I help founders turn one hard-to-explain point into language sharp enough to use.
           </p>
           <div class="hero-actions">
             <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
+            <a class="btn" href="https://lensbrief.substack.com/subscribe" target="_blank" rel="noreferrer">Or read The Lens first →</a>
           </div>
+          <p class="hero-byline">By Dylan Galloway. I write <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">The Lens</a>.</p>
         </div>
       </section>
 
@@ -653,6 +682,7 @@
             <ul class="offer-list">
               <li>Bring a homepage hero, an investor memo, a pricing page, or a voice note of you explaining the point you can't quite write.</li>
               <li>You leave with language you can use, not a strategy document.</li>
+              <li>If the written articulation doesn't feel like you when you read it back, one round of revision is included.</li>
             </ul>
           </article>
         </div>
@@ -723,12 +753,18 @@
             <p class="preview-excerpt">The latest notes from The Lens will appear here.</p>
           </article>
         </div>
-        <p class="subscribe-line">Subscribe at <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">lensbrief.substack.com</a>.</p>
+        <aside class="lens-subscribe">
+          <div>
+            <p class="label">Stay close to the thinking</p>
+            <h3>Get The Lens in your inbox.</h3>
+            <p>One short essay a week for founders who care about the sentence.</p>
+          </div>
+          <a class="btn btn-primary" href="https://lensbrief.substack.com/subscribe" target="_blank" rel="noreferrer">Subscribe to The Lens</a>
+        </aside>
       </section>
 
       <section class="section" id="about">
         <p class="label">About</p>
-        <h2>I care about the sentence because the sentence is where thinking stops hiding.</h2>
         <p class="about-copy">
           I am Dylan Galloway. I write The Lens, read too much, and have spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. I do this because clarity is not decoration. It is the difference between being felt in the room and being understood when you are not there. The £450 buys the session. Nothing bundled around it.
         </p>
@@ -740,6 +776,7 @@
         <p class="final-copy">We will work it until the useful version exists.</p>
         <div class="cta-row">
           <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
+          <a class="btn" href="https://lensbrief.substack.com/subscribe" target="_blank" rel="noreferrer">Or subscribe to The Lens</a>
         </div>
       </section>
     </main>
