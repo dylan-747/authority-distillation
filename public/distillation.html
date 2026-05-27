@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dylan Galloway - LinkedIn ghostwriting for founders</title>
+    <title>Authority Distillation</title>
     <meta
       name="description"
-      content="LinkedIn ghostwriting for founders who'd rather be building. Four posts a month, in your voice."
+      content="A 90-minute working session for one specific articulation problem."
     />
-    <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=2" />
-    <link rel="shortcut icon" href="/dg-favicon.svg?v=2" />
+    <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=1" />
+    <link rel="shortcut icon" href="/dg-favicon.svg?v=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -130,26 +130,6 @@
         background: #333631;
       }
 
-      .btn-stack {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.18rem;
-        padding: 0.85rem 1.5rem;
-        line-height: 1.18;
-      }
-
-      .btn-stack .btn-headline {
-        font-size: 1.05rem;
-        font-weight: 500;
-        letter-spacing: 0.005em;
-      }
-
-      .btn-stack .btn-caption {
-        font-size: 0.78rem;
-        font-weight: 400;
-        opacity: 0.78;
-      }
-
       .hero {
         padding: 4.5rem 0 2.2rem;
       }
@@ -219,43 +199,6 @@
         gap: 0.75rem;
       }
 
-      .hero-byline {
-        margin: 0.6rem 0 0;
-        color: var(--muted);
-        font-size: 0.92rem;
-      }
-
-      .hero-byline a {
-        color: var(--blue);
-      }
-
-      .lens-subscribe {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1.4rem;
-        margin-top: 2rem;
-        padding: 1.6rem 1.8rem;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: rgba(255, 250, 241, 0.74);
-        box-shadow: var(--shadow);
-      }
-
-      .lens-subscribe h3 {
-        margin: 0.2rem 0 0.4rem;
-      }
-
-      .lens-subscribe p {
-        margin: 0;
-        color: var(--muted);
-      }
-
-      .lens-subscribe > div {
-        flex: 1 1 320px;
-      }
-
       .section {
         padding: 4rem 0 0;
       }
@@ -268,7 +211,7 @@
       }
 
       .intro-card,
-      .proof-card,
+      .proof-placeholder,
       .essay-card,
       .reader-shell,
       .filter-card {
@@ -280,27 +223,6 @@
       .intro-card {
         padding: 1.4rem;
         border-radius: 8px;
-      }
-
-      .proof-card {
-        padding: 1.6rem 1.8rem 1.8rem;
-        border-radius: 8px;
-      }
-
-      .proof-quote {
-        margin: 0;
-        font-family: 'Fraunces', serif;
-        font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-        line-height: 1.32;
-        color: var(--ink);
-      }
-
-      .proof-cite {
-        display: block;
-        margin-top: 1.1rem;
-        color: var(--muted);
-        font-style: normal;
-        font-size: 0.95rem;
       }
 
       .price {
@@ -327,13 +249,27 @@
         padding-left: 0.78rem;
       }
 
+      .proof-placeholder {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        gap: 1rem;
+        padding: 1.2rem;
+        border-radius: 8px;
+      }
+
       .quote-mark {
-        display: block;
-        margin-bottom: 0.4rem;
         color: var(--clay);
         font-family: 'Fraunces', serif;
-        font-size: 3.4rem;
-        line-height: 0.6;
+        font-size: 4rem;
+        line-height: 0.8;
+      }
+
+      .placeholder-box {
+        min-height: 180px;
+        border: 1px dashed #9d9588;
+        border-radius: 8px;
+        padding: 1rem;
+        color: var(--muted);
       }
 
       .steps {
@@ -467,6 +403,16 @@
       .essay-action {
         color: var(--clay);
         font-size: 0.9rem;
+      }
+
+      .subscribe-line {
+        margin: 1rem 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .subscribe-line a {
+        color: var(--blue);
       }
 
       .essay-meta {
@@ -643,6 +589,7 @@
         }
 
         .section-grid,
+        .proof-placeholder,
         .steps,
         .filter-grid,
         .lens-stack,
@@ -663,11 +610,11 @@
   <body>
     <header class="topbar">
       <div class="topbar-inner">
-        <p class="brand">Dylan Galloway</p>
+        <p class="brand">Authority Distillation</p>
         <nav class="topnav" aria-label="Primary">
           <a href="#lens">Read first</a>
           <a href="#about">About</a>
-          <a class="btn btn-primary" href="mailto:dylan.galloway@proton.me?subject=LinkedIn%20ghostwriting%20conversation&body=Hi%20Dylan%2C%0A%0AI%20want%20to%20start%20a%20conversation%20about%20LinkedIn%20ghostwriting.%0A%0AMy%20company%3A%0AMy%20LinkedIn%3A%0A">Start the conversation</a>
+          <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
         </nav>
       </div>
     </header>
@@ -675,16 +622,14 @@
     <main>
       <section class="hero">
         <div class="hero-inner">
-          <p class="eyebrow">For founders who'd rather be building than posting</p>
-          <h1>You sound sharper in the room than you do on LinkedIn.</h1>
+          <p class="eyebrow">For founders who don't need monthly posts, but have one piece of writing that has to land</p>
+          <h1>Authority Distillation</h1>
           <p class="hero-copy">
-            That gap costs you. Investors who never quite get it. Hires who bounce off your profile. A feed full of founders who sound the same, and yours buried in there with them. I write LinkedIn posts in your voice, from your thinking, so the version of you that lands in the room lands on the page too.
+            A 90-minute working session on one specific articulation problem, followed by a written articulation within 72 hours. Bring a hero, a memo, a pricing page, or a voice note of you explaining the point you can't quite write. You leave with language you can use, not a strategy document.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-secondary" href="#process">See how it works</a>
-            <a class="btn btn-primary" href="mailto:dylan.galloway@proton.me?subject=LinkedIn%20ghostwriting%20conversation&body=Hi%20Dylan%2C%0A%0AI%20want%20to%20start%20a%20conversation%20about%20LinkedIn%20ghostwriting.%0A%0AMy%20company%3A%0AMy%20LinkedIn%3A%0A">Start the conversation</a>
+            <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
           </div>
-          <p class="hero-byline">By Dylan Galloway. I write <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">The Lens</a>.</p>
         </div>
       </section>
 
@@ -692,68 +637,74 @@
         <div class="section-grid">
           <div>
             <p class="label">What this is</p>
-            <h2>Four posts a month. Your voice. Written for you.</h2>
+            <h2>For the writing that has to land once.</h2>
           </div>
           <article class="intro-card">
-            <p class="price">From £1,000 a month</p>
+            <p class="price">£850</p>
             <p>
-              A monthly retainer for founders who know they should be on LinkedIn and can't make themselves do it consistently. We talk twice a month for thirty minutes. I listen. I write. Four posts go out under your name, on your schedule, in language that sounds like you on a good day, not like LinkedIn on any day.
+              A 90-minute working session on one specific articulation problem, followed by a written articulation within 72 hours.
             </p>
             <ul class="offer-list">
-              <li>Two thirty-minute calls a month. You talk, I take notes, I write.</li>
-              <li>Four posts a month, drafted within 72 hours of each call.</li>
-              <li>Two rounds of revision on every post. If it doesn't sound like you, we fix it.</li>
-              <li>Posts published on your schedule, under your name. I stay invisible.</li>
+              <li>Bring a hero, a memo, a pricing page, or a voice note of you explaining the point you can't quite write.</li>
+              <li>You leave with language you can use, not a strategy document.</li>
             </ul>
           </article>
         </div>
       </section>
 
+      <!-- Proof section hidden until Nelson's quote arrives. Restore the block below to re-enable. -->
+      <!--
       <section class="section" id="proof">
         <div class="section-grid">
           <div>
-            <p class="label">Proof</p>
-            <h2>What founders say about working with me.</h2>
+            <p class="label">Before / after</p>
+            <h2>A named founder proof block will live here.</h2>
           </div>
-          <article class="proof-card">
-            <span class="quote-mark" aria-hidden="true">“</span>
-            <blockquote class="proof-quote">Dylan helped me see I was selling the product instead of naming the problem. My posts changed after that.</blockquote>
-            <cite class="proof-cite">Nelson Omoigui, Endorsings</cite>
+          <article class="proof-placeholder">
+            <div>
+              <span class="quote-mark">“</span>
+              <h3>Nelson Omoigui, Endorsings.</h3>
+              <p>Named founder proof to drop in here once the final quote arrives.</p>
+            </div>
+            <div class="placeholder-box">
+              <p>[Old sentence Nelson was using.]</p>
+              <p>[New sentence after the session.]</p>
+              <p>"Quote from Nelson on what shifted." - Nelson Omoigui, Endorsings</p>
+            </div>
           </article>
         </div>
       </section>
+      -->
 
 
       <section class="section" id="process">
         <p class="label">How it works</p>
         <h2>Three steps. No theatre.</h2>
         <ol class="steps">
-          <li><span class="step-num">01</span><strong>Start the conversation.</strong><br />We have a thirty-minute call. You tell me what you do, who you're trying to reach, and why your current LinkedIn isn't working. If we're a fit, we agree the terms and start the following week.</li>
-          <li><span class="step-num">02</span><strong>The rhythm begins.</strong><br />Every two weeks, we talk for thirty minutes. You walk me through what you've been thinking about, what's happened in the business, what you'd say if you had the time. I take notes. I write.</li>
-          <li><span class="step-num">03</span><strong>Posts go out under your name.</strong><br />Four posts a month, in your voice, published on your schedule. Two rounds of revision included on every one. You stay focused on the business. The LinkedIn feed stays full.</li>
+          <li><span class="step-num">01</span><strong>Book.</strong><br />Pay, then pick your weekday slot.</li>
+          <li><span class="step-num">02</span><strong>Work for 90 minutes.</strong><br />We isolate one articulation problem and stay with it.</li>
+          <li><span class="step-num">03</span><strong>Receive the articulation.</strong><br />Within 72 hours, I send the written version you can use.</li>
         </ol>
       </section>
 
       <section class="section" id="fit">
         <p class="label">Who this is for</p>
-        <h2>For founders who know what they think, but can't make themselves write it down.</h2>
+        <h2>For founders who know what they are doing, but cannot get it cleanly onto the page.</h2>
         <div class="filter-grid">
           <article class="filter-card">
             <h3>This is for you if</h3>
             <ul class="filter-list">
-              <li>You sound sharper live than your LinkedIn does.</li>
-              <li>You've started posting consistently three times and stopped three times.</li>
-              <li>Your posts get traction when you do publish, but the consistency isn't there.</li>
-              <li>You'd rather spend ninety minutes a month talking than ninety minutes a week writing.</li>
+              <li>You sound sharper live than your site or deck sounds.</li>
+              <li>The business changed and the language has not caught up.</li>
+              <li>You need one important point to land properly.</li>
             </ul>
           </article>
           <article class="filter-card not">
             <h3>This is not for you if</h3>
             <ul class="filter-list">
-              <li>You want a content calendar across five platforms.</li>
-              <li>You want guaranteed engagement, follower growth, or lead numbers.</li>
-              <li>You want someone to make up opinions for you. I write your thinking, not mine.</li>
-              <li>You're looking for the cheapest option. I'm not it.</li>
+              <li>You need a brand, logo, identity system, or marketing plan.</li>
+              <li>You want a full website rewrite or ongoing content calendar.</li>
+              <li>You are looking for generic copywriting volume.</li>
             </ul>
           </article>
         </div>
@@ -765,40 +716,42 @@
             <p class="label">Read first</p>
             <h2>The Lens</h2>
           </div>
-          <p>Recent essays on writing, founders, and the sentences that have to carry weight. The Lens is the easiest way to see how I write before you hire me to write for you.</p>
+          <p>Recent notes on authority, articulation, and the sentences that have to carry weight.</p>
         </div>
-        <div class="lens-stack" id="lensStack" aria-busy="true"></div>
-        <aside class="lens-subscribe">
-          <div>
-            <p class="label">Stay close to the thinking</p>
-            <h3>Get The Lens in your inbox.</h3>
-            <p>One short essay a week for founders who care about the sentence.</p>
-          </div>
-          <a class="btn btn-primary" href="https://lensbrief.substack.com/subscribe" target="_blank" rel="noreferrer">Subscribe to The Lens</a>
-        </aside>
+        <div class="lens-stack" id="lensStack">
+          <article class="lens-preview">
+            <div>
+              <p class="preview-kicker">Loading The Lens</p>
+              <h3 class="preview-title">Fetching latest essays...</h3>
+            </div>
+            <p class="preview-excerpt">The latest notes from The Lens will appear here.</p>
+          </article>
+        </div>
+        <p class="subscribe-line">Subscribe at <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">lensbrief.substack.com</a>.</p>
       </section>
 
       <section class="section" id="about">
         <p class="label">About</p>
+        <h2>I care about the sentence because the sentence is where thinking stops hiding.</h2>
         <p class="about-copy">
-          I'm Dylan Galloway. I write The Lens, I'm finishing a novel, and I've spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. Ghostwriting is what happens when I do that work for someone else. The monthly fee buys the writing. Not strategy decks, not engagement reports, not analytics dashboards. Just the posts, in your voice, every week, on time.
+          I am Dylan Galloway. I write The Lens, read too much, and have spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. I do this because clarity is not decoration. It is the difference between being felt in the room and being understood when you are not there. The £850 buys the session. Nothing bundled around it.
         </p>
       </section>
 
-      <section class="section final-cta" id="start">
-        <p class="label">Start</p>
-        <h2>Bring me your thinking. I'll bring the sentences.</h2>
-        <p class="final-copy">Thirty-minute call to see if we're a fit. No pitch deck, no obligation. If we're not right for each other, I'll tell you who is.</p>
+      <section class="section final-cta" id="book">
+        <p class="label">Book</p>
+        <h2>Bring one piece of writing that has to land.</h2>
+        <p class="final-copy">A 90-minute session, followed by written articulation within 72 hours.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="mailto:dylan.galloway@proton.me?subject=LinkedIn%20ghostwriting%20conversation&body=Hi%20Dylan%2C%0A%0AI%20want%20to%20start%20a%20conversation%20about%20LinkedIn%20ghostwriting.%0A%0AMy%20company%3A%0AMy%20LinkedIn%3A%0A">Start the conversation</a>
+          <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
         </div>
       </section>
     </main>
 
     <footer class="footer">
       <div class="footer-inner">
-        <p>Dylan Galloway. LinkedIn ghostwriting for founders.</p>
-        <p><a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">The Lens</a> · <a href="https://dylanjg.substack.com/" target="_blank" rel="noreferrer">Glass &amp; Dust</a></p>
+        <p>Authority Distillation</p>
+        <p>One session for the articulation that has to land. The Lens for the thinking in between.</p>
       </div>
     </footer>
 
@@ -816,16 +769,16 @@
         <div class="reader-body" id="readerBody"></div>
         <footer class="reader-footer">
           <p class="label">Next step</p>
-          <h3>Want this applied to your own LinkedIn?</h3>
-          <p>Thirty-minute call. We'll see if we're a fit.</p>
-          <a class="btn btn-primary" href="mailto:dylan.galloway@proton.me?subject=LinkedIn%20ghostwriting%20conversation&body=Hi%20Dylan%2C%0A%0AI%20want%20to%20start%20a%20conversation%20about%20LinkedIn%20ghostwriting.%0A%0AMy%20company%3A%0AMy%20LinkedIn%3A%0A">Start the conversation</a>
+          <h3>Want this applied to your own articulation problem?</h3>
+          <p>Book the 90-minute Authority Distillation session.</p>
+          <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
           <div class="reader-rail" id="readerRail"></div>
         </footer>
       </article>
     </aside>
 
-    <!-- LENS_DATA -->
     <script>
+      const checkoutButtons = Array.from(document.querySelectorAll('[data-checkout]'));
       const lensStack = document.getElementById('lensStack');
       const reader = document.getElementById('reader');
       const readerClose = document.getElementById('readerClose');
@@ -836,6 +789,33 @@
       const readerRail = document.getElementById('readerRail');
       let lensPosts = [];
       let activeLensIndex = 0;
+
+      async function startCheckout(button) {
+        const original = button.textContent;
+        button.textContent = 'Opening Stripe...';
+        button.disabled = true;
+
+        try {
+          const response = await fetch('/api/create-checkout-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Unable to start checkout.');
+          window.location.href = data.url;
+        } catch (error) {
+          button.textContent = error.message || 'Unable to open Stripe';
+          setTimeout(() => {
+            button.textContent = original;
+            button.disabled = false;
+          }, 2600);
+        }
+      }
+
+      checkoutButtons.forEach((button) => {
+        button.addEventListener('click', () => startCheckout(button));
+      });
 
       function formatDate(value) {
         if (!value) return 'Dylan Galloway';
@@ -1010,24 +990,7 @@
         if (event.key === 'Escape') closeReader();
       });
 
-      function initLensFromServer() {
-        const dataEl = document.getElementById('lens-data');
-        if (!dataEl) return false;
-        try {
-          const posts = JSON.parse(dataEl.textContent);
-          if (!Array.isArray(posts)) return false;
-          lensPosts = posts;
-          renderPosts(posts);
-          lensStack.removeAttribute('aria-busy');
-          return true;
-        } catch (_error) {
-          return false;
-        }
-      }
-
-      if (!initLensFromServer()) {
-        loadLensPosts().finally(() => lensStack.removeAttribute('aria-busy'));
-      }
+      loadLensPosts();
     </script>
   </body>
 </html>

@@ -14,7 +14,7 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
-      - key: PRICE_GBP_PENCE
-        value: 45000
+      - key: DISTILLATION_PRICE_GBP_PENCE
+        value: 85000
       - key: DATA_DIR
         value: /var/data

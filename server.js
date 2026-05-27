@@ -10,7 +10,7 @@ const app = express();
 const host = process.env.HOST || '0.0.0.0';
 const port = Number(process.env.PORT || 3000);
 const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
-const pricePence = Number(process.env.PRICE_GBP_PENCE || 45000);
+const pricePence = Number(process.env.DISTILLATION_PRICE_GBP_PENCE || 85000);
 const storageRoot = process.env.DATA_DIR || path.join(__dirname, 'data');
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -469,6 +469,10 @@ app.get('/confirmation', (_req, res) => {
   return sendHtmlFile(res, 'confirmation.html');
 });
 
+app.get('/distillation', (_req, res) => {
+  return sendHtmlFile(res, 'distillation.html');
+});
+
 app.get('/v2', async (_req, res) => {
   await getLensPosts();
   return renderIndexWithLens(res);
@@ -525,7 +529,7 @@ app.post('/api/create-checkout-session', async (_req, res) => {
             currency: 'gbp',
             product_data: {
               name: 'Authority Distillation',
-              description: '90-minute thinking session, one specific problem clarified'
+              description: '90-minute working session, one specific articulation problem clarified'
             },
             unit_amount: pricePence
           },
@@ -536,7 +540,7 @@ app.post('/api/create-checkout-session', async (_req, res) => {
         product: 'authority_distillation'
       },
       success_url: `${baseUrl}/book-next.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/?cancelled=1`
+      cancel_url: `${baseUrl}/distillation?cancelled=1`
     });
 
     return res.json({ url: session.url });
