@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Lens — Title Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f0ece3;
+      font-family: 'Inter', sans-serif;
+      padding: 2rem 1rem 4rem;
+      color: #1a1a1a;
+    }
+
+    .page-label {
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 2.5rem;
+    }
+
+    .cards {
+      display: grid;
+      gap: 2.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .cover {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Simulated cinematic B&W cover */
+    .cover-inner {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 35% 45%, #3a3a3a 0%, #111 55%, #050505 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .cover-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 40% 50%, rgba(255,255,255,0.18) 0%, transparent 55%);
+    }
+
+    /* Silhouette figure */
+    .figure {
+      width: 38px;
+      height: 90px;
+      background: #1a1a1a;
+      border-radius: 50% 50% 0 0 / 40% 40% 0 0;
+      position: relative;
+      z-index: 2;
+      clip-path: polygon(30% 0%, 70% 0%, 70% 30%, 90% 30%, 100% 100%, 0% 100%, 10% 30%, 30% 30%);
+    }
+
+    .cover-glow {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%);
+      left: 50%;
+      top: 40%;
+      transform: translate(-50%, -50%);
+    }
+
+    .cover-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+    }
+
+    .card-body {
+      padding: 1.4rem 1.5rem 1.6rem;
+      border-top: 3px solid #f0ece3;
+    }
+
+    .tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #e66b00;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
+
+    .title {
+      font-family: 'Source Serif 4', serif;
+      font-size: clamp(1.4rem, 3.5vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.12;
+      color: #0f0f0f;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #555;
+      margin-bottom: 0.9rem;
+    }
+
+    .meta {
+      font-size: 0.75rem;
+      color: #999;
+      letter-spacing: 0.04em;
+    }
+
+    .pick {
+      position: relative;
+    }
+
+    .pick-badge {
+      position: absolute;
+      top: 0.9rem;
+      right: 0.9rem;
+      background: #e66b00;
+      color: white;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      font-weight: 600;
+      z-index: 10;
+    }
+
+    .divider {
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin: 1rem 0 0;
+    }
+  </style>
+</head>
+<body>
+
+  <p class="page-label">The Lens — Title options for Quality essay</p>
+
+  <div class="cards">
+
+    <!-- Option 1 — MY PICK -->
+    <div class="card pick">
+      <span class="pick-badge">My pick</span>
+      <div class="cover">
+        <div class="cover-inner">
+          <div class="cover-glow"></div>
+          <div class="cover-grain"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="tag">The Lens</p>
+        <h2 class="title">The Thing That Knew First</h2>
+        <p class="subtitle">On what you felt before the data confirmed it — and why that sense is worth protecting.</p>
+        <p class="meta">APR 9 · DYLAN</p>
+      </div>
+    </div>
+
+    <!-- Option 2 -->
+    <div class="card">
+      <div class="cover">
+        <div class="cover-inner">
+          <div class="cover-glow"></div>
+          <div class="cover-grain"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="tag">The Lens</p>
+        <h2 class="title">Before the Data Confirmed It</h2>
+        <p class="subtitle">Why the best founders trust a sense they can't explain — and what happens when they stop.</p>
+        <p class="meta">APR 9 · DYLAN</p>
+      </div>
+    </div>
+
+    <!-- Option 3 -->
+    <div class="card">
+      <div class="cover">
+        <div class="cover-inner">
+          <div class="cover-glow"></div>
+          <div class="cover-grain"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="tag">The Lens</p>
+        <h2 class="title">Quality Without Witnesses</h2>
+        <p class="subtitle">The standard that holds when no one is measuring.</p>
+        <p class="meta">APR 9 · DYLAN</p>
+      </div>
+    </div>
+
+    <!-- Option 4 -->
+    <div class="card">
+      <div class="cover">
+        <div class="cover-inner">
+          <div class="cover-glow"></div>
+          <div class="cover-grain"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="tag">The Lens</p>
+        <h2 class="title">What the Room Can't Measure</h2>
+        <p class="subtitle">On quality as the thing you recognise before you can name — and what erodes it.</p>
+        <p class="meta">APR 9 · DYLAN</p>
+      </div>
+    </div>
+
+    <!-- Option 5 -->
+    <div class="card">
+      <div class="cover">
+        <div class="cover-inner">
+          <div class="cover-glow"></div>
+          <div class="cover-grain"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="tag">The Lens</p>
+        <h2 class="title">The Standard That Holds</h2>
+        <p class="subtitle">Metrics measure response. Quality is something else. On why that distinction still matters.</p>
+        <p class="meta">APR 9 · DYLAN</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Cover image prompt -->
+  <div style="max-width:680px;margin:3rem auto 0;padding:1.5rem;background:#fff;border-radius:4px;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:#e66b00;margin-bottom:0.7rem;font-weight:500;">Cover image prompt</p>
+    <p style="font-size:0.9rem;line-height:1.6;color:#333;font-family:'Source Serif 4',serif;font-style:italic;">"A craftsman's hands holding a single precise object — a lens, a blade, or a compass — against a dark industrial background. Dramatic single-source light. Black and white. High contrast. Cinematic grain. No faces. The object is the focal point. The hands suggest authority, not labour."</p>
+    <p style="font-size:0.75rem;color:#aaa;margin-top:0.8rem;">Drop this into Midjourney, Firefly, or Ideogram. Adjust object to taste.</p>
+  </div>
+
+</body>
+</html>

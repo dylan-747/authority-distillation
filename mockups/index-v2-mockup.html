@@ -3,12 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Authority Distillation</title>
-    <meta name="robots" content="noindex, nofollow" />
-    <meta
-      name="description"
-      content="A 90-minute working session for one specific articulation problem."
-    />
+    <title>Authority Distillation — V2 Prototype</title>
     <link rel="icon" type="image/svg+xml" href="/dg-favicon.svg?v=1" />
     <link rel="shortcut icon" href="/dg-favicon.svg?v=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,7 +33,6 @@
 
       html {
         scroll-behavior: smooth;
-        scroll-padding-top: 24px;
       }
 
       body {
@@ -160,22 +154,12 @@
 
       h1 {
         max-width: 900px;
-        font-size: clamp(2.4rem, 7vw, 6.5rem);
-        text-wrap: balance;
+        font-size: clamp(3rem, 7vw, 6.5rem);
       }
 
       h2 {
         max-width: 740px;
-        font-size: clamp(1.9rem, 5vw, 4rem);
-        text-wrap: balance;
-      }
-
-      .section > h2 {
-        margin-bottom: 1.4rem;
-      }
-
-      .section-grid h2 {
-        font-size: clamp(1.9rem, 4vw, 3rem);
+        font-size: clamp(2.2rem, 5vw, 4rem);
       }
 
       h3 {
@@ -557,10 +541,6 @@
       }
 
       @media (max-width: 860px) {
-        html {
-          scroll-padding-top: 60px;
-        }
-
         .topbar-inner,
         .section,
         .hero-inner,
@@ -599,7 +579,7 @@
         }
 
         .lens-preview {
-          display: none;
+          min-height: 340px;
         }
 
         .preview-title {
@@ -611,9 +591,9 @@
   <body>
     <header class="topbar">
       <div class="topbar-inner">
-        <p class="brand"><a href="/" style="text-decoration: none;">Dylan Galloway</a></p>
+        <p class="brand">Authority Distillation</p>
         <nav class="topnav" aria-label="Primary">
-          <a href="/">Ghostwriting</a>
+          <a href="#lens">Read first</a>
           <a href="#about">About</a>
           <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
         </nav>
@@ -623,13 +603,13 @@
     <main>
       <section class="hero">
         <div class="hero-inner">
-          <p class="eyebrow">For founders who don't need monthly posts, but have one piece of writing that has to land</p>
-          <h1>Authority Distillation</h1>
+          <p class="eyebrow">For founders who are clearer in conversation than on the page</p>
+          <h1>You sound sharper in the room than you do on the page.</h1>
           <p class="hero-copy">
-            A 90-minute working session on one specific articulation problem, followed by a written articulation within 72 hours. Bring a hero, a memo, a pricing page, or a voice note of you explaining the point you can't quite write. You leave with language you can use, not a strategy document.
+            That gap costs more than it admits. I help founders turn one hard-to-explain point into language sharp enough to use on a website, in a memo, or inside a conversation that matters.
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
+            <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
           </div>
         </div>
       </section>
@@ -638,24 +618,21 @@
         <div class="section-grid">
           <div>
             <p class="label">What this is</p>
-            <h2>For the writing that has to land once.</h2>
+            <h2>One problem. One working session. One useful articulation.</h2>
           </div>
           <article class="intro-card">
-            <p class="price">£850</p>
+            <p class="price">£450</p>
             <p>
-              A 90-minute working session on one specific articulation problem, followed by a written articulation within 72 hours.
+              A 90-minute Authority Distillation session for one specific articulation problem, followed by a written articulation within 72 hours.
             </p>
             <ul class="offer-list">
-              <li>Bring a hero, a memo, a pricing page, or a voice note of you explaining the point you can't quite write.</li>
+              <li>Bring a page, memo, deck, voice note, or half-formed explanation.</li>
               <li>You leave with language you can use, not a strategy document.</li>
-              <li>Credited in full against your first month if we move on to <a href="/">monthly ghostwriting</a> — the session plus month one costs the same £1,000 as month one alone.</li>
             </ul>
           </article>
         </div>
       </section>
 
-      <!-- Proof section hidden until Nelson's quote arrives. Restore the block below to re-enable. -->
-      <!--
       <section class="section" id="proof">
         <div class="section-grid">
           <div>
@@ -676,14 +653,12 @@
           </article>
         </div>
       </section>
-      -->
-
 
       <section class="section" id="process">
         <p class="label">How it works</p>
-        <h2>Three steps. No theatre.</h2>
+        <h2>Simple, because the work is already demanding enough.</h2>
         <ol class="steps">
-          <li><span class="step-num">01</span><strong>Book.</strong><br />Pay, then pick your weekday slot.</li>
+          <li><span class="step-num">01</span><strong>Book.</strong><br />Pay through Stripe and choose a weekday slot after checkout.</li>
           <li><span class="step-num">02</span><strong>Work for 90 minutes.</strong><br />We isolate one articulation problem and stay with it.</li>
           <li><span class="step-num">03</span><strong>Receive the articulation.</strong><br />Within 72 hours, I send the written version you can use.</li>
         </ol>
@@ -715,10 +690,10 @@
       <section class="section" id="lens">
         <div class="lens-head">
           <div>
-            <p class="label">How I write</p>
+            <p class="label">Read first</p>
             <h2>The Lens</h2>
           </div>
-          <p>Recent notes on authority, articulation, and the sentences that have to carry weight.</p>
+          <p>Recent founder notes from The Lens, pulled into this site so the thread does not break.</p>
         </div>
         <div class="lens-stack" id="lensStack">
           <article class="lens-preview">
@@ -736,16 +711,16 @@
         <p class="label">About</p>
         <h2>I care about the sentence because the sentence is where thinking stops hiding.</h2>
         <p class="about-copy">
-          I am Dylan Galloway. I write The Lens, read too much, and have spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. I do this because clarity is not decoration. It is the difference between being felt in the room and being understood when you are not there. The £850 buys the session. Nothing bundled around it. If we go on to <a href="/">monthly ghostwriting</a>, it is credited in full against your first month.
+          I am Dylan Galloway. I write The Lens, read too much, and have spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. I do this because clarity is not decoration. It is the difference between being felt in the room and being understood when you are not there. The £450 is for one concentrated session, not a bundle of theatre around it.
         </p>
       </section>
 
       <section class="section final-cta" id="book">
         <p class="label">Book</p>
-        <h2>Bring one piece of writing that has to land.</h2>
-        <p class="final-copy">A 90-minute session, followed by written articulation within 72 hours. If it becomes <a href="/">monthly ghostwriting</a>, the £850 is credited in full against your first month.</p>
+        <h2>Bring one thing that is not landing.</h2>
+        <p class="final-copy">We will work it until the useful version exists.</p>
         <div class="cta-row">
-          <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
+          <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
         </div>
       </section>
     </main>
@@ -753,7 +728,7 @@
     <footer class="footer">
       <div class="footer-inner">
         <p>Authority Distillation</p>
-        <p>One session for the articulation that has to land. The Lens for the thinking in between.</p>
+        <p>V2 prototype. Nothing pushed live.</p>
       </div>
     </footer>
 
@@ -773,7 +748,7 @@
           <p class="label">Next step</p>
           <h3>Want this applied to your own articulation problem?</h3>
           <p>Book the 90-minute Authority Distillation session.</p>
-          <button class="btn btn-primary" type="button" data-checkout>Book the session</button>
+          <button class="btn btn-primary" type="button" data-checkout>Book the £450 session</button>
           <div class="reader-rail" id="readerRail"></div>
         </footer>
       </article>

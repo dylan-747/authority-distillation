@@ -16,8 +16,9 @@ Set these environment variables:
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 - `BASE_URL`
-- `PRICE_GBP_PENCE=45000`
+- `DISTILLATION_PRICE_GBP_PENCE=85000` (the server reads this name only; the old `PRICE_GBP_PENCE` is ignored)
 - `DATA_DIR=/var/data`
+- `RESEND_API_KEY`, `NOTIFY_TO_EMAIL`, `NOTIFY_FROM_EMAIL` (inquiry + booking emails)
 
 For the first deploy, set:
 

@@ -1,25 +1,15 @@
-# Authority Distillation
+# dylangalloway.com
 
-Minimal horizontal landing page for Dylan Galloway's founder articulation service.
+Landing page for Dylan Galloway's LinkedIn ghostwriting retainer, with the older Authority Distillation session flow kept unlisted at `/distillation`.
 
 ## What it does
-- Presents the service as a horizontal swipe/drag experience
-- Takes payment with Stripe Checkout
-- Routes paid clients into a booking flow with fixed weekly slots
-- Sends booking notification emails via Resend
-- Sends a client confirmation email after booking
-- Opens a pre-filled mail draft for the free draft-polish entry point
+- Sells the ghostwriting retainer on the homepage and captures inquiries with an on-page form
+- Stores every inquiry in `inquiries.json` and emails Dylan via Resend (`POST /api/inquiry`)
+- Pulls recent essays from The Lens (Substack RSS) and renders them in-page
+- Unlisted Distillation flow: Stripe Checkout, booking handoff, Resend notifications
 
-## Page flow
-- `Raw Thinking`
-- `Example`
-- `Distillation`
-- `Essays / Notes`
-- `What Leaves The Room`
-- `Example 2`
-- `Example 3`
-- `Reading`
-- `Purchase`
+## Internal mockups
+Design explorations live in `mockups/` so they are never served by Express. Don't put drafts in `public/`.
 
 ## Local setup
 1. Install dependencies:
@@ -35,7 +25,7 @@ Minimal horizontal landing page for Dylan Galloway's founder articulation servic
    STRIPE_SECRET_KEY=sk_test_your_real_key
    BASE_URL=http://localhost:3000
    PORT=3000
-   PRICE_GBP_PENCE=45000
+   DISTILLATION_PRICE_GBP_PENCE=85000
    DATA_DIR=./data
    ```
 4. Start the app:
@@ -48,7 +38,7 @@ Minimal horizontal landing page for Dylan Galloway's founder articulation servic
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 - `BASE_URL`
-- `PRICE_GBP_PENCE`
+- `DISTILLATION_PRICE_GBP_PENCE` (pence; defaults to 85000 = £850)
 - `DATA_DIR`
 - `RESEND_API_KEY`
 - `NOTIFY_TO_EMAIL`

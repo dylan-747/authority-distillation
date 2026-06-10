@@ -368,6 +368,18 @@
         padding-left: 0.78rem;
       }
 
+      .offer-note {
+        margin: 1.2rem 0 0;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .offer-note a {
+        color: var(--blue);
+      }
+
       .quote-mark {
         display: block;
         margin-bottom: 0.4rem;
@@ -529,6 +541,102 @@
         border-bottom: 1px solid var(--line);
       }
 
+      .inquiry-form {
+        display: grid;
+        gap: 0.95rem;
+        max-width: 560px;
+        margin-top: 1.8rem;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.95rem;
+      }
+
+      .inquiry-form label {
+        display: grid;
+        gap: 0.4rem;
+        color: var(--muted);
+        font-size: 0.76rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .inquiry-form input,
+      .inquiry-form textarea {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 250, 241, 0.74);
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 1rem;
+        padding: 0.72rem 0.85rem;
+        resize: vertical;
+      }
+
+      .inquiry-form input:focus,
+      .inquiry-form textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 250, 241, 0.96);
+      }
+
+      .inquiry-form ::placeholder {
+        color: rgba(98, 102, 95, 0.6);
+      }
+
+      .inquiry-form .btn {
+        justify-self: start;
+        padding: 0.72rem 1.6rem;
+      }
+
+      .form-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .form-note a {
+        color: var(--blue);
+      }
+
+      .form-status {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .form-status.error {
+        color: var(--clay);
+      }
+
+      .form-success {
+        max-width: 560px;
+        margin-top: 1.8rem;
+        padding: 1.4rem 1.6rem;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 250, 241, 0.74);
+        box-shadow: var(--shadow);
+      }
+
+      .form-success h3 {
+        margin-bottom: 0.5rem;
+      }
+
+      .form-success p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .hp-field {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+
       .footer {
         padding: 2rem 0 3rem;
       }
@@ -687,8 +795,13 @@
         .steps,
         .filter-grid,
         .lens-stack,
-        .reader-rail {
+        .reader-rail,
+        .form-row {
           grid-template-columns: 1fr;
+        }
+
+        .inquiry-form .btn {
+          justify-self: stretch;
         }
 
         .lens-preview {
@@ -706,9 +819,9 @@
       <div class="topbar-inner">
         <p class="brand">Dylan Galloway</p>
         <nav class="topnav" aria-label="Primary">
-          <a href="#lens">Read first</a>
+          <a href="#lens">How I write</a>
           <a href="#about">About</a>
-          <a class="btn btn-primary" href="mailto:hello@dylangalloway.com?subject=LinkedIn%20ghostwriting%20conversation&body=Company%3A%0ALinkedIn%3A%0AWhy%20now%3A%0A">Start the conversation</a>
+          <a class="btn btn-primary" href="#start">Start the conversation</a>
         </nav>
       </div>
     </header>
@@ -723,14 +836,10 @@
           </p>
           <div class="hero-actions">
             <a class="btn btn-secondary" href="#process">See how it works</a>
-            <a class="btn btn-primary" href="mailto:hello@dylangalloway.com?subject=LinkedIn%20ghostwriting%20conversation&body=Company%3A%0ALinkedIn%3A%0AWhy%20now%3A%0A">Start the conversation</a>
+            <a class="btn btn-primary" href="#start">Start the conversation</a>
           </div>
           <p class="hero-byline">By Dylan Galloway. I write <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">The Lens</a>.</p>
         </div>
-      </section>
-
-      <section class="positioning-line" aria-label="Ghostwriting positioning">
-        <h2>Other ghostwriters give you posts. I give you the sentence you didn't know you were reaching for.</h2>
       </section>
 
       <section class="section" id="what">
@@ -742,7 +851,7 @@
           <article class="intro-card">
             <p class="price">From £1,000 a month</p>
             <p>
-              A monthly retainer for founders who know they should be on LinkedIn and can't make themselves do it consistently. We talk twice a month for thirty minutes. I listen. I write. Four posts go out under your name, on your schedule, in language that sounds like you on a good day, not like LinkedIn on any day.
+              A monthly retainer for founders who know they should be on LinkedIn and can't make themselves do it consistently. We talk twice a month for thirty minutes. I listen. I write. Four posts go out under your name, on your schedule, in language that sounds like you on a good day, not like LinkedIn on any day. £1,000 is the founding rate while the client list is short.
             </p>
             <ul class="offer-list">
               <li>Two thirty-minute calls a month. You talk, I take notes, I write.</li>
@@ -750,8 +859,13 @@
               <li>Two rounds of revision on every post. If it doesn't sound like you, we fix it.</li>
               <li>Posts published on your schedule, under your name.</li>
             </ul>
+            <p class="offer-note">Every engagement opens with a single 90-minute working session, so the voice is right before the first post goes out. Want to test the work before committing to a month? <a href="/distillation">The session stands alone at £850</a> — credited in full against your first month if we continue.</p>
           </article>
         </div>
+      </section>
+
+      <section class="positioning-line" aria-label="Ghostwriting positioning">
+        <h2>Other ghostwriters give you posts. I give you the sentence you didn't know you were reaching for.</h2>
       </section>
 
       <section class="section" id="proof">
@@ -774,9 +888,9 @@
         <p class="label">How it works</p>
         <h2>Three steps. No theatre.</h2>
         <ol class="steps">
-          <li><span class="step-num">01</span><strong>Start the conversation.</strong><br />We have a thirty-minute call. You tell me what you do, who you're trying to reach, and why your current LinkedIn isn't working. If we're a fit, we agree the terms and start the following week.</li>
-          <li><span class="step-num">02</span><strong>The rhythm begins.</strong><br />Every two weeks, we talk for thirty minutes. You walk me through what you've been thinking about, what's happened in the business, what you'd say if you had the time. I take notes. I write.</li>
-          <li><span class="step-num">03</span><strong>Posts go out under your name.</strong><br />Four posts a month, in your voice, published on your schedule. Two rounds of revision included on every one. You stay focused on the business. The LinkedIn feed stays full.</li>
+          <li><span class="step-num">01</span><strong>Start the conversation.</strong><br />You write to me below. If it looks like a fit, we have a thirty-minute call: what you do, who you're trying to reach, why your current LinkedIn isn't working.</li>
+          <li><span class="step-num">02</span><strong>One session proves it.</strong><br />Every engagement starts with a single 90-minute working session on the thing you most need to say. £850, credited in full against your first month. You leave with language you can use, whether or not we go on.</li>
+          <li><span class="step-num">03</span><strong>The rhythm begins.</strong><br />Every two weeks we talk for thirty minutes; I take notes, I write. Four posts a month go out under your name, two rounds of revision on every one. You stay focused on the business. The feed stays full.</li>
         </ol>
       </section>
 
@@ -812,7 +926,7 @@
       <section class="section" id="lens">
         <div class="lens-head">
           <div>
-            <p class="label">Read first</p>
+            <p class="label">How I write</p>
             <h2>The Lens</h2>
           </div>
           <p>Recent essays on writing, founders, and the sentences that have to carry weight. The Lens is the easiest way to see how I write before you hire me to write for you.</p>
@@ -831,7 +945,7 @@
       <section class="section" id="about">
         <p class="label">About</p>
         <p class="about-copy">
-          I'm Dylan Galloway. I write The Lens, I'm finishing a novel, and I've spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. Ghostwriting is what happens when I do that work for someone else. The monthly fee buys the writing. Not strategy decks, not engagement reports, not analytics dashboards. Just the posts, in your voice, every week, on time.
+          I'm Dylan Galloway. I write The Lens, I'm finishing a novel, and I've spent most of my life noticing the point where someone knows exactly what they mean but loses it when the words have to stand on their own. Ghostwriting is what happens when I do that work for someone else. The monthly fee buys the writing. Not strategy decks, not engagement reports, not analytics dashboards. Just the posts, in your voice, every week, on time. I keep the client list short on purpose.
         </p>
       </section>
 
@@ -839,8 +953,36 @@
         <p class="label">Start</p>
         <h2>Let's talk.</h2>
         <p class="final-copy">Thirty-minute call to see if we're a fit. No pitch deck, no obligation. If we're not right for each other, I'll tell you who is.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="mailto:hello@dylangalloway.com?subject=LinkedIn%20ghostwriting%20conversation&body=Company%3A%0ALinkedIn%3A%0AWhy%20now%3A%0A">Start the conversation</a>
+        <form class="inquiry-form" id="inquiryForm" novalidate>
+          <div class="form-row">
+            <label>Name
+              <input name="name" autocomplete="name" required />
+            </label>
+            <label>Email
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Company
+              <input name="company" autocomplete="organization" />
+            </label>
+            <label>Your LinkedIn
+              <input name="linkedin" inputmode="url" placeholder="linkedin.com/in/you" />
+            </label>
+          </div>
+          <label>Why now
+            <textarea name="whyNow" rows="3" placeholder="A raise, a hire, the sense your feed undersells you — whatever's prompting this."></textarea>
+          </label>
+          <label class="hp-field" aria-hidden="true">Website
+            <input name="website" tabindex="-1" autocomplete="off" />
+          </label>
+          <p class="form-status error" id="inquiryStatus" hidden></p>
+          <button class="btn btn-primary" type="submit" id="inquirySubmit">Start the conversation</button>
+          <p class="form-note">This goes straight to my inbox. Prefer plain email? <a href="mailto:hello@dylangalloway.com">hello@dylangalloway.com</a></p>
+        </form>
+        <div class="form-success" id="inquirySuccess" hidden>
+          <h3>Got it.</h3>
+          <p>You'll hear back from me — not an autoresponder. In the meantime, <a href="#lens">The Lens</a> is the best preview of the work.</p>
         </div>
       </section>
     </main>
@@ -848,7 +990,7 @@
     <footer class="footer">
       <div class="footer-inner">
         <p>Dylan Galloway. LinkedIn ghostwriting for founders.</p>
-        <p><a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">The Lens</a> · <a href="https://dylanjg.substack.com/" target="_blank" rel="noreferrer">Glass &amp; Dust</a></p>
+        <p><a href="/distillation">One session</a> · <a href="https://lensbrief.substack.com/" target="_blank" rel="noreferrer">The Lens</a> · <a href="https://dylanjg.substack.com/" target="_blank" rel="noreferrer">Glass &amp; Dust</a></p>
       </div>
     </footer>
 
@@ -868,7 +1010,7 @@
           <p class="label">Next step</p>
           <h3>Want this applied to your own LinkedIn?</h3>
           <p>Thirty-minute call. We'll see if we're a fit.</p>
-          <a class="btn btn-primary" href="mailto:hello@dylangalloway.com?subject=LinkedIn%20ghostwriting%20conversation&body=Company%3A%0ALinkedIn%3A%0AWhy%20now%3A%0A">Start the conversation</a>
+          <a class="btn btn-primary" href="#start" id="readerStartLink">Start the conversation</a>
           <div class="reader-rail" id="readerRail"></div>
         </footer>
       </article>
@@ -1058,6 +1200,49 @@
       }, { passive: true });
       window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeReader();
+      });
+
+      document.getElementById('readerStartLink').addEventListener('click', () => {
+        closeReader();
+      });
+
+      const inquiryForm = document.getElementById('inquiryForm');
+      const inquiryStatus = document.getElementById('inquiryStatus');
+      const inquirySuccess = document.getElementById('inquirySuccess');
+      const inquirySubmit = document.getElementById('inquirySubmit');
+
+      inquiryForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        inquiryStatus.hidden = true;
+
+        const data = Object.fromEntries(new FormData(inquiryForm).entries());
+        if (!data.name || !data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+          inquiryStatus.textContent = 'A name and a working email are all I need.';
+          inquiryStatus.hidden = false;
+          return;
+        }
+
+        inquirySubmit.disabled = true;
+        inquirySubmit.textContent = 'Sending…';
+
+        try {
+          const response = await fetch('/api/inquiry', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          if (!response.ok) {
+            const body = await response.json().catch(() => ({}));
+            throw new Error(body.error || 'Something went wrong on my end.');
+          }
+          inquiryForm.hidden = true;
+          inquirySuccess.hidden = false;
+        } catch (error) {
+          inquiryStatus.textContent = `${error.message} You can always write to hello@dylangalloway.com directly.`;
+          inquiryStatus.hidden = false;
+          inquirySubmit.disabled = false;
+          inquirySubmit.textContent = 'Start the conversation';
+        }
       });
 
       function initLensFromServer() {

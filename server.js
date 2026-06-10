@@ -23,6 +23,7 @@ const dataDir = storageRoot;
 const publicDir = path.join(__dirname, 'public');
 const bookingsPath = path.join(dataDir, 'bookings.json');
 const freePolishPath = path.join(dataDir, 'free-polish.json');
+const inquiriesPath = path.join(dataDir, 'inquiries.json');
 const resendApiKey = process.env.RESEND_API_KEY || '';
 const notifyToEmail = process.env.NOTIFY_TO_EMAIL || '';
 const notifyFromEmail = process.env.NOTIFY_FROM_EMAIL || '';
@@ -200,6 +201,16 @@ function saveFreePolishRequest(entry) {
   const requests = getFreePolishRequests();
   requests.push(entry);
   writeJsonFile(freePolishPath, requests);
+}
+
+function getInquiries() {
+  return readJsonFile(inquiriesPath, []);
+}
+
+function saveInquiry(entry) {
+  const inquiries = getInquiries();
+  inquiries.push(entry);
+  writeJsonFile(inquiriesPath, inquiries);
 }
 
 function getSessionCustomerEmail(session) {
@@ -529,7 +540,7 @@ app.post('/api/create-checkout-session', async (_req, res) => {
             currency: 'gbp',
             product_data: {
               name: 'Authority Distillation',
-              description: '90-minute working session, one specific articulation problem clarified'
+              description: '90-minute working session on one articulation problem. Credited in full against your first month of monthly ghostwriting if we continue.'
             },
             unit_amount: pricePence
           },
@@ -554,6 +565,54 @@ app.post('/api/book-session', (_req, res) => {
   return res.status(410).json({
     error: 'App-side slot booking has been removed. Use the real calendar handoff after checkout.'
   });
+});
+
+app.post('/api/inquiry', async (req, res) => {
+  const { name, email, company, linkedin, whyNow, website } = req.body || {};
+
+  // Honeypot: bots fill the hidden field, humans never see it.
+  if (website) {
+    return res.json({ ok: true });
+  }
+
+  if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email))) {
+    return res.status(400).json({ error: 'A name and a working email are required.' });
+  }
+
+  const entry = {
+    name: String(name).trim().slice(0, 200),
+    email: String(email).trim().slice(0, 200),
+    company: String(company || '').trim().slice(0, 200),
+    linkedin: String(linkedin || '').trim().slice(0, 300),
+    whyNow: String(whyNow || '').trim().slice(0, 2000),
+    createdAt: new Date().toISOString()
+  };
+
+  saveInquiry(entry);
+
+  try {
+    await sendEmail({
+      to: notifyToEmail,
+      subject: `Ghostwriting inquiry: ${entry.name}${entry.company ? ` (${entry.company})` : ''}`,
+      text: [
+        'New ghostwriting inquiry from dylangalloway.com',
+        '',
+        `Name: ${entry.name}`,
+        `Email: ${entry.email}`,
+        `Company: ${entry.company || 'Not given'}`,
+        `LinkedIn: ${entry.linkedin || 'Not given'}`,
+        '',
+        'Why now:',
+        entry.whyNow || 'Not given'
+      ].join('\n'),
+      replyTo: entry.email
+    });
+  } catch (error) {
+    // The inquiry is already on disk; never lose a lead over a mail failure.
+    console.error('Inquiry email error:', error.message);
+  }
+
+  return res.json({ ok: true });
 });
 
 app.post('/api/free-polish', (req, res) => {
